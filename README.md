@@ -1,3 +1,5 @@
+WooCommerce PDF Invoices Italian Add-on
+
 It adds all you need for your Italian WooCommerce e-shop to the Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/).
 
 Fiscal code or VAT number are added to WooCommerce checkout page. The customer could choice between Invoice or Receipt option. In case of Invoice VAT is complimentary.
