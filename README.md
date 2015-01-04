@@ -1,6 +1,5 @@
-###################
 WooCommerce PDF Invoices Italian Add-on
-###################
+***
 
 It adds all you need for your Italian WooCommerce e-shop to the Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/).
 
