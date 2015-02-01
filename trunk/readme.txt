@@ -3,7 +3,7 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -33,8 +33,8 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 2.2.10
-* WooCommerce PDF Invoices & Packing Slips v. 1.5.2
+* WooCommerce v. 2.2.11
+* WooCommerce PDF Invoices & Packing Slips v. 1.5.3
 
 = Features =
 
@@ -73,7 +73,19 @@ To do.
 = 0.1 - 2015/01/02 =
 * Initial version of plugin
 
+= 0.2 - 2015/02/01 =
+IT
+
+* Se è selezionata l'opzione Fattura controlla se la partita IVA è scritta correttamente, secondo le regole Europee;
+* Se viene indicato un codice fiscale (opzione Ricevuta) effettua un controllo di conformità, valido anche in caso di omocodia.
+* Corretti alcuni errori che intervenivano nel caso di stampa o invio di email multiplo (grazie a Francesco Giannetta)
+
+EN
+
+* If invoice option is selected then check if VAT Number is correct (according European rules);
+* Fixed some errors in case of multiple actions (print or email sending) (thanks to Francesco Giannetta);
+
 == Upgrade Notice ==
 
-= 1.0 =
-No reason to upgrade.
+= 0.2 =
+Consigliato l'upgrade.

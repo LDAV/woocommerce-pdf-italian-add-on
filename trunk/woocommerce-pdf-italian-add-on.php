@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: http://ldav.it/wp/plugins/woocommerce-pdf-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.1
+ * Version: 0.2
  * Author: laboratorio d'Avanguardia
  * Author URI: http://ldav.it/
  * License: GPLv2 or later
@@ -18,7 +18,6 @@ function wcpdf_IT_load_plugin_textdomain() {
 	load_plugin_textdomain( 'woocommerce-pdf-italian-add-on', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'plugins_loaded', 'wcpdf_IT_load_plugin_textdomain' );
-
 
 /* Add the Invoice or Receipt choice and VAT number fields to WooCommerce checkout*/
 add_filter( 'woocommerce_checkout_fields' , 'wcpdf_IT_override_checkout_fields');
@@ -51,7 +50,15 @@ function wcpdf_IT_piva_checkout_field_process() {
 	global $woocommerce;
 	// Verifica se è presente quando cliccano su acquista
 	if($_POST["billing_invoice_type"] == "invoice") {
-		if (!$_POST['billing_cf']) $woocommerce->add_error( __('Please enter your VAT number or Fiscal code', "woocommerce-pdf-italian-add-on") );
+		if (!$_POST['billing_cf']) {
+			$woocommerce->add_error( __('Please enter your VAT number', "woocommerce-pdf-italian-add-on") );
+		} else {
+			if(!preg_match("/^((AT)?U[0-9]{8}|(BE)?0[0-9]{9}|(BG)?[0-9]{9,10}|(CY)?[0-9]{8}L| (CZ)?[0-9]{8,10}|(DE)?[0-9]{9}|(DK)?[0-9]{8}|(EE)?[0-9]{9}|(EL|GR)?[0-9]{9}|(ES)?[0-9A-Z][0-9]{7}[0-9A-Z]|(FI)?[0-9]{8}|(FR)?[0-9A-Z]{2}[0-9]{9}|(GB)?([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{3})|(HU)?[0-9]{8}|(IE)?[0-9]S[0-9]{5}L|(IT)?[0-9]{11}|(LT)?([0-9]{9}|[0-9]{12})|(LU)?[0-9]{8}|(LV)?[0-9]{11}|(MT)?[0-9]{8}|(NL)?[0-9]{9}B[0-9]{2}|(PL)?[0-9]{10}|(PT)?[0-9]{9}|(RO)?[0-9]{2,10}|(SE)?[0-9]{12}|(SI)?[0-9]{8}|(SK)?[0-9]{10})$/i", $_POST["billing_country"].$_POST['billing_cf'])) $woocommerce->add_error( sprintf(__('VAT number %1$s is not correct', "woocommerce-pdf-italian-add-on"), "<strong>". $_POST["billing_country"].$_POST['billing_cf'] . "</strong>"));
+		}
+		//if (!$_POST['billing_cf']) $woocommerce->add_error( __('Please enter your VAT number or Fiscal code', "woocommerce-pdf-italian-add-on") );
+	}
+	if($_POST["billing_invoice_type"] == "receipt" && $_POST['billing_cf'] && $_POST["billing_country"] == 'IT' && !preg_match("/^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i", $_POST['billing_cf'])) {
+		$woocommerce->add_error( sprintf(__('Tax Identification Number %1$s is not correct', "woocommerce-pdf-italian-add-on"), "<strong>". strtoupper($_POST['billing_cf']) . "</strong>"));
 	}
 }
 
@@ -133,7 +140,7 @@ function wcpdf_IT_formatted_address_replacements( $address, $args ) {
 	$address['{cf}'] = '';
 
 	if ( ! empty( $args['cf']) && ! empty( $args['invoice_type'] ) ) {
-		$address['{cf}'] = ($args['invoice_type'] == "invoice" ? __('VAT', "woocommerce-pdf-italian-add-on") : __('Fiscal code', "woocommerce-pdf-italian-add-on")) . ': ' . strtoupper( $args['cf'] );
+		$address['{cf}'] = ($args['invoice_type'] == "invoice" ? __('VAT', "woocommerce-pdf-italian-add-on") . ": " . $args['country'] : __('Fiscal code', "woocommerce-pdf-italian-add-on") . ': ') . strtoupper( $args['cf'] );
 	}
 
 	return $address;
@@ -200,11 +207,42 @@ function wcpdf_IT_wpo_wcpdf_listing_actions( $listing_actions) {
 	return $listing_actions;
 }
 
-add_action( 'wpo_wcpdf_process_template_order' , 'wcpdf_IT_wpo_wcpdf_process_template_order', 20, 2 );
+global $wcpdf_IT_invoicetype;
+
+add_filter( 'wpo_wcpdf_process_template_order' , 'wcpdf_IT_wpo_wcpdf_process_template_order', 20,2);
 function wcpdf_IT_wpo_wcpdf_process_template_order($template_type, $order_id) {
+	global $wcpdf_IT_invoicetype;
 	if($template_type == 'invoice') {
 		$invoicetype = get_post_meta($order_id,"_billing_invoice_type",true);
 		$template_type = $invoicetype ? $invoicetype : "invoice";
+		$wcpdf_IT_invoicetype = $invoicetype;
 	}
 	return $template_type;
+}
+
+add_filter( 'wpo_wcpdf_template_file' , 'wcpdf_IT_wpo_wcpdf_template_file', 20,2);
+function wcpdf_IT_wpo_wcpdf_template_file($template, $template_type) {
+	global $wcpdf_IT_invoicetype, $wpo_wcpdf;
+
+	$template = $wpo_wcpdf->export->template_path . '/' . $template_type . '.php';
+	//$template = str_replace("invoice",$wcpdf_IT_invoicetype,$template);
+	return $template;
+}
+
+add_filter( 'wpo_wcpdf_process_order_ids' , 'wcpdf_IT_wpo_wcpdf_process_order_ids', 20,2 );
+function wcpdf_IT_wpo_wcpdf_process_order_ids( $order_ids, $template_type) {
+	$oids = array();
+	if($template_type == "packing-slip") return($order_ids);
+
+	foreach ($order_ids as $order_id) {
+		$invoicetype = get_post_meta($order_id,"_billing_invoice_type",true);
+		if($invoicetype == $template_type) $oids[] = $order_id;
+	}
+	return $oids;
+}
+
+add_filter( 'wpo_wcpdf_custom_email_condition' , 'wcpdf_IT_wpo_wcpdf_custom_email_condition', 20,3);
+function wcpdf_IT_wpo_wcpdf_custom_email_condition($flag, $order, $status) {
+	$invoicetype = get_post_meta($order->id,"_billing_invoice_type",true);
+	return ($invoicetype == "invoice") ? true : false;
 }

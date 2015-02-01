@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: woocommerce-pdf-italian-add-on\n"
 "POT-Creation-Date: 2015-01-02 20:23+0100\n"
-"PO-Revision-Date: 2015-01-02 20:34+0100\n"
+"PO-Revision-Date: 2015-02-01 11:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -48,9 +48,20 @@ msgid "VAT number"
 msgstr "Cod.Fisc./P.IVA"
 
 #: ../woocommerce-pdf-italian-add-on.php:40
-#: ../woocommerce-pdf-italian-add-on.php:54
 msgid "Please enter your VAT number or Fiscal code"
 msgstr "Digita il tuo Codice fiscale o Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:54
+msgid "Please enter your VAT number"
+msgstr "Digita la tua Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:54
+msgid "VAT number %1$s is not correct"
+msgstr "La partita IVA %1$s non è indicata in modo corretto"
+
+#: ../woocommerce-pdf-italian-add-on.php:54
+msgid "Tax Identification Number %1$s is not correct"
+msgstr "Il Codice Fiscale %1$s non è indicato in modo corretto"
 
 #: ../woocommerce-pdf-italian-add-on.php:136
 msgid "VAT"
