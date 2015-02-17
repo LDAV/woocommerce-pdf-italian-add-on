@@ -15,7 +15,10 @@
 //Thanks to Nicola Mustone https://gist.github.com/SiR-DanieL
 
 function wcpdf_IT_load_plugin_textdomain() {
-	load_plugin_textdomain( 'woocommerce-pdf-italian-add-on', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+	$domain = 'woocommerce-pdf-italian-add-on';
+	$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+	load_textdomain( $domain, WP_LANG_DIR."/plugins/{$domain}-{$locale}.mo" );
+	load_plugin_textdomain( $domain, FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'plugins_loaded', 'wcpdf_IT_load_plugin_textdomain' );
 
