@@ -2,8 +2,8 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.1
-Stable tag: 0.2
+Tested up to: 4.1.1
+Stable tag: 0.2c
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -33,8 +33,8 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 2.2.11
-* WooCommerce PDF Invoices & Packing Slips v. 1.5.3
+* WooCommerce v. 2.3.6
+* WooCommerce PDF Invoices & Packing Slips v. 1.5.5
 
 = Features =
 
@@ -70,10 +70,24 @@ To do.
 
 == Changelog ==
 
-= 0.1 - 2015/01/02 =
-* Initial version of plugin
+= 0.2c - 2015/03/17 =
+
+IT
+
+* Le impostazioni di Fattura o Ricevuta e codice fiscale / partita IVA, registrate con l'utente, vengono riportate nei checkout successivi;
+* Aggiornamenti per compatibilità con Woocommerce 2.3.6  (grazie a ECom Store e fburatti)
+
+EN
+
+* User additional settings are called in checkout;
+* Minor updates due to Woocommerce 2.3.6 (thanks to ECom Store and fburatti)
+
+= 0.2b - 2015/02/17 =
+
+Added an additional gettext call to allow users to override default plugin translations (thanks to Salaros https://github.com/salaros)
 
 = 0.2 - 2015/02/01 =
+
 IT
 
 * Se è selezionata l'opzione Fattura controlla se la partita IVA è scritta correttamente, secondo le regole Europee;
@@ -85,7 +99,28 @@ EN
 * If invoice option is selected then check if VAT Number is correct (according European rules);
 * Fixed some errors in case of multiple actions (print or email sending) (thanks to Francesco Giannetta);
 
+= 0.1 - 2015/01/02 =
+* Initial version of plugin
+
 == Upgrade Notice ==
 
-= 0.2 =
+= 0.2c =
 Consigliato l'upgrade.
+
+== Support ==
+
+Se ritieni ci sia un problema [puoi segnalarcelo anche su GitHub](https://github.com/LDAV/woocommerce-pdf-italian-add-on)
+
+If you find an issue, [let us know here!](https://github.com/LDAV/woocommerce-pdf-italian-add-on)
+
+== Contributions ==
+
+Anyone is welcome to contribute to the plugin. There are various ways you can contribute:
+
+[Raise an issue](https://github.com/LDAV/woocommerce-pdf-italian-add-on) on GitHub.
+
+Send us a Pull Request with your bug fixes and/or new features.
+
+Provide feedback and [suggestions on enhancements](https://github.com/LDAV/woocommerce-pdf-italian-add-on/issues).
+
+Translate the plugin into your language. You can download the latest .po/.mo file [here](https://github.com/LDAV/woocommerce-pdf-italian-add-on/tree/master/trunk/languages).
