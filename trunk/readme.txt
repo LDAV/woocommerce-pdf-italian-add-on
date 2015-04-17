@@ -3,7 +3,7 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
 Tested up to: 4.1.1
-Stable tag: 0.4
+Stable tag: 0.4.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -15,8 +15,8 @@ It adds all you need for your Italian WooCommerce e-shop to the Ewout Fernhout's
 
 Fiscal code or VAT number are added to WooCommerce checkout page. The customer could choice between Invoice or Receipt option. In case of Invoice VAT is complimentary.
 
-1 Read the istructions for [How to create my own custom template](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/faq/).
-1 Copy the "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" in your (child) theme, and customize it.
+1. Read the istructions for [How to create my own custom template](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/faq/).
+1. Copy the "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" in your (child) theme, and customize it.
 
 = IT =
 
