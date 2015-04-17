@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: woocommerce-pdf-italian-add-on\n"
-"POT-Creation-Date: 2015-01-02 20:23+0100\n"
-"PO-Revision-Date: 2015-02-01 11:39+0100\n"
+"POT-Creation-Date: 2015-04-17 11:37+0100\n"
+"PO-Revision-Date: 2015-04-17 11:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,75 +14,146 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../woocommerce-pdf-italian-add-on.php:27
-#: ../woocommerce-pdf-italian-add-on.php:28
-#: ../woocommerce-pdf-italian-add-on.php:62
-#: ../woocommerce-pdf-italian-add-on.php:103
-#: ../woocommerce-pdf-italian-add-on.php:104
-#: ../woocommerce-pdf-italian-add-on.php:161
-msgid "Invoice or Receipt"
-msgstr "Fattura o ricevuta"
-
-#: ../woocommerce-pdf-italian-add-on.php:34
-#: ../woocommerce-pdf-italian-add-on.php:66
-#: ../woocommerce-pdf-italian-add-on.php:110
-#: ../woocommerce-pdf-italian-add-on.php:177
-#: ../woocommerce-pdf-italian-add-on.php:194
-msgid "Receipt"
-msgstr "Ricevuta"
-
-#: ../woocommerce-pdf-italian-add-on.php:35
-#: ../woocommerce-pdf-italian-add-on.php:67
-#: ../woocommerce-pdf-italian-add-on.php:111
-#: ../woocommerce-pdf-italian-add-on.php:177
-#: ../woocommerce-pdf-italian-add-on.php:194
-msgid "Invoice"
-msgstr "Fattura"
-
-#: ../woocommerce-pdf-italian-add-on.php:39
-#: ../woocommerce-pdf-italian-add-on.php:71
-#: ../woocommerce-pdf-italian-add-on.php:119
-#: ../woocommerce-pdf-italian-add-on.php:120
-#: ../woocommerce-pdf-italian-add-on.php:165
-msgid "VAT number"
-msgstr "Cod.Fisc./P.IVA"
-
-#: ../woocommerce-pdf-italian-add-on.php:40
-msgid "Please enter your VAT number or Fiscal code"
-msgstr "Digita il tuo Codice fiscale o Partita IVA"
-
-#: ../woocommerce-pdf-italian-add-on.php:54
-msgid "Please enter your VAT number"
-msgstr "Digita la tua Partita IVA"
-
-#: ../woocommerce-pdf-italian-add-on.php:54
-msgid "VAT number %1$s is not correct"
-msgstr "La partita IVA %1$s non è indicata in modo corretto"
-
-#: ../woocommerce-pdf-italian-add-on.php:54
-msgid "Tax Identification Number %1$s is not correct"
-msgstr "Il Codice Fiscale %1$s non è indicato in modo corretto"
-
-#: ../woocommerce-pdf-italian-add-on.php:136
-msgid "VAT"
-msgstr "P.IVA"
-
-#: ../woocommerce-pdf-italian-add-on.php:136
-msgid "Fiscal code"
-msgstr "Cod.Fisc."
-
-#: ppp.php:136
+#: ../_frasi.php:2
 msgid "invoice"
 msgstr "fattura"
 
-#: ppp.php:136
+#: ../_frasi.php:3
 msgid "receipt"
 msgstr "ricevuta"
 
-#: ppp.php:136
+#: ../_frasi.php:4
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: ppp.php:136
+#: ../_frasi.php:5
 msgid "Invoice Number"
 msgstr "Fattura n°"
+
+#: ../woocommerce-pdf-italian-add-on.php:29
+#: ../woocommerce-pdf-italian-add-on.php:30
+#: ../woocommerce-pdf-italian-add-on.php:77
+#: ../woocommerce-pdf-italian-add-on.php:118
+#: ../woocommerce-pdf-italian-add-on.php:119
+#: ../woocommerce-pdf-italian-add-on.php:173
+msgid "Invoice or Receipt"
+msgstr "Fattura o ricevuta"
+
+#: ../woocommerce-pdf-italian-add-on.php:36
+#: ../woocommerce-pdf-italian-add-on.php:81
+#: ../woocommerce-pdf-italian-add-on.php:125
+#: ../woocommerce-pdf-italian-add-on.php:176
+#: ../templates/pdf/Simple/receipt.php:9
+#: ../templates/pdf/Simple/receipt.php:21
+msgid "Receipt"
+msgstr "Ricevuta"
+
+#: ../woocommerce-pdf-italian-add-on.php:37
+#: ../woocommerce-pdf-italian-add-on.php:82
+#: ../woocommerce-pdf-italian-add-on.php:126
+#: ../woocommerce-pdf-italian-add-on.php:177
+msgid "Invoice"
+msgstr "Fattura"
+
+#: ../woocommerce-pdf-italian-add-on.php:41
+#: ../woocommerce-pdf-italian-add-on.php:86
+#: ../woocommerce-pdf-italian-add-on.php:134
+#: ../woocommerce-pdf-italian-add-on.php:135
+#: ../woocommerce-pdf-italian-add-on.php:182
+msgid "VAT number"
+msgstr "Cod.Fisc./P.IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:42
+msgid "Please enter your VAT number or Fiscal code"
+msgstr "Digita il tuo Codice fiscale o Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:62
+msgid "Please enter your VAT number"
+msgstr "Digita la tua Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:64
+#, php-format
+msgid "VAT number %1$s is not correct"
+msgstr "La partita IVA %1$s non è indicata in modo corretto"
+
+#: ../woocommerce-pdf-italian-add-on.php:69
+#, php-format
+msgid "Tax Identification Number %1$s is not correct"
+msgstr "Il Codice Fiscale %1$s non è indicato in modo corretto"
+
+#: ../woocommerce-pdf-italian-add-on.php:151
+msgid "VAT"
+msgstr "P.IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:151
+msgid "Fiscal code"
+msgstr "Cod.Fisc."
+
+#: ../woocommerce-pdf-italian-add-on.php:196
+#: ../woocommerce-pdf-italian-add-on.php:214
+msgid "PDF Receipt"
+msgstr "Ricevuta PDF"
+
+#: ../woocommerce-pdf-italian-add-on.php:223
+msgid "PDF Receipts"
+msgstr "Ricevute PDF"
+
+#: ../woocommerce-pdf-italian-add-on.php:260
+msgid "Download Receipt (PDF)"
+msgstr "Scarica ricevuta (PDF)"
+
+#: ../templates/pdf/Simple/receipt.php:29
+msgid "Billing Address:"
+msgstr "Indirizzo:"
+
+#: ../templates/pdf/Simple/receipt.php:40
+msgid "Ship To:"
+msgstr "Destinatario:"
+
+#: ../templates/pdf/Simple/receipt.php:49
+msgid "Receipt Date:"
+msgstr "Data ricevuta:"
+
+#: ../templates/pdf/Simple/receipt.php:54
+msgid "Order Number:"
+msgstr "Ordine n°:"
+
+#: ../templates/pdf/Simple/receipt.php:58
+msgid "Order Date:"
+msgstr "Data ordine:"
+
+#: ../templates/pdf/Simple/receipt.php:62
+msgid "Payment Method:"
+msgstr "Metodo di pagamento:"
+
+#: ../templates/pdf/Simple/receipt.php:76
+msgid "Product"
+msgstr "Prodotto"
+
+#: ../templates/pdf/Simple/receipt.php:77
+msgid "Quantity"
+msgstr "Quantità"
+
+#: ../templates/pdf/Simple/receipt.php:78
+msgid "Price"
+msgstr "Prezzo"
+
+#: ../templates/pdf/Simple/receipt.php:85
+msgid "Description"
+msgstr "Descrizione"
+
+#: ../templates/pdf/Simple/receipt.php:90
+msgid "SKU"
+msgstr "Codice prod."
+
+#: ../templates/pdf/Simple/receipt.php:91
+msgid "SKU:"
+msgstr "Codice prod.:"
+
+#: ../templates/pdf/Simple/receipt.php:92
+msgid "Weight:"
+msgstr "Peso:"
+
+#: ../templates/pdf/Simple/receipt.php:106
+msgid "Customer Notes"
+msgstr "Note del Cliente"

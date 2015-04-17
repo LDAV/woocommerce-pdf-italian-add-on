@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: http://ldav.it/wp/plugins/woocommerce-pdf-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.3
+ * Version: 0.4
  * Author: laboratorio d'Avanguardia
  * Author URI: http://ldav.it/
  * License: GPLv2 or later
@@ -156,9 +156,7 @@ function wcpdf_IT_formatted_address_replacements( $address, $args ) {
 
 add_filter( 'woocommerce_localisation_address_formats', 'wcpdf_IT_localisation_address_format' );
 function wcpdf_IT_localisation_address_format( $formats ) {
-	//$formats['IT'] .= "\n\n{invoice_type}\n{cf}";
 	$formats['IT'] .= "\n\n{cf}";
-
 	return $formats;
 }
 
@@ -166,7 +164,6 @@ add_filter( 'woocommerce_found_customer_details', 'wcpdf_IT_found_customer_detai
 function wcpdf_IT_found_customer_details( $customer_data ) {
 	$customer_data['billing_invoice_type'] = get_user_meta( $_POST['user_id'], 'billing_invoice_type', true );
 	$customer_data['billing_cf'] = get_user_meta( $_POST['user_id'], 'billing_cf', true );
-
 	return $customer_data;
 }
 
@@ -174,6 +171,11 @@ add_filter( 'woocommerce_customer_meta_fields', 'wcpdf_IT_customer_meta_fields' 
 function wcpdf_IT_customer_meta_fields( $fields ) {
 	$fields['billing']['fields']['billing_invoice_type'] = array(
 		'label'       => __('Invoice or Receipt', "woocommerce-pdf-italian-add-on"),
+		'type'        => 'select',
+		'options'     => array(
+			'receipt' => __('Receipt', "woocommerce-pdf-italian-add-on" ),
+			'invoice' => __('Invoice', "woocommerce-pdf-italian-add-on" )
+		),
 		'description'       => ""
 	);
 	$fields['billing']['fields']['billing_cf'] = array(
@@ -183,21 +185,21 @@ function wcpdf_IT_customer_meta_fields( $fields ) {
 	return $fields;
 }
 
-/* Add the Invoice or Receipt options to WCPDF admin Meta Boxes*/
 add_filter( 'wpo_wcpdf_meta_box_actions' , 'wcpdf_IT_wpo_wcpdf_meta_box_actions' );
 function wcpdf_IT_wpo_wcpdf_meta_box_actions( $meta_actions ) {
 	global $post_id;
 	$invoicetype = get_post_meta($post_id,"_billing_invoice_type",true);
-	$fattura = ($invoicetype && $invoicetype == "invoice") ? 1 : 0;
-	$lblFattura = $fattura ? __( 'Invoice', "woocommerce-pdf-italian-add-on" ) : __( 'Receipt', "woocommerce-pdf-italian-add-on" );
-	if(!$fattura) {
-		$meta_actions["invoice"]["url"] = str_replace("invoice","receipt",$meta_actions["invoice"]["url"]);
+	if($invoicetype == "receipt") {
+		$meta_actions = array_merge(array("receipt" => array(
+			'url'		=> wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $post_id ), 'generate_wpo_wcpdf' ),
+			'alt'		=> esc_attr__( 'PDF Receipt', 'woocommerce-pdf-italian-add-on' ),
+			'title'		=> __( 'PDF Receipt', 'woocommerce-pdf-italian-add-on' )
+		)), $meta_actions);
+		unset($meta_actions['invoice']);
 		delete_post_meta( $post_id, '_wcpdf_invoice_exists' );
 		delete_post_meta( $post_id, '_wcpdf_invoice_date' );
 		delete_post_meta( $post_id, '_wcpdf_invoice_number' );
 	}
-	$meta_actions["invoice"]["alt"] = "PDF " . $lblFattura;
-	$meta_actions["invoice"]["title"] = "PDF " . $lblFattura;
 	return $meta_actions;
 }
 
@@ -205,36 +207,30 @@ add_filter( 'wpo_wcpdf_listing_actions' , 'wcpdf_IT_wpo_wcpdf_listing_actions' )
 function wcpdf_IT_wpo_wcpdf_listing_actions( $listing_actions) {
 	global $the_order ;
 	$invoicetype = get_post_meta($the_order->id,"_billing_invoice_type",true);
-	$fattura = ($invoicetype && $invoicetype == "invoice") ? 1 : 0;
-	$lblFattura = $fattura ? __( 'Invoice', "woocommerce-pdf-italian-add-on" ) : __( 'Receipt', "woocommerce-pdf-italian-add-on" );
-
-	if(!$fattura) {
-		$listing_actions["invoice"]["url"] = str_replace("invoice","receipt",$listing_actions["invoice"]["url"]);
+	if($invoicetype == "receipt") {
+		$listing_actions = array_merge(array("receipt" => array(
+			'url'		=> wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $the_order->id ), 'generate_wpo_wcpdf' ),
+			'img'		=> plugins_url() . '/woocommerce-pdf-italian-add-on/images/receipt.png',
+			'alt'		=> __( 'PDF Receipt', 'woocommerce-pdf-italian-add-on' )
+		)), $listing_actions);
+		unset($listing_actions['invoice']);
 	}
-	$listing_actions["invoice"]["alt"] = "PDF " . $lblFattura;
 	return $listing_actions;
 }
 
-global $wcpdf_IT_invoicetype;
+add_filter( 'wpo_wcpdf_bulk_actions' , 'wcpdf_IT_wpo_wcpdf_bulk_actions' );
+function wcpdf_IT_wpo_wcpdf_bulk_actions( $bulk_actions) {
+	$bulk_actions['receipt'] = __( 'PDF Receipts', 'woocommerce-pdf-italian-add-on' );
+	return $bulk_actions;
+}
 
 add_filter( 'wpo_wcpdf_process_template_order' , 'wcpdf_IT_wpo_wcpdf_process_template_order', 20,2);
 function wcpdf_IT_wpo_wcpdf_process_template_order($template_type, $order_id) {
-	global $wcpdf_IT_invoicetype;
 	if($template_type == 'invoice') {
 		$invoicetype = get_post_meta($order_id,"_billing_invoice_type",true);
 		$template_type = $invoicetype ? $invoicetype : "invoice";
-		$wcpdf_IT_invoicetype = $invoicetype;
 	}
 	return $template_type;
-}
-
-add_filter( 'wpo_wcpdf_template_file' , 'wcpdf_IT_wpo_wcpdf_template_file', 20,2);
-function wcpdf_IT_wpo_wcpdf_template_file($template, $template_type) {
-	global $wcpdf_IT_invoicetype, $wpo_wcpdf;
-
-	$template = $wpo_wcpdf->export->template_path . '/' . $template_type . '.php';
-	//$template = str_replace("invoice",$wcpdf_IT_invoicetype,$template);
-	return $template;
 }
 
 add_filter( 'wpo_wcpdf_process_order_ids' , 'wcpdf_IT_wpo_wcpdf_process_order_ids', 20,2 );
@@ -253,4 +249,38 @@ add_filter( 'wpo_wcpdf_custom_email_condition' , 'wcpdf_IT_wpo_wcpdf_custom_emai
 function wcpdf_IT_wpo_wcpdf_custom_email_condition($flag, $order, $status) {
 	$invoicetype = get_post_meta($order->id,"_billing_invoice_type",true);
 	return ($invoicetype == "invoice") ? true : false;
+}
+
+add_filter( 'wpo_wcpdf_myaccount_actions', 'wcpdf_IT_wpo_wcpdf_my_account', 10, 2 );
+function wcpdf_IT_wpo_wcpdf_my_account( $actions, $order ) {
+	$invoicetype = get_post_meta($order->id,"_billing_invoice_type",true);
+	if ( $invoicetype == 'receipt') {
+		$actions['receipt'] = array(
+			'url'  => wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $order->id . '&my-account' ), 'generate_wpo_wcpdf' ),
+			'name' => __( 'Download Receipt (PDF)', 'woocommerce-pdf-italian-add-on' )
+		);				
+		unset($actions['invoice']);
+	}
+	return $actions;
+}
+
+add_filter( 'wpo_wcpdf_template_file', 'wcpdf_IT_wpo_wcpdf_template_files', 20, 2 );
+function wcpdf_IT_wpo_wcpdf_template_files( $template, $template_type ) {
+	global $wpo_wcpdf;
+	$template = $wpo_wcpdf->export->template_path . '/' . $template_type . '.php';
+	if( file_exists( $template ) ) return $template;
+	$receipt_template = dirname(__FILE__) . '/templates/pdf/Simple/receipt.php';
+	if( file_exists( $receipt_template ) ) return $receipt_template;
+	return $template;
+}
+
+add_filter( 'wpo_wcpdf_attach_documents', 'wcpdf_IT_wpo_wcpdf_attach_receipt', 20, 1 );
+function wcpdf_IT_wpo_wcpdf_attach_receipt( $documents ) {
+	global $wpo_wcpdf;
+	$invoicetype = get_post_meta($wpo_wcpdf->export->order->id,"_billing_invoice_type",true);
+	if ( $invoicetype == 'receipt') {
+		$documents['receipt'] = $documents['invoice'];
+		unset($documents['invoice']);
+	}
+	return $documents;
 }
