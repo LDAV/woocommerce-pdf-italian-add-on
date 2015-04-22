@@ -267,10 +267,19 @@ function wcpdf_IT_wpo_wcpdf_my_account( $actions, $order ) {
 add_filter( 'wpo_wcpdf_template_file', 'wcpdf_IT_wpo_wcpdf_template_files', 20, 2 );
 function wcpdf_IT_wpo_wcpdf_template_files( $template, $template_type ) {
 	global $wpo_wcpdf;
-	$template = $wpo_wcpdf->export->template_path . '/' . $template_type . '.php';
-	if( file_exists( $template ) ) return $template;
-	$receipt_template = dirname(__FILE__) . '/templates/pdf/Simple/receipt.php';
-	if( file_exists( $receipt_template ) ) return $receipt_template;
+
+	// bail out if file already exists in default or custom path!
+	if ( file_exists( $template ) ) {
+		return $template;
+	}
+	
+	if ( $template_type == 'receipt') {
+		$receipt_template = dirname(__FILE__) . '/templates/pdf/Simple/receipt.php';
+		if( file_exists( $receipt_template ) ) {
+			$template = $receipt_template;
+		}
+	}
+
 	return $template;
 }
 
