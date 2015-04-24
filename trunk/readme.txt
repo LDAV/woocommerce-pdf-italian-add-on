@@ -2,7 +2,7 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.1.1
+Tested up to: 4.2
 Stable tag: 0.4.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -33,8 +33,8 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 2.3.7
-* WooCommerce PDF Invoices & Packing Slips v. 1.5.10
+* WooCommerce v. 2.3.8
+* WooCommerce PDF Invoices & Packing Slips v. 1.5.11
 
 = Features =
 
