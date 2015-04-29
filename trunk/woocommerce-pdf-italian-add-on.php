@@ -236,7 +236,7 @@ function wcpdf_IT_wpo_wcpdf_process_template_order($template_type, $order_id) {
 add_filter( 'wpo_wcpdf_process_order_ids' , 'wcpdf_IT_wpo_wcpdf_process_order_ids', 20,2 );
 function wcpdf_IT_wpo_wcpdf_process_order_ids( $order_ids, $template_type) {
 	$oids = array();
-	if($template_type == "packing-slip") return($order_ids);
+	if($template_type != "invoice") return($order_ids);
 
 	foreach ($order_ids as $order_id) {
 		$invoicetype = get_post_meta($order_id,"_billing_invoice_type",true);
