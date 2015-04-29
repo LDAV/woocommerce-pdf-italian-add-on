@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: http://ldav.it/wp/plugins/woocommerce-pdf-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.4.1
+ * Version: 0.4.2
  * Author: laboratorio d'Avanguardia
  * Author URI: http://ldav.it/
  * License: GPLv2 or later
@@ -236,7 +236,7 @@ function wcpdf_IT_wpo_wcpdf_process_template_order($template_type, $order_id) {
 add_filter( 'wpo_wcpdf_process_order_ids' , 'wcpdf_IT_wpo_wcpdf_process_order_ids', 20,2 );
 function wcpdf_IT_wpo_wcpdf_process_order_ids( $order_ids, $template_type) {
 	$oids = array();
-	if($template_type == "packing-slip") return($order_ids);
+	if( !in_array( $template_type, array('invoice', 'receipt') ) ) return($order_ids);
 
 	foreach ($order_ids as $order_id) {
 		$invoicetype = get_post_meta($order_id,"_billing_invoice_type",true);
@@ -267,10 +267,19 @@ function wcpdf_IT_wpo_wcpdf_my_account( $actions, $order ) {
 add_filter( 'wpo_wcpdf_template_file', 'wcpdf_IT_wpo_wcpdf_template_files', 20, 2 );
 function wcpdf_IT_wpo_wcpdf_template_files( $template, $template_type ) {
 	global $wpo_wcpdf;
-	$template = $wpo_wcpdf->export->template_path . '/' . $template_type . '.php';
-	if( file_exists( $template ) ) return $template;
-	$receipt_template = dirname(__FILE__) . '/templates/pdf/Simple/receipt.php';
-	if( file_exists( $receipt_template ) ) return $receipt_template;
+
+	// bail out if file already exists in default or custom path!
+	if ( file_exists( $template ) ) {
+		return $template;
+	}
+	
+	if ( $template_type == 'receipt') {
+		$receipt_template = dirname(__FILE__) . '/templates/pdf/Simple/receipt.php';
+		if( file_exists( $receipt_template ) ) {
+			$template = $receipt_template;
+		}
+	}
+
 	return $template;
 }
 

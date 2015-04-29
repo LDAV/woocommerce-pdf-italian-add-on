@@ -2,8 +2,8 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.2
-Stable tag: 0.4.1
+Tested up to: 4.2.1
+Stable tag: 0.4.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -34,7 +34,7 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 Tested up to/Testato fino alle versioni:
 
 * WooCommerce v. 2.3.8
-* WooCommerce PDF Invoices & Packing Slips v. 1.5.11
+* WooCommerce PDF Invoices & Packing Slips v. 1.5.12
 
 = Features =
 
