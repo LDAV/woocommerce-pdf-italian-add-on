@@ -1,9 +1,9 @@
 === WooCommerce PDF Invoices Italian Add-on ===
 Contributors: labdav
-Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
+Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.2.1
-Stable tag: 0.4.2
+Tested up to: 4.2.2
+Stable tag: 0.4.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -33,8 +33,8 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 2.3.8
-* WooCommerce PDF Invoices & Packing Slips v. 1.5.12
+* WooCommerce v. 2.3.11
+* WooCommerce PDF Invoices & Packing Slips v. 1.5.15
 
 = Features =
 
@@ -81,6 +81,16 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 4. Il codice Fiscale o la Partita IVA vengono riportate nei dati dell'indirizzo, e quindi anche nelle email o nel pdf di fattura o ricevuta
 
 == Changelog ==
+
+= 0.4.3 - 2015/06/12 =
+
+IT
+
+* L'opzione Fattura/Ricevuta viene formattata come gli altri elementi a discesa, se è registrato select2.js come di default su WooCommerce.
+
+EN
+
+* The Invoice/Receipt option is formatted as the other drop-down select fields, if select2.js is registered as is the default on WooCommerce.
 
 = 0.4 - 2015/04/17 =
 

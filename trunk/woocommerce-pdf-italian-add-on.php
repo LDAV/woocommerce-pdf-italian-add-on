@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: http://ldav.it/wp/plugins/woocommerce-pdf-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.4.2
+ * Version: 0.4.3
  * Author: laboratorio d'Avanguardia
  * Author URI: http://ldav.it/
  * License: GPLv2 or later
@@ -27,7 +27,7 @@ add_filter( 'woocommerce_checkout_fields' , 'wcpdf_IT_override_checkout_fields')
 function wcpdf_IT_override_checkout_fields( $fields ) {
 	$fields['billing']['billing_invoice_type'] = array( 
 	'label' => __('Invoice or Receipt', "woocommerce-pdf-italian-add-on"),
-	'placeholder' => _x('Invoice or Receipt', 'placeholder', "woocommerce-pdf-italian-add-on"),
+	'placeholder' => __('Invoice or Receipt', "woocommerce-pdf-italian-add-on"),
 	'required' => false,
 	'class' => array('form-row-first'),
 	'clear'       => false,
@@ -39,7 +39,7 @@ function wcpdf_IT_override_checkout_fields( $fields ) {
 	);
 	$fields['billing']['billing_cf'] = array( 
 	'label' => __('VAT number', "woocommerce-pdf-italian-add-on"),
-	'placeholder' => _x('Please enter your VAT number or Fiscal code', 'placeholder', "woocommerce-pdf-italian-add-on"),
+	'placeholder' => __('Please enter your VAT number or Fiscal code', "woocommerce-pdf-italian-add-on"),
 	'required' => false,
 	'class' => array('form-row-last'),
 	'clear' => true 
@@ -51,6 +51,17 @@ function wcpdf_IT_override_checkout_fields( $fields ) {
 		$fields['billing']['billing_cf']['default'] = $current_user->billing_cf;
 	}
 	return $fields;
+}
+
+add_action('woocommerce_after_order_notes', 'wcpdf_IT_after_order_notes');
+function wcpdf_IT_after_order_notes( $checkout ) {
+	if(wp_script_is( "select2")) {
+		echo '<script type="text/javascript">
+		jQuery(function() {
+			jQuery("#billing_invoice_type").select2({minimumResultsForSearch: Infinity});
+		});
+		</script>';
+	}
 }
 
 add_action('woocommerce_checkout_process', 'wcpdf_IT_piva_checkout_field_process');
@@ -116,7 +127,7 @@ function wcpdf_IT_address_to_edit( $address ) {
 	if ( ! isset( $address['billing_invoice_type'] ) ) {
     	$address['billing_invoice_type'] = array(
 				'label' => __('Invoice or Receipt', "woocommerce-pdf-italian-add-on"),
-				'placeholder' => _x( 'Invoice or Receipt', 'placeholder', 'woocommerce-pdf-italian-add-on' ),
+				'placeholder' => __( 'Invoice or Receipt', 'woocommerce-pdf-italian-add-on' ),
 				'required'    => false,
 				'class'       => array( 'form-row-first' ),
 				'clear'       => false,
@@ -132,9 +143,9 @@ function wcpdf_IT_address_to_edit( $address ) {
     if ( ! isset( $address['billing_cf'] ) ) {
     	$address['billing_cf'] = array(
 				'label'       => __('VAT number', "woocommerce-pdf-italian-add-on"),
-				'placeholder' => _x( 'VAT number', 'placeholder', 'woocommerce-pdf-italian-add-on' ),
+				'placeholder' => __('Please enter your VAT number or Fiscal code', "woocommerce-pdf-italian-add-on"),
 				'required'    => false,
-				'class'       => array( 'form-row-first' ),
+				'class'       => array( 'form-row-last' ),
 				'value'       => get_user_meta( get_current_user_id(), 'billing_cf', true )
 			);
     }
