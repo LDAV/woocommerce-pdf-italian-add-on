@@ -1,0 +1,228 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: woocommerce-pdf-italian-add-on\n"
+"POT-Creation-Date: 2015-08-14 10:59+0100\n"
+"PO-Revision-Date: 2015-08-14 11:02+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_x;_n\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: ../woocommerce-pdf-italian-add-on.php:78
+#, php-format
+msgid ""
+"WooCommerce Italian Add-on requires %sWooCommerce%s to be installed and "
+"activated!"
+msgstr ""
+"WooCommerce Italian Add-on richiede che %sWooCommerce%s sia installato e "
+"attivato!"
+
+#: ../woocommerce-pdf-italian-add-on.php:132
+#: ../woocommerce-pdf-italian-add-on.php:133
+#: ../woocommerce-pdf-italian-add-on.php:156
+#: ../woocommerce-pdf-italian-add-on.php:240
+#: ../woocommerce-pdf-italian-add-on.php:258
+msgid "Invoice or Receipt"
+msgstr "Fattura o ricevuta"
+
+#: ../woocommerce-pdf-italian-add-on.php:139
+#: ../woocommerce-pdf-italian-add-on.php:161
+#: ../woocommerce-pdf-italian-add-on.php:243
+#: ../templates/pdf/Simple/receipt.php:9
+#: ../templates/pdf/Simple/receipt.php:21
+msgid "Receipt"
+msgstr "Ricevuta"
+
+#: ../woocommerce-pdf-italian-add-on.php:140
+#: ../woocommerce-pdf-italian-add-on.php:162
+#: ../woocommerce-pdf-italian-add-on.php:244
+msgid "Invoice"
+msgstr "Fattura"
+
+#: ../woocommerce-pdf-italian-add-on.php:145
+#: ../woocommerce-pdf-italian-add-on.php:166
+#: ../woocommerce-pdf-italian-add-on.php:249
+msgid "VAT number"
+msgstr "Codice fiscale o Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:146
+msgid "Please enter your VAT number or Fiscal code"
+msgstr "Digita il tuo Codice fiscale o Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:189
+msgid "Please enter your VAT number"
+msgstr "Digita la tua Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:191
+#, php-format
+msgid "VAT number %1$s is not correct"
+msgstr "La partita IVA %1$s non è indicata in modo corretto"
+
+#: ../woocommerce-pdf-italian-add-on.php:196
+#, php-format
+msgid "Tax Identification Number %1$s is not correct"
+msgstr "Il Codice Fiscale %1$s non è indicato in modo corretto"
+
+#: ../woocommerce-pdf-italian-add-on.php:220
+msgid "VAT"
+msgstr "P.IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:220
+msgid "Fiscal code"
+msgstr "Cod.Fisc."
+
+#: ../woocommerce-pdf-italian-add-on.php:275
+msgid "invoice"
+msgstr "fattura"
+
+#: ../woocommerce-pdf-italian-add-on.php:276
+msgid "receipt"
+msgstr "ricevuta"
+
+#: ../includes/class-wc-settings.php:29 ../includes/class-wc-settings.php:30
+msgid "Italian Add-on"
+msgstr "Italian Add-on"
+
+#: ../includes/class-wc-settings.php:65 ../includes/class-wc-settings.php:93
+#: ../includes/class-wc-settings.php:98 ../includes/class-wc-settings.php:502
+msgid "Premium Versions"
+msgstr "Versioni premium"
+
+#: ../includes/class-wc-settings.php:83
+#, php-format
+msgid ""
+"If you like <strong>%1s</strong> please leave us a %2s rating. A huge thank "
+"you from %3s team in advance!"
+msgstr ""
+"Se ti piace <strong>%1s</strong> metti un rating %2s. Un grosso grazie dal "
+"team di %3s!"
+
+#: ../includes/class-wc-settings.php:107 ../includes/class-wc-settings.php:500
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: ../includes/class-wc-settings.php:111
+msgid "General settings"
+msgstr "Impostazioni generali"
+
+#: ../includes/class-wc-settings.php:118
+msgid "Required VAT/Tax Code"
+msgstr "partita IVA e Codice Fiscale obbligatori"
+
+#: ../includes/class-wc-settings.php:126
+msgid "Choose if you want that VAT/Tax Code is a required field"
+msgstr ""
+"Scegli se vuoi che il campo partita IVA/Codice Fiscale sia obbligatorio"
+
+#: ../includes/class-wc-settings.php:129
+msgid "required"
+msgstr "obbligatorio"
+
+#: ../includes/class-wc-settings.php:130
+msgid "not required"
+msgstr "non obbligatorio"
+
+#: ../includes/class-wc-settings.php:137
+msgid "VAT/Tax Code field width"
+msgstr "larghezza del campo partita IVA/Codice Fiscale"
+
+#: ../includes/class-wc-settings.php:145
+msgid ""
+"Choose if you want that fields VAT/Tax Code and invoice/receipt on the same "
+"row in checkout page"
+msgstr ""
+"Nella pagina del checkout scegli se vuoi che i campi partita IVA/Codice "
+"Fiscale e Fattura/Ricevuta siano sulla stessa riga"
+
+#: ../includes/class-wc-settings.php:148
+msgid "wide"
+msgstr "largo"
+
+#: ../includes/class-wc-settings.php:149
+msgid "short"
+msgstr "stretto"
+
+#: ../includes/class-wc-settings.php:514
+msgid "More Options"
+msgstr "Altre opzioni"
+
+#: ../includes/class-wcpdf-integration.php:25
+#: ../includes/class-wcpdf-integration.php:42
+msgid "PDF Receipt"
+msgstr "Ricevuta PDF"
+
+#: ../includes/class-wcpdf-integration.php:50
+msgid "PDF Receipts"
+msgstr "Ricevute PDF"
+
+#: ../includes/class-wcpdf-integration.php:83
+msgid "Download Receipt (PDF)"
+msgstr "Scarica ricevuta (PDF)"
+
+#: ../templates/pdf/Simple/receipt.php:29
+msgid "Billing Address:"
+msgstr "Indirizzo:"
+
+#: ../templates/pdf/Simple/receipt.php:40
+msgid "Ship To:"
+msgstr "Destinatario:"
+
+#: ../templates/pdf/Simple/receipt.php:49
+msgid "Receipt Date:"
+msgstr "Data ricevuta:"
+
+#: ../templates/pdf/Simple/receipt.php:54
+msgid "Order Number:"
+msgstr "Ordine n°:"
+
+#: ../templates/pdf/Simple/receipt.php:58
+msgid "Order Date:"
+msgstr "Data ordine:"
+
+#: ../templates/pdf/Simple/receipt.php:62
+msgid "Payment Method:"
+msgstr "Metodo di pagamento:"
+
+#: ../templates/pdf/Simple/receipt.php:76
+msgid "Product"
+msgstr "Prodotto"
+
+#: ../templates/pdf/Simple/receipt.php:77
+msgid "Quantity"
+msgstr "Quantità"
+
+#: ../templates/pdf/Simple/receipt.php:78
+msgid "Price"
+msgstr "Prezzo"
+
+#: ../templates/pdf/Simple/receipt.php:85
+msgid "Description"
+msgstr "Descrizione"
+
+#: ../templates/pdf/Simple/receipt.php:90
+msgid "SKU"
+msgstr "Codice prod."
+
+#: ../templates/pdf/Simple/receipt.php:91
+msgid "SKU:"
+msgstr "Codice prod.:"
+
+#: ../templates/pdf/Simple/receipt.php:92
+msgid "Weight:"
+msgstr "Peso:"
+
+#: ../templates/pdf/Simple/receipt.php:106
+msgid "Customer Notes"
+msgstr "Note del Cliente"
+
+#~ msgid "Recipient"
+#~ msgstr "Destinatario"
+
+#~ msgid "Invoice Number"
+#~ msgstr "Fattura n°"

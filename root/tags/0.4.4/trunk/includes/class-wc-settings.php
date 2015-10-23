@@ -56,13 +56,8 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 				case $this->premium_versions_key :
 					try {
 						$s = file_get_contents("http://ldav.it/plugin/woocommerce-italian-add-on/");
-<<<<<<< HEAD
-						preg_match("/<section\sitemprop=\"articleBody\"[^>]*>(.*?)<\\/section>/si", $s, $m);
-						$content = isset($m[0]) ? $m[0] : $s;;
-=======
 						preg_match("/<div[^>]*itemprop=\"articleBody\">(.*?)<\\/div>/si", $s, $m);
 						$content = $m[1];
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 					} catch (Exception $e) {
 						$content = "";
 					}

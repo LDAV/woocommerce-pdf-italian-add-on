@@ -2,11 +2,7 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-<<<<<<< HEAD
-Tested up to: 4.3
-=======
 Tested up to: 4.2.4
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 Stable tag: 0.4.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -37,14 +33,8 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 
 Tested up to/Testato fino alle versioni:
 
-<<<<<<< HEAD
-* WooCommerce v. 2.4.4
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 1.5.21
-* WooCommerce PDF Invoice [RightPress] v. 2.1.6
-=======
 * WooCommerce v. 2.4.3
 * WooCommerce PDF Invoices & Packing Slips v. 1.5.19
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 
 = Features =
 
@@ -96,16 +86,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 IT
 
-<<<<<<< HEAD
-* Migliorata la Regular Expression per il riconoscimento di alcune Partite IVA europee.
-* Aggiunta la colonna Fattura/Ricevuta nell'elenco ordini.
-* Il plugin è compatibile anche con WooCommerce PDF Invoice [RightPress], oltre che con WooCommerce PDF Invoices & Packing Slips.
-=======
 * Disattiva alcune funzioni se manca WooCommerce PDF Invoices & Packing Slips (opzionale).
 * Migliorata la Regular Expression per il riconoscimento di alcune Partite IVA europee.
 * Aggiunta la colonna Fattura/Ricevuta nell'elenco ordini.
 * Migliorata la compatibilità con altri pacchetti.
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 * Aggiornamenti vari del codice sorgente.
 
 = 0.4.3 - 2015/06/12 =

@@ -88,11 +88,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	}
 	
 	public function wcpdf_template_files( $template, $template_type ) {
-<<<<<<< HEAD
-		global $wcpdf_IT;
-=======
 		global $wpo_wcpdf;
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 	
 		// bail out if file already exists in default or custom path!
 		if ( file_exists( $template ) ) {
@@ -100,11 +96,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		}
 		
 		if ( $template_type == 'receipt') {
-<<<<<<< HEAD
-			$receipt_template = $wcpdf_IT->plugin_path . 'templates/pdf/Simple/receipt.php';
-=======
 			$receipt_template = dirname(__FILE__) . '/templates/pdf/Simple/receipt.php';
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 			if( file_exists( $receipt_template ) ) {
 				$template = $receipt_template;
 			}

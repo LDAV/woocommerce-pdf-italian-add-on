@@ -3,11 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: http://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
-<<<<<<< HEAD
- * Version: 0.4.5b
-=======
  * Version: 0.4.4
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
  * Author: laboratorio d'Avanguardia
  * Author URI: http://ldav.it/
  * License: GPLv2 or later
@@ -27,11 +23,7 @@ class WooCommerce_Italian_add_on {
 	public $plugin_basename;
 	public $plugin_url;
 	public $plugin_path;
-<<<<<<< HEAD
-	public $version = '0.4.5b';
-=======
 	public $version = '0.4.4';
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 	protected static $instance = null;
 	
 	public $settings;
