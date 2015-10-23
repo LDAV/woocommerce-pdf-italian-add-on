@@ -33,9 +33,8 @@ Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture vi
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 2.4.4
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 1.5.19
-* WooCommerce PDF Invoice [RightPress] v. 2.1.6
+* WooCommerce v. 2.4.3
+* WooCommerce PDF Invoices & Packing Slips v. 1.5.19
 
 = Features =
 
@@ -87,9 +86,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 IT
 
+* Disattiva alcune funzioni se manca WooCommerce PDF Invoices & Packing Slips (opzionale).
 * Migliorata la Regular Expression per il riconoscimento di alcune Partite IVA europee.
 * Aggiunta la colonna Fattura/Ricevuta nell'elenco ordini.
-* Il plugin è compatibile anche con WooCommerce PDF Invoice [RightPress], oltre che con WooCommerce PDF Invoices & Packing Slips.
+* Migliorata la compatibilità con altri pacchetti.
 * Aggiornamenti vari del codice sorgente.
 
 = 0.4.3 - 2015/06/12 =
