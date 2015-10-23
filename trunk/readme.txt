@@ -2,13 +2,8 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Fiscal Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-<<<<<<< HEAD
 Tested up to: 4.3.1
 Stable tag: 0.4.5b
-=======
-Tested up to: 4.2.4
-Stable tag: 0.4.4
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -23,11 +18,8 @@ Fiscal code or VAT number are added to WooCommerce checkout page. The customer c
 1. Read the istructions for [How to create my own custom template](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/faq/).
 1. Copy the "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" in your (child) theme, and customize it.
 
-<<<<<<< HEAD
 Our plugin is certified fully WPML Compatible.
 
-=======
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 = IT =
 
 Questo plugin aggiunge tutto quello che è necessario per un' e-shop italiano. Per funzionare ha bisogno del plugin gratuito di Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) che consente di numerare automaticamente le fatture e di stamparle o inviarle in formato PDF.
@@ -41,7 +33,6 @@ Il plugin [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.or
 
 Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture viene sospesa e riprende solamente per le successive fatture.
 
-<<<<<<< HEAD
 Il nostro plugin è certificato fully WPML Compatible.
 
 Tested up to/Testato fino alle versioni:
@@ -51,13 +42,6 @@ Tested up to/Testato fino alle versioni:
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
 * WPML Multilingual CMS v. 3.2.7
 * WooCommerce Multilingual v. 3.6.11
-=======
-Tested up to/Testato fino alle versioni:
-
-* WooCommerce v. 2.4.4
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 1.5.19
-* WooCommerce PDF Invoice [RightPress] v. 2.1.6
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 
 = Features =
 
@@ -105,13 +89,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-<<<<<<< HEAD
 = 0.4.5 - 2015/09/15 =
 
 Some bug fix
 
-=======
->>>>>>> 03c3d820580edf25963cc2823fbd58bb512c7498
 = 0.4.4 - 2015/08/12 =
 
 IT
