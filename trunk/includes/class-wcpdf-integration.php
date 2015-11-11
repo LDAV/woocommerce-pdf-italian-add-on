@@ -118,4 +118,3 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 }
 $wcpdf_it_add_on = new wcpdf_Integration_Italian_add_on();
 endif;
-?>
