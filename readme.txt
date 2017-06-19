@@ -2,7 +2,7 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.8
+Tested up to: 4.7.4
 Stable tag: 0.4.9.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -49,11 +49,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.0.8
+* WooCommerce v. 3.0.4
 * WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 1.6.5
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 3.7.1
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.1.4
+* [WPML Multilingual CMS](https://wpml.org/) v. 3.7.0
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.1.2
 
 = Translations in your language =
 
@@ -102,7 +102,7 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 == Changelog ==
 
 = 0.4.9 =
-* updated for WooCommerce up to 3.0.8
+* updated for WooCommerce up to 3.0.1
 
 = 0.4.8 =
 * minor bug fixes

@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: http://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.4.9.4
+ * Version: 0.5.0.beta
  * Author: laboratorio d'Avanguardia
  * Author URI: http://ldav.it/
  * License: GPLv2 or later
@@ -23,7 +23,7 @@ class WooCommerce_Italian_add_on {
 	public $plugin_basename;
 	public $plugin_url;
 	public $plugin_path;
-	public $version = '0.4.9.4';
+	public $version = '0.5.0.beta';
 	protected static $instance = null;
 	
 	public $settings;
@@ -46,6 +46,10 @@ class WooCommerce_Italian_add_on {
 		$this->plugin_url = plugin_dir_url($this->plugin_basename);
 		$this->plugin_path = trailingslashit(dirname(__FILE__));
 		$this->init_hooks();
+	}
+
+	public function plugin_url() {
+		return untrailingslashit( plugins_url( '/', __FILE__ ) );
 	}
 
 	public function init() {
@@ -117,10 +121,16 @@ class WooCommerce_Italian_add_on {
 		$this->eu_vat_countries = WC()->countries->get_european_union_countries('eu_vat');
 		$this->default_country = WC()->countries->get_base_country();
 
-		if ( in_array( 'woocommerce-pdf-invoices-packing-slips/woocommerce-pdf-invoices-packingslips.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-			include_once 'includes/class-wcpdf-integration.php';
+		if ( class_exists( 'WPO_WCPDF' ) ) {
+			if(version_compare( WPO_WCPDF()->version, '1.7', '<' ) ) {
+				include_once 'includes/class-wcpdf-integration.php';
+			} else {
+				include_once 'includes/class-wcpdf-integration2.php';
+			}
+/*
 		} else {
-			//add_action( 'admin_notices', array ( $this, 'check_wpo_wcpdf' ) );
+			add_action( 'admin_notices', array ( $this, 'check_wpo_wcpdf' ) );
+*/
 		}
 	}
 
@@ -324,6 +334,15 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 </style>
 <?php
 		return $new_columns;
+	}
+
+	public function get_billing_invoice_type($order) {
+		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
+			$invoicetype = get_post_meta($order->id,"_billing_invoice_type",true);
+		} else {
+			$invoicetype = $order->get_meta("_billing_invoice_type",true);
+		}
+		return($invoicetype);
 	}
 
 	public function invoice_type_column_data( $column ) {

@@ -178,7 +178,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
 			$invoicetype = get_post_meta($wpo_wcpdf->export->order->id,"_billing_invoice_type",true);
 		} else {
-			$order = wc_get_order($wpo_wcpdf->export->order->id);
+			$order = wc_get_order($wpo_wcpdf->export->order->get_id() );
 			$invoicetype = $order->get_meta("_billing_invoice_type",true);
 		}
 

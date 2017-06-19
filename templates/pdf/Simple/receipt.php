@@ -1,5 +1,5 @@
 <?php global $wpo_wcpdf; ?>
-<table class="head container">
+<table class="head container receipt1">
 	<tr>
 		<td class="header">
 		<?php
