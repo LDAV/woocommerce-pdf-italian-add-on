@@ -2,8 +2,8 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.8
-Stable tag: 0.4.9.4
+Tested up to: 4.8.2
+Stable tag: 0.5.0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -49,11 +49,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.0.8
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 1.6.5
+* WooCommerce v. 3.2.1
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.0.13
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 3.7.1
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.1.4
+* [WPML Multilingual CMS](https://wpml.org/) v. 3.8.3
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.2.4
 
 = Translations in your language =
 
@@ -100,6 +100,16 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 4. Il codice Fiscale o la Partita IVA vengono riportate nei dati dell'indirizzo, e quindi anche nelle email o nel pdf di fattura o ricevuta
 
 == Changelog ==
+
+= 0.5.0.3 =
+* It dynamically adds an asterisk to the required fields in checkout page, if required;
+* You can check if VAT number is required for non-EU customer;
+* bug fixes.
+
+= 0.5.0 =
+* Now is possible to set a number for receipts, that increase indipendently.
+* updated for WooCommerce PDF Invoices & Packing Slips 2.0.x
+* bug fixes (new order blank page)
 
 = 0.4.9 =
 * updated for WooCommerce up to 3.0.8
@@ -194,8 +204,8 @@ EN
 
 == Upgrade Notice ==
 
-= 0.3.3 =
-Abbiamo aggiunto un paio di funzioni che migliorano la compatibilità del plugin. È consigliato l'upgrade. 
+= 0.5.0.1 =
+Oltre alla correzione di alcuni bug, è stato migliorato il funzionamento nella pagina del checkout. È consigliato l'upgrade. 
 
 == Support ==
 

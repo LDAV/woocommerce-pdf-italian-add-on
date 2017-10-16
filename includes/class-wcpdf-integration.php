@@ -4,7 +4,7 @@ if ( ! class_exists( 'wcpdf_Integration_Italian_add_on' )) :
 class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 
 	public function __construct() {
-		add_filter( 'wpo_wcpdf_meta_box_actions' , array( $this, 'wcpdf_meta_box_actions'), 20, 2 );
+		add_filter( 'wpo_wcpdf_meta_box_actions' , array( $this, 'wcpdf_meta_box_actions') );
 		add_filter( 'wpo_wcpdf_listing_actions' , array( $this, 'wcpdf_listing_actions') );
 		add_filter( 'wpo_wcpdf_bulk_actions' , array( $this, 'wcpdf_bulk_actions') );
 		add_filter( 'wpo_wcpdf_process_template_order' , array( $this, 'wcpdf_process_template_order'), 20,2);
@@ -15,8 +15,14 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		add_filter( 'wpo_wcpdf_attach_documents', array( $this, 'wcpdf_attach_receipt'), 20, 1 );
 	}
 	
-	public function wcpdf_meta_box_actions( $meta_actions, $post_id) {
-		$invoicetype = get_post_meta($post_id,"_billing_invoice_type",true);
+	public function wcpdf_meta_box_actions( $meta_actions ) {
+		global $post_id;
+		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
+			$invoicetype = get_post_meta($post_id,"_billing_invoice_type",true);
+		} else {
+			$order = wc_get_order($post_id);
+			$invoicetype = $order->get_meta("_billing_invoice_type",true);
+		}
 		if($invoicetype == "receipt") {
 			$meta_actions = array_merge(array("receipt" => array(
 				'url'		=> wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $post_id ), 'generate_wpo_wcpdf' ),
@@ -172,7 +178,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
 			$invoicetype = get_post_meta($wpo_wcpdf->export->order->id,"_billing_invoice_type",true);
 		} else {
-			$order = wc_get_order($wpo_wcpdf->export->order->id);
+			$order = wc_get_order($wpo_wcpdf->export->order->get_id() );
 			$invoicetype = $order->get_meta("_billing_invoice_type",true);
 		}
 

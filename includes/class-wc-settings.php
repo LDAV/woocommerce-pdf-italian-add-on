@@ -100,9 +100,20 @@ do_settings_sections($tab);
 <?php submit_button();?>
 </form>
 <script type="text/javascript">
-jQuery(function() {
-jQuery(".form-table .description:eq(1)").append('<br><img src="<?php echo $wcpdf_IT->plugin_url ?>images/invoice_width.png" width="464" height="259" />');
-jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("If you like <strong>%1s</strong> please leave us a %2s rating. A huge thank you from %3s team in advance!", WCPDF_IT_DOMAIN ), "WooCommerce Italian Add-on", "<a href='https://wordpress.org/support/view/plugin-reviews/woocommerce-pdf-invoices-italian-add-on?rate=5#postform'>★★★★★</a>", "<a href='http://ldav.it'>laboratorio d'avanguardia</a>"); ?></em></p><div class=\"clear\"></div>");
+jQuery(function($) {
+	jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("If you like <strong>%1s</strong> please leave us a %2s rating. A huge thank you from %3s team in advance!", WCPDF_IT_DOMAIN ), "WooCommerce Italian Add-on", "<a href='https://wordpress.org/support/view/plugin-reviews/woocommerce-pdf-invoices-italian-add-on?rate=5#postform'>★★★★★</a>", "<a href='https://ldav.it'>laboratorio d'Avanguardia</a>"); ?></em></p><div class=\"clear\"></div>");
+	jQuery("input[name='wcpdf_IT_general_settings[hide_outside_UE]']").click(function () {
+		if($(this).val() === "1" && $(this).prop("checked") ) {
+			$("input[id='wcpdf_IT_general_settings[invoice_required_non_UE][1]']").prop("checked", false);
+			$("input[id='wcpdf_IT_general_settings[invoice_required_non_UE][0]']").prop("checked", true);
+		}
+	});
+	jQuery("input[name='wcpdf_IT_general_settings[invoice_required_non_UE]']").click(function () {
+		if($(this).val() === "1" && $(this).prop("checked") ) {
+			$("input[id='wcpdf_IT_general_settings[hide_outside_UE][1]']").prop("checked", false);
+			$("input[id='wcpdf_IT_general_settings[hide_outside_UE][0]']").prop("checked", true);
+		}
+	});
 });
 </script>
 <?php
@@ -140,13 +151,15 @@ jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("I
 		}
 		
 		public function register_general_settings() {
+			global $wcpdf_IT;
 			$this->plugin_settings_tabs[$this->general_settings_key] = __( 'Settings', WCPDF_IT_DOMAIN );
 
 			if ( false === get_option( $this->general_settings_key ) ) {
 				$default = array(
 					'invoice_width'	=> 'wide',
 					'invoice_required'	=> 'not-required',
-					'hide_outside_UE'	=> false
+					'hide_outside_UE'	=> false,
+					'invoice_required_non_UE' => false
 				);
 				add_option( $this->general_settings_key, $default );
 			}
@@ -168,11 +181,49 @@ jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("I
 					'menu'			=> $this->general_settings_key,
 					'id'			=> 'invoice_required',
 					'help'			=> 'Choose if you want that VAT/Tax Code is a required field',
-					'description' => sprintf("%s<table class='fixed widefat striped'><tr><td>%s</td><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td><td>%s</td></tr></table>", __( "Choose if you want that VAT/Tax Code is always a required field. If NOT always required, it follows these rules:", WCPDF_IT_DOMAIN), __("Customer's billing country", WCPDF_IT_DOMAIN), __("User selection: Invoice", WCPDF_IT_DOMAIN), __("User selection: Receipt", WCPDF_IT_DOMAIN), __("Italy", WCPDF_IT_DOMAIN), __("VAT/Tax Code required", WCPDF_IT_DOMAIN), __("not required", WCPDF_IT_DOMAIN), __("UE", WCPDF_IT_DOMAIN), __("VAT required", WCPDF_IT_DOMAIN), __("not required", WCPDF_IT_DOMAIN), __("Extra UE", WCPDF_IT_DOMAIN), __("not required", WCPDF_IT_DOMAIN), __("not required", WCPDF_IT_DOMAIN) ),
+					'description' => sprintf("%s<table class='wp-list-table widefat fixed striped'><thead><tr><td>%s</td><td>%s</td><td>%s</td></tr></thead><tbody><tr><td>%s</td><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td><td>%s</td></tr><tr><td>%s</td><td>%s</td><td>%s</td></tr></tbody></table>", __( "Choose if you want that VAT/Tax Code is always a required field. If NOT always required, it follows these rules:", WCPDF_IT_DOMAIN), __("Customer's billing country", WCPDF_IT_DOMAIN), __("User selection: Invoice", WCPDF_IT_DOMAIN), __("User selection: Receipt", WCPDF_IT_DOMAIN), __("Italy", WCPDF_IT_DOMAIN), __("VAT/Tax Code required", WCPDF_IT_DOMAIN), __("not required", WCPDF_IT_DOMAIN), __("UE", WCPDF_IT_DOMAIN), __("VAT required", WCPDF_IT_DOMAIN), __("not required", WCPDF_IT_DOMAIN), __("Extra UE", WCPDF_IT_DOMAIN) . " <sup>(1)</sup>", __("VAT required/not required", WCPDF_IT_DOMAIN) . " <sup>(2)</sup>", __("not required", WCPDF_IT_DOMAIN) ),
 					'default' => 'not-required',
 					'options' 		=> array(
 						'required'	=> __( 'always required' , WCPDF_IT_DOMAIN ),
 						'not-required'	=> __( 'depends on billing country and user selection' , WCPDF_IT_DOMAIN ),
+					),
+				)
+			);
+
+			add_settings_field(
+				'hide_outside_UE',
+				"<sup>(1)</sup> " . __( 'Hide the Italian Add-on fields if billing country is outside UE?', WCPDF_IT_DOMAIN ),
+				array( &$this, 'radio_element_callback' ),
+				$this->general_settings_key,
+				$this->general_settings_key,
+				array(
+					'menu'			=> $this->general_settings_key,
+					'id'			=> 'hide_outside_UE',
+					'help'			=> "Choose if you want to hide the Italian Add-on fields if customer's billing country is outside UE",
+					'description' => __( "Choose if you want to hide the Italian Add-on fields if customer's billing country is outside UE", WCPDF_IT_DOMAIN ),
+					'default' => 0,
+					'options' 		=> array(
+						0	=> __( "Always show Italian Add-on fields" , WCPDF_IT_DOMAIN ),
+						1	=> __( "Hide Italian Add-on fields if customer's billing country is outside UE" , WCPDF_IT_DOMAIN ),
+					)
+				)
+			);
+
+			add_settings_field(
+				'invoice_required_non_UE',
+				"<sup>(2)</sup> " . __( 'Always request VAT number for non-EU customers invoices', WCPDF_IT_DOMAIN ),
+				array( &$this, 'radio_element_callback' ),
+				$this->general_settings_key,
+				$this->general_settings_key,
+				array(
+					'menu'			=> $this->general_settings_key,
+					'id'			=> 'invoice_required_non_UE',
+					'help'			=> 'Choose whether you want to make it compulsory to enter a VAT number for non-EU customers invoices.',
+					'description' => __( "Choose whether you want to make it compulsory to enter a VAT number for non-EU customers invoices.", WCPDF_IT_DOMAIN ),
+					'default' => 0,
+					'options' 		=> array(
+						1	=> __( 'required' , WCPDF_IT_DOMAIN ),
+						0	=> __( 'not required' , WCPDF_IT_DOMAIN ),
 					),
 				)
 			);
@@ -187,31 +238,12 @@ jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("I
 					'menu'			=> $this->general_settings_key,
 					'id'			=> 'invoice_width',
 					'help'			=> 'Choose if you want that fields VAT/Tax Code and invoice/receipt on the same row in checkout page',
-					'description' => __( "Choose if you want that fields VAT/Tax Code and invoice/receipt on the same row in checkout page", WCPDF_IT_DOMAIN ),
+					'description' => __( "Choose if you want that fields VAT/Tax Code and invoice/receipt on the same row in checkout page", WCPDF_IT_DOMAIN ) . '<br><img src="' . $wcpdf_IT->plugin_url . 'images/invoice_width.png" width="464" height="259" />',
 					'default' => 'wide',
 					'options' 		=> array(
 						'wide'	=> __( 'wide' , WCPDF_IT_DOMAIN ),
 						'short'	=> __( 'short' , WCPDF_IT_DOMAIN ),
 					),
-				)
-			);
-
-			add_settings_field(
-				'hide_outside_UE',
-				__( 'Hide the Italian Add-on fields if billing country is outside UE?', WCPDF_IT_DOMAIN ),
-				array( &$this, 'radio_element_callback' ),
-				$this->general_settings_key,
-				$this->general_settings_key,
-				array(
-					'menu'			=> $this->general_settings_key,
-					'id'			=> 'hide_outside_UE',
-					'help'			=> "Choose if you want to hide the Italian Add-on fields if customer's billing country is outside UE",
-					'description' => __( "Choose if you want to hide the Italian Add-on fields if customer's billing country is outside UE", WCPDF_IT_DOMAIN ),
-					'default' => false,
-					'options' 		=> array(
-						false	=> __( "Always show Italian Add-on fields" , WCPDF_IT_DOMAIN ),
-						true	=> __( "Hide Italian Add-on fields if customer's billing country is outside UE" , WCPDF_IT_DOMAIN ),
-					)
 				)
 			);
 
@@ -558,12 +590,10 @@ jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("I
 			return apply_filters( 'wcpdf_IT_validate_input', $output, $input );
 		}
 
-
-
 		public function add_settings_link( $links ) {
 			$settings_link = '<a href="admin.php?page=wcpdf_IT_options_page">'. __( 'Settings', WCPDF_IT_DOMAIN ) . '</a>';
 			array_push( $links, $settings_link );
-			$settings_link = '<a href="http://ldav.it/plugin/woocommerce-italian-add-on/">'. __( 'Premium Versions', WCPDF_IT_DOMAIN ) . '</a>';
+			$settings_link = '<a href="https://ldav.it/plugin/woocommerce-italian-add-on/">'. __( 'Premium Versions', WCPDF_IT_DOMAIN ) . '</a>';
 			array_push( $links, $settings_link );
 			return $links;
 		}
@@ -575,7 +605,7 @@ jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("I
 			}
 		
 			if ( $file == $wcpdf_IT->plugin_basename ) {
-			 $links[] = '<a href="http://ldav.it/plugin/woocommerce-italian-add-on/" target="_blank" title="' . __( 'More Options', WCPDF_IT_DOMAIN ) . '">' . __( 'More Options', WCPDF_IT_DOMAIN ) . '...</a>';
+			 $links[] = '<a href="https://ldav.it/plugin/woocommerce-italian-add-on/" target="_blank" title="' . __( 'More Options', WCPDF_IT_DOMAIN ) . '">' . __( 'More Options', WCPDF_IT_DOMAIN ) . '...</a>';
 			}
 			return $links;
 		}
