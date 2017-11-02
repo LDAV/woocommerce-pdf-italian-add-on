@@ -42,7 +42,7 @@ function wcpdf_IT_hide_outside_UE() {
 	}
 }
 jQuery(function($){
-	if(wcpdf_IT.hasSelect2){$("#billing_invoice_type").select2({minimumResultsForSearch: Infinity});}
+	if(typeof(jQuery.fn.select2) === "function"){$("#billing_invoice_type").select2({minimumResultsForSearch: Infinity});}
 	if(wcpdf_IT.hide_outside_UE) {
 		$("#billing_country").change(wcpdf_IT_hide_outside_UE);
 		$("#billing_invoice_type").change(wcpdf_IT_hide_outside_UE);

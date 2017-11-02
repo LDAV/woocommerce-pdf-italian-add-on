@@ -198,6 +198,11 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	public function wcpdf_my_account( $actions, $order ) {
 		$invoicetype = $this->get_billing_invoice_type($order);
 		if ( $invoicetype == 'receipt') {
+			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
+				$order_id = $order->id;
+			} else {
+				$order_id = $order->get_id();
+			}
 			$wpo_wcpdf_general_settings = get_option('wpo_wcpdf_general_settings');
 			$pdf_url = wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $order_id . '&my-account'), 'generate_wpo_wcpdf' );
 			if (isset($wpo_wcpdf_general_settings['my_account_buttons'])) {
