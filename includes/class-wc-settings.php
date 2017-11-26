@@ -14,12 +14,11 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 		
 
 		public function __construct() {
-			global $wcpdf_IT;
 			add_action( 'admin_menu', array( &$this, 'add_admin_menus' ) ); // Add menu.
 			add_action( 'admin_init', array( &$this, 'register_general_settings' ) ); // Registers settings
 			add_action( 'admin_init', array( &$this, 'register_premium_versions' ) ); // Registers settings
 			add_action( 'admin_init', array( &$this, 'register_invoice_templates' ) ); // Registers settings
-			add_filter( 'plugin_action_links_'. $wcpdf_IT->plugin_basename, array( &$this, 'add_settings_link' ) );
+			add_filter( 'plugin_action_links_'. WooCommerce_Italian_add_on::$plugin_basename, array( &$this, 'add_settings_link' ) );
 			add_filter( 'plugin_row_meta', array( $this, 'add_support_links' ), 10, 2 );
 		}
 		
@@ -158,8 +157,9 @@ jQuery(function($) {
 				$default = array(
 					'invoice_width'	=> 'wide',
 					'invoice_required'	=> 'not-required',
-					'hide_outside_UE'	=> false,
-					'invoice_required_non_UE' => false
+					'hide_outside_UE'	=> "0",
+					'vat_exempt_if_UE_business'	=> "0",
+					'invoice_required_non_UE' => 0
 				);
 				add_option( $this->general_settings_key, $default );
 			}
@@ -210,6 +210,25 @@ jQuery(function($) {
 			);
 
 			add_settings_field(
+				'vat_exempt_if_UE_business',
+				__( 'Apply the VAT exemption if customer type is business and billing foreign country is in EU', WCPDF_IT_DOMAIN ),
+				array( &$this, 'radio_element_callback' ),
+				$this->general_settings_key,
+				$this->general_settings_key,
+				array(
+					'menu'			=> $this->general_settings_key,
+					'id'			=> 'vat_exempt_if_UE_business',
+					'help'			=> "Choose whether you want to apply the VAT exemption to the foreign customers companies whose its billing country is in the EU",
+					'description' => sprintf(__( 'Choose whether you want to apply the VAT exemption to the foreign customers companies whose its billing country is in the EU.<br><strong>CAUTION: <a href="%s" target="_blank">VIES registration</a> of the VAT Number is NOT checked.</strong>', WCPDF_IT_DOMAIN ), "http://ec.europa.eu/taxation_customs/vies/vieshome.do"),
+					'default' => "0",
+					'options' 		=> array(
+						"0"	=> __( "No VAT exemption (recommended)" , WCPDF_IT_DOMAIN ),
+						"1"	=> __( "VAT-exempt" , WCPDF_IT_DOMAIN ),
+					)
+				)
+			);
+
+			add_settings_field(
 				'invoice_required_non_UE',
 				"<sup>(2)</sup> " . __( 'Always request VAT number for non-EU customers invoices', WCPDF_IT_DOMAIN ),
 				array( &$this, 'radio_element_callback' ),
@@ -238,7 +257,7 @@ jQuery(function($) {
 					'menu'			=> $this->general_settings_key,
 					'id'			=> 'invoice_width',
 					'help'			=> 'Choose if you want that fields VAT/Tax Code and invoice/receipt on the same row in checkout page',
-					'description' => __( "Choose if you want that fields VAT/Tax Code and invoice/receipt on the same row in checkout page", WCPDF_IT_DOMAIN ) . '<br><img src="' . $wcpdf_IT->plugin_url . 'images/invoice_width.png" width="464" height="259" />',
+					'description' => __( "Choose if you want that fields VAT/Tax Code and invoice/receipt on the same row in checkout page", WCPDF_IT_DOMAIN ) . '<br><img src="' . WooCommerce_Italian_add_on::$plugin_url . 'images/invoice_width.png" width="464" height="259" />',
 					'default' => 'wide',
 					'options' 		=> array(
 						'wide'	=> __( 'wide' , WCPDF_IT_DOMAIN ),
@@ -255,7 +274,7 @@ jQuery(function($) {
 		public function text_element_callback( $args ) {
 			$menu = $args['menu'];
 			$id = $args['id'];
-			$size = isset( $args['size'] ) ? $args['size'] : '25';
+			$size = isset( $args['size'] ) ? $args['size'] : '120px';
 		
 			$options = get_option( $menu );
 		
@@ -265,7 +284,7 @@ jQuery(function($) {
 				$current = isset( $args['default'] ) ? $args['default'] : '';
 			}
 		
-			$html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" size="%4$s"/>', $id, $menu, $current, $size );
+			$html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" style="width:%4$s"/>', $id, $menu, $current, $size );
 		
 			// Displays option description.
 			if ( isset( $args['description'] ) ) {
@@ -275,7 +294,6 @@ jQuery(function($) {
 			echo $html;
 		}
 		
-		// Text element callback.
 		public function textarea_element_callback( $args ) {
 			$menu = $args['menu'];
 			$id = $args['id'];
@@ -299,7 +317,6 @@ jQuery(function($) {
 		
 			echo $html;
 		}
-	
 	
 		/**
 		 * Checkbox field callback.
@@ -590,6 +607,8 @@ jQuery(function($) {
 			return apply_filters( 'wcpdf_IT_validate_input', $output, $input );
 		}
 
+
+
 		public function add_settings_link( $links ) {
 			$settings_link = '<a href="admin.php?page=wcpdf_IT_options_page">'. __( 'Settings', WCPDF_IT_DOMAIN ) . '</a>';
 			array_push( $links, $settings_link );
@@ -599,12 +618,11 @@ jQuery(function($) {
 		}
 
 		public function add_support_links( $links, $file ) {
-			global $wcpdf_IT;
 			if ( !current_user_can( 'install_plugins' ) ) {
 				return $links;
 			}
 		
-			if ( $file == $wcpdf_IT->plugin_basename ) {
+			if ( $file == WooCommerce_Italian_add_on::$plugin_basename ) {
 			 $links[] = '<a href="https://ldav.it/plugin/woocommerce-italian-add-on/" target="_blank" title="' . __( 'More Options', WCPDF_IT_DOMAIN ) . '">' . __( 'More Options', WCPDF_IT_DOMAIN ) . '...</a>';
 			}
 			return $links;

@@ -249,16 +249,15 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	public function wcpdf_template_files( $file_path, $type, $order ) {
 		if($type !== "receipt" || strpos($file_path, "receipt") === false) return $file_path;
 		
-		global $wcpdf_IT;
 		$file = "receipt2.php";
-
 		$path = WPO_WCPDF()->settings->get_template_path( $file );
 		$file_path = "{$path}/{$file}";
-
-		$fallback_file_path = $wcpdf_IT->plugin_path . 'templates/pdf/Simple/' . $file;
-		if ( !file_exists( $file_path ) && file_exists( $fallback_file_path ) ) {
-			$file_path = $fallback_file_path;
-		}
+		if(file_exists( $file_path )) return($file_path);
+		$file_path = "{$path}/receipt.php";
+		if(file_exists( $file_path )) return($file_path);
+		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt2.php';
+		if(file_exists( $file_path )) return($file_path);
+		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt.php';
 		return $file_path;
 	}
 /*

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: woocommerce-pdf-italian-add-on\n"
-"POT-Creation-Date: 2017-09-22 15:19+0200\n"
-"PO-Revision-Date: 2017-09-22 15:20+0200\n"
+"POT-Creation-Date: 2017-11-26 17:23+0100\n"
+"PO-Revision-Date: 2017-11-26 17:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -15,21 +15,21 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../includes/class-wc-settings.php:31 ../includes/class-wc-settings.php:32
+#: ../includes/class-wc-settings.php:30 ../includes/class-wc-settings.php:31
 msgid "Italian Add-on"
 msgstr "Italian Add-on"
 
-#: ../includes/class-wc-settings.php:75 ../includes/class-wc-settings.php:114
-#: ../includes/class-wc-settings.php:119 ../includes/class-wc-settings.php:584
+#: ../includes/class-wc-settings.php:74 ../includes/class-wc-settings.php:125
+#: ../includes/class-wc-settings.php:130 ../includes/class-wc-settings.php:615
 msgid "Premium Versions"
 msgstr "Versioni premium"
 
-#: ../includes/class-wc-settings.php:88 ../includes/class-wc-settings.php:128
-#: ../includes/class-wc-settings.php:133
+#: ../includes/class-wc-settings.php:87 ../includes/class-wc-settings.php:139
+#: ../includes/class-wc-settings.php:144
 msgid "Invoice Templates"
 msgstr "Modelli di Fattura"
 
-#: ../includes/class-wc-settings.php:104
+#: ../includes/class-wc-settings.php:103
 #, php-format
 msgid ""
 "If you like <strong>%1s</strong> please leave us a %2s rating. A huge thank "
@@ -38,19 +38,19 @@ msgstr ""
 "Se ti piace <strong>%1s</strong> metti un rating %2s. Un grosso grazie dal "
 "team di %3s!"
 
-#: ../includes/class-wc-settings.php:143 ../includes/class-wc-settings.php:582
+#: ../includes/class-wc-settings.php:154 ../includes/class-wc-settings.php:613
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: ../includes/class-wc-settings.php:157
+#: ../includes/class-wc-settings.php:169
 msgid "General settings"
 msgstr "Impostazioni generali"
 
-#: ../includes/class-wc-settings.php:164
+#: ../includes/class-wc-settings.php:176
 msgid "VAT/Tax Code always required"
 msgstr "Partita IVA o Codice Fiscale sempre obbligatori"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid ""
 "Choose if you want that VAT/Tax Code is always a required field. If NOT "
 "always required, it follows these rules:"
@@ -58,61 +58,61 @@ msgstr ""
 "Scegli se vuoi che il campo partita IVA/Codice Fiscale sia sempre "
 "obbligatorio. Se NON è sempre obbligatorio, si seguono queste regole:"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "Customer's billing country"
 msgstr "Paese di fatturazione del cliente"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "User selection: Invoice"
 msgstr "L’utente seleziona: Fattura"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "User selection: Receipt"
 msgstr "L’utente seleziona: Ricevuta"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "Italy"
 msgstr "Italia"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "VAT/Tax Code required"
 msgstr "Partita IVA o Codice Fiscale obbligatori"
 
-#: ../includes/class-wc-settings.php:172 ../includes/class-wc-settings.php:214
+#: ../includes/class-wc-settings.php:184 ../includes/class-wc-settings.php:245
 msgid "not required"
 msgstr "non obbligatorio"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "UE"
 msgstr "UE"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "VAT required"
 msgstr "Partita IVA obbligatoria"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "Extra UE"
 msgstr "Extra UE"
 
-#: ../includes/class-wc-settings.php:172
+#: ../includes/class-wc-settings.php:184
 msgid "VAT required/not required"
 msgstr "Partita IVA obbligatoria/non obbligatoria"
 
-#: ../includes/class-wc-settings.php:175
+#: ../includes/class-wc-settings.php:187
 msgid "always required"
 msgstr "sempre obbligatorio"
 
-#: ../includes/class-wc-settings.php:176
+#: ../includes/class-wc-settings.php:188
 msgid "depends on billing country and user selection"
 msgstr "dipende dal Paese di fatturazione e dalla selezione dell’utente"
 
-#: ../includes/class-wc-settings.php:183
+#: ../includes/class-wc-settings.php:195
 msgid "Hide the Italian Add-on fields if billing country is outside UE?"
 msgstr ""
 "Nascondere il campo partita IVA e codice fiscale se l'indirizzo di "
 "fatturazione non è nella Unione Europea?"
 
-#: ../includes/class-wc-settings.php:191
+#: ../includes/class-wc-settings.php:203
 msgid ""
 "Choose if you want to hide the Italian Add-on fields if customer's billing "
 "country is outside UE"
@@ -120,22 +120,52 @@ msgstr ""
 "Scegli se vuoi nascondere il campo partita IVA o codice fiscale quando "
 "l'indirizzo di fatturazione non è nella Unione Europea"
 
-#: ../includes/class-wc-settings.php:194
+#: ../includes/class-wc-settings.php:206
 msgid "Always show Italian Add-on fields"
 msgstr "Mostra sempre il campo partita IVA/codice fiscale"
 
-#: ../includes/class-wc-settings.php:195
+#: ../includes/class-wc-settings.php:207
 msgid "Hide Italian Add-on fields if customer's billing country is outside UE"
 msgstr ""
 "Nascondi la partita IVA o il codice fiscale quando l'indirizzo di "
 "fatturazione del cliente e fuori dall'Unione Europea"
 
-#: ../includes/class-wc-settings.php:202
+#: ../includes/class-wc-settings.php:214
+msgid ""
+"Apply the VAT exemption if customer type is business and billing foreign "
+"country is in EU"
+msgstr ""
+"Applica l'esenzione IVA se il cliente è un'azienda o un professionista e il "
+"suo indirizzo estero di fatturazione è nella UE"
+
+#: ../includes/class-wc-settings.php:222
+#, php-format
+msgid ""
+"Choose whether you want to apply the VAT exemption to the foreign customers "
+"companies whose its billing country is in the EU.<br><strong>CAUTION: <a "
+"href=\"%s\" target=\"_blank\">VIES registration</a> of the VAT Number is NOT "
+"checked.</strong>"
+msgstr ""
+"Scegli se vuoi applicare l'esenzione dell'IVA ai clienti aziende o "
+"professionisti esteri il cui indirizzo di fatturazione è nella UE."
+"<br><strong>ATTENZIONE: l'eventuale <a href=\"%s\" target=\"_blank"
+"\">registrazione al VIES</a> del numero della partita IVA NON viene "
+"verificata dal sistema.</strong>"
+
+#: ../includes/class-wc-settings.php:225
+msgid "No VAT exemption (recommended)"
+msgstr "Nessuna esenzione dell'IVA (raccomandato)"
+
+#: ../includes/class-wc-settings.php:226
+msgid "VAT-exempt"
+msgstr "IVA esente"
+
+#: ../includes/class-wc-settings.php:233
 msgid "Always request VAT number for non-EU customers invoices"
 msgstr ""
 "Richiedi sempre il numero di partita IVA per le fatture dei clienti non UE"
 
-#: ../includes/class-wc-settings.php:210
+#: ../includes/class-wc-settings.php:241
 msgid ""
 "Choose whether you want to make it compulsory to enter a VAT number for non-"
 "EU customers invoices."
@@ -143,16 +173,16 @@ msgstr ""
 "Scegli se vuoi rendere obbligatorio l'inserimento di un numero di partita "
 "IVA per le fatture ai clienti non UE."
 
-#: ../includes/class-wc-settings.php:213
-#: ../woocommerce-pdf-italian-add-on.php:200
+#: ../includes/class-wc-settings.php:244
+#: ../woocommerce-pdf-italian-add-on.php:227
 msgid "required"
 msgstr "obbligatorio"
 
-#: ../includes/class-wc-settings.php:221
+#: ../includes/class-wc-settings.php:252
 msgid "VAT/Tax Code field width"
 msgstr "larghezza del campo partita IVA/Codice Fiscale"
 
-#: ../includes/class-wc-settings.php:229
+#: ../includes/class-wc-settings.php:260
 msgid ""
 "Choose if you want that fields VAT/Tax Code and invoice/receipt on the same "
 "row in checkout page"
@@ -160,15 +190,15 @@ msgstr ""
 "Nella pagina del checkout scegli se vuoi che i campi partita IVA/Codice "
 "Fiscale e Fattura/Ricevuta siano sulla stessa riga"
 
-#: ../includes/class-wc-settings.php:232
+#: ../includes/class-wc-settings.php:263
 msgid "wide"
 msgstr "largo"
 
-#: ../includes/class-wc-settings.php:233
+#: ../includes/class-wc-settings.php:264
 msgid "short"
 msgstr "stretto"
 
-#: ../includes/class-wc-settings.php:596
+#: ../includes/class-wc-settings.php:626
 msgid "More Options"
 msgstr "Altre opzioni"
 
@@ -183,7 +213,7 @@ msgid "PDF Receipts"
 msgstr "Ricevute PDF"
 
 #: ../includes/class-wcpdf-integration.php:143
-#: ../includes/class-wcpdf-integration2.php:230
+#: ../includes/class-wcpdf-integration2.php:235
 msgid "Download Receipt (PDF)"
 msgstr "Scarica ricevuta (PDF)"
 
@@ -197,9 +227,9 @@ msgstr "Dati della ricevuta PDF"
 #: ../templates/pdf/Simple/receipt.php:9 ../templates/pdf/Simple/receipt.php:21
 #: ../templates/pdf/Simple/receipt2.php:10
 #: ../templates/pdf/Simple/receipt2.php:22
-#: ../woocommerce-pdf-italian-add-on.php:155
-#: ../woocommerce-pdf-italian-add-on.php:177
-#: ../woocommerce-pdf-italian-add-on.php:317
+#: ../woocommerce-pdf-italian-add-on.php:176
+#: ../woocommerce-pdf-italian-add-on.php:198
+#: ../woocommerce-pdf-italian-add-on.php:328
 msgid "Receipt"
 msgstr "Ricevuta"
 
@@ -223,7 +253,7 @@ msgid "Receipt Number (unformatted!)"
 msgstr "Numero ricevuta (non formattato)"
 
 #: ../includes/class-wcpdf-receipt-document.php:63
-#: ../woocommerce-pdf-italian-add-on.php:366
+#: ../woocommerce-pdf-italian-add-on.php:377
 msgid "receipt"
 msgstr "ricevuta"
 
@@ -297,7 +327,8 @@ msgstr "Padding"
 #: ../includes/class-wcpdf-receipt-document.php:220
 msgid "enter the number of digits here - enter \"6\" to display 42 as 000042"
 msgstr ""
-"inserisci qui il numero di cifre - scrivi “6” per visualizzare 42 come 000042"
+"inserisci qui il numero di cifre - scrivi \"6\" per visualizzare 42 come "
+"000042"
 
 #: ../templates/pdf/Simple/receipt.php:29
 #: ../templates/pdf/Simple/receipt2.php:30
@@ -368,7 +399,7 @@ msgstr "Note del Cliente"
 msgid "Receipt Number:"
 msgstr "Numero ricevuta:"
 
-#: ../woocommerce-pdf-italian-add-on.php:105
+#: ../woocommerce-pdf-italian-add-on.php:112
 #, php-format
 msgid ""
 "WooCommerce Italian Add-on requires %sWooCommerce%s to be installed and "
@@ -377,56 +408,106 @@ msgstr ""
 "WooCommerce Italian Add-on richiede che %sWooCommerce%s sia installato e "
 "attivato!"
 
-#: ../woocommerce-pdf-italian-add-on.php:148
-#: ../woocommerce-pdf-italian-add-on.php:149
-#: ../woocommerce-pdf-italian-add-on.php:172
-#: ../woocommerce-pdf-italian-add-on.php:314
-#: ../woocommerce-pdf-italian-add-on.php:331
+#: ../woocommerce-pdf-italian-add-on.php:169
+#: ../woocommerce-pdf-italian-add-on.php:170
+#: ../woocommerce-pdf-italian-add-on.php:193
+#: ../woocommerce-pdf-italian-add-on.php:325
+#: ../woocommerce-pdf-italian-add-on.php:342
 msgid "Invoice or Receipt"
 msgstr "Fattura o ricevuta"
 
-#: ../woocommerce-pdf-italian-add-on.php:156
-#: ../woocommerce-pdf-italian-add-on.php:178
-#: ../woocommerce-pdf-italian-add-on.php:318
+#: ../woocommerce-pdf-italian-add-on.php:177
+#: ../woocommerce-pdf-italian-add-on.php:199
+#: ../woocommerce-pdf-italian-add-on.php:329
 msgid "Invoice"
 msgstr "Fattura"
 
-#: ../woocommerce-pdf-italian-add-on.php:161
 #: ../woocommerce-pdf-italian-add-on.php:182
-#: ../woocommerce-pdf-italian-add-on.php:323
+#: ../woocommerce-pdf-italian-add-on.php:203
+#: ../woocommerce-pdf-italian-add-on.php:224
+#: ../woocommerce-pdf-italian-add-on.php:334
 msgid "VAT number"
-msgstr "Codice fiscale o Partita IVA"
+msgstr "Partita IVA"
 
-#: ../woocommerce-pdf-italian-add-on.php:162
+#: ../woocommerce-pdf-italian-add-on.php:183
+#: ../woocommerce-pdf-italian-add-on.php:221
 msgid "Please enter your VAT number or Tax Code"
 msgstr "Digita il tuo Codice fiscale o Partita IVA"
 
-#: ../woocommerce-pdf-italian-add-on.php:216
-#: ../woocommerce-pdf-italian-add-on.php:249
+#: ../woocommerce-pdf-italian-add-on.php:220
+msgid "VAT number or Tax Code"
+msgstr "Partita IVA o Codice Fiscale"
+
+#: ../woocommerce-pdf-italian-add-on.php:222
+#: ../woocommerce-pdf-italian-add-on.php:296
+msgid "Tax Code"
+msgstr "Codice fiscale"
+
+#: ../woocommerce-pdf-italian-add-on.php:223
+msgid "Please enter your Tax Code"
+msgstr "Digita il tuo Codice fiscale"
+
+#: ../woocommerce-pdf-italian-add-on.php:225
+#: ../woocommerce-pdf-italian-add-on.php:253
+msgid "Please enter your VAT number"
+msgstr "Digita la tua Partita IVA"
+
+#: ../woocommerce-pdf-italian-add-on.php:243
+#: ../woocommerce-pdf-italian-add-on.php:260
 #, php-format
 msgid "Tax Identification Number %1$s is not correct"
 msgstr "Il Codice Fiscale %1$s non è indicato in modo corretto"
 
-#: ../woocommerce-pdf-italian-add-on.php:221
+#: ../woocommerce-pdf-italian-add-on.php:248
 #, php-format
 msgid "VAT number %1$s is not correct"
 msgstr "La partita IVA %1$s non è indicata in modo corretto"
 
-#: ../woocommerce-pdf-italian-add-on.php:226
-msgid "Please enter your VAT number"
-msgstr "Digita la tua Partita IVA"
-
-#: ../woocommerce-pdf-italian-add-on.php:284
-msgid "Tax Code"
-msgstr "Cod.Fisc."
-
-#: ../woocommerce-pdf-italian-add-on.php:284
+#: ../woocommerce-pdf-italian-add-on.php:296
 msgid "VAT"
 msgstr "P.IVA"
 
-#: ../woocommerce-pdf-italian-add-on.php:365
+#: ../woocommerce-pdf-italian-add-on.php:376
 msgid "invoice"
 msgstr "fattura"
+
+#~ msgid ""
+#~ "The notice that appears in case of VAT exemption for purchases of EU "
+#~ "businesses."
+#~ msgstr ""
+#~ "L'avviso che compare in caso di esenzione IVA per gli acquisti di aziende "
+#~ "UE."
+
+#~ msgid ""
+#~ "Choose the notice that must appear on the checkout page in case of VAT "
+#~ "exemption for purchases made by EU businesses, such as: <strong>Non "
+#~ "taxable transaction ex art. 41 D.L. 331/93 comma 1 lett. a)</strong>. "
+#~ "Leave blank if you don't want any notice."
+#~ msgstr ""
+#~ "Scegli l'avviso che deve comparire nella pagina del checkout in caso di "
+#~ "esenzione IVA per gli acquisti effettuati da aziende UE, come ad esempio: "
+#~ "<strong>Operazione esente IVA ex art. 41 D.L. 331/93 comma 1 lett. a)</"
+#~ "strong>. Lascia vuoto se non vuoi nessun avviso."
+
+#~ msgid ""
+#~ "The notice that appears in case of VAT exemption for Extra UE purchases."
+#~ msgstr ""
+#~ "L'avviso che compare in caso di esenzione IVA per gli acquisti Extra UE."
+
+#~ msgid ""
+#~ "Choose the notice that must appear on the checkout page in case of VAT "
+#~ "exemption for purchases made by Extra-EU individuals or businesses, such "
+#~ "as: <strong>Non taxable transaction ex art. 8 D.P.R. n. 633/72 comma 1 "
+#~ "lett. b)</strong>. Leave blank if you don't want any notice."
+#~ "<br><strong>CAUTION</strong>: VAT exemption for non-EU purchases is set "
+#~ "in the WooCommerce Tax Rates panel."
+#~ msgstr ""
+#~ "Scegli l'avviso che deve comparire nella pagina del checkout in caso di "
+#~ "esenzione IVA per gli acquisti effettuati da privati o aziende Extra-UE, "
+#~ "come ad esempio: <strong>Operazione esente IVA ex art. 8 D.P.R. n. 633/72 "
+#~ "comma 1 lett. b)</strong>. Lascia vuoto se non vuoi nessun avviso."
+#~ "<br><strong>ATTENZIONE</strong>: L'esenzione IVA per gli acquisti Extra "
+#~ "UE è impostata nel pannello delle Aliquote IVA di WooCommerce."
 
 #~ msgid "if hidden"
 #~ msgstr "se nascosto"
@@ -439,9 +520,6 @@ msgstr "fattura"
 
 #~ msgid "not always required"
 #~ msgstr "non sempre obbligatorio"
-
-#~ msgid "VAT Number or Tax Code required"
-#~ msgstr "Partita IVA o Codice Fiscale obbligatori"
 
 #~ msgid "Required VAT/Tax Code"
 #~ msgstr "partita IVA e Codice Fiscale obbligatori"
