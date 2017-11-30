@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.5.1
+ * Version: 0.5.1.1
  * Author: laboratorio d'Avanguardia
  * Author URI: https://ldav.it/
  * License: GPLv2 or later
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.5.1';
+	public $version = '0.5.1.1';
 	protected static $instance = null;
 	
 	public $settings;
@@ -87,9 +87,6 @@ class WooCommerce_Italian_add_on {
 				add_filter( 'woocommerce_ajax_get_customer_details', array( $this, 'ajax_get_customer_details'), 10, 3 );
 			}
 			add_filter( 'woocommerce_customer_meta_fields', array( $this, 'customer_meta_fields') );
-
-			add_action( 'woocommerce_process_checkout_field_billing_invoice_type', array( $this, 'process_checkout_field_billing_invoice_type'));
-
 			add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_invoice_type_column' ));
 			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'invoice_type_column_data' ));
 
@@ -264,12 +261,6 @@ class WooCommerce_Italian_add_on {
 				$this->has_error = true;
 			}
 		}
-	}
-
-	function process_checkout_field_billing_invoice_type( $value ) {
-		//if(in_array( $value, array('invoice', 'receipt') ) ) return($value);
-		//return $value == "1" ? "invoice" : "receipt";
-		return $value ? "invoice" : "receipt";
 	}
 	
 	public function woocommerce_order_formatted_billing_address( $fields, $order) {

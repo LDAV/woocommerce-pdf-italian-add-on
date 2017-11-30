@@ -2,8 +2,8 @@
 **Contributors:** labdav  
 **Tags:** WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav  
 **Requires at least:** 3.8  
-**Tested up to:** 4.9 
-**Stable tag:** 0.5.1  
+**Tested up to:** 4.9.1
+**Stable tag:** 0.5.1.1
 **License:** GPLv3 or later  
 **License URI:** http://www.gnu.org/licenses/gpl.html  
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -120,6 +120,9 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 
 ## Changelog 
+
+### 0.5.1.1
+* bug fixes.
 
 ### 0.5.1
 * bug fixes.
@@ -242,8 +245,8 @@ EN
 ## Upgrade Notice 
 
 
-### 0.3.3 
-Abbiamo aggiunto un paio di funzioni che migliorano la compatibilità del plugin. È consigliato l'upgrade. 
+### 0.5.1.1
+Oltre alla correzione di alcuni bug, è stato migliorato il funzionamento nella pagina del checkout. È consigliato l'upgrade. 
 
 
 ## Support 
