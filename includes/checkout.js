@@ -13,7 +13,6 @@ function wcpdf_IT_check_required() {
 	var wcpdf_IT_country_selected = jQuery("#billing_country").val();
 	wcpdf_IT_billing_customer_type_change(wcpdf_IT_country_selected);
 	if(wcpdf_IT.hide_outside_UE) {wcpdf_IT_hide_outside_UE(wcpdf_IT_country_selected);}
-	if(wcpdf_IT.vat_exempt_if_UE_business) {wcpdf_IT_check_VatExpemptUE(wcpdf_IT_country_selected);}
 	if(wcpdf_IT.invoice_required) {return(false);}
 	jQuery("#billing_cf_field").removeClass("validate-required woocommerce-invalid woocommerce-invalid-required-field");
 	jQuery("#billing_cf_field label abbr").remove();

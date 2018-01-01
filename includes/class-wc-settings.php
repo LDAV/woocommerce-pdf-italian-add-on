@@ -158,7 +158,6 @@ jQuery(function($) {
 					'invoice_width'	=> 'wide',
 					'invoice_required'	=> 'not-required',
 					'hide_outside_UE'	=> "0",
-					'vat_exempt_if_UE_business'	=> "0",
 					'invoice_required_non_UE' => 0
 				);
 				add_option( $this->general_settings_key, $default );
@@ -205,25 +204,6 @@ jQuery(function($) {
 					'options' 		=> array(
 						0	=> __( "Always show Italian Add-on fields" , WCPDF_IT_DOMAIN ),
 						1	=> __( "Hide Italian Add-on fields if customer's billing country is outside UE" , WCPDF_IT_DOMAIN ),
-					)
-				)
-			);
-
-			add_settings_field(
-				'vat_exempt_if_UE_business',
-				__( 'Apply the VAT exemption if customer type is business and billing foreign country is in EU', WCPDF_IT_DOMAIN ),
-				array( &$this, 'radio_element_callback' ),
-				$this->general_settings_key,
-				$this->general_settings_key,
-				array(
-					'menu'			=> $this->general_settings_key,
-					'id'			=> 'vat_exempt_if_UE_business',
-					'help'			=> "Choose whether you want to apply the VAT exemption to the foreign customers companies whose its billing country is in the EU",
-					'description' => sprintf(__( 'Choose whether you want to apply the VAT exemption to the foreign customers companies whose its billing country is in the EU.<br><strong>CAUTION: <a href="%s" target="_blank">VIES registration</a> of the VAT Number is NOT checked.</strong>', WCPDF_IT_DOMAIN ), "http://ec.europa.eu/taxation_customs/vies/vieshome.do"),
-					'default' => "0",
-					'options' 		=> array(
-						"0"	=> __( "No VAT exemption (recommended)" , WCPDF_IT_DOMAIN ),
-						"1"	=> __( "VAT-exempt" , WCPDF_IT_DOMAIN ),
 					)
 				)
 			);

@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.5.1.1
+ * Version: 0.5.1.2
  * Author: laboratorio d'Avanguardia
  * Author URI: https://ldav.it/
  * License: GPLv2 or later
@@ -11,7 +11,7 @@
  * Text Domain: woocommerce-pdf-invoices-italian-add-on
  * Domain Path: /languages
  * WC requires at least: 2.6.0
- * WC tested up to: 3.2.5
+ * WC tested up to: 3.2.6
 
 */
 
@@ -33,7 +33,6 @@ class WooCommerce_Italian_add_on {
 	public $eu_vat_countries;
 	public $default_country;
 	public $has_error;
-	public $vat_exempt_if_UE_business;
 	public $regexCF = "/^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i";
 	public $regexPIVA = "/^(ATU[0-9]{8}|BE0[0-9]{9}|BG[0-9]{9,10}|CY[0-9]{8}L| CZ[0-9]{8,10}|DE[0-9]{9}|DK[0-9]{8}|EE[0-9]{9}|(EL|GR)[0-9]{9}|ES[0-9A-Z][0-9]{7}[0-9A-Z]|FI[0-9]{8}|FR[0-9A-Z]{2}[0-9]{9}|GB([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{13})|HU[0-9]{8}|IE[0-9]S[0-9]{5}L|IT[0-9]{11}|LT([0-9]{9}|[0-9]{12})|LU[0-9]{8}|LV[0-9]{11}|MT[0-9]{8}|NL[0-9]{9}B[0-9]{2}|PL[0-9]{10}|PT[0-9]{9}|RO[0-9]{2,10}|SE[0-9]{12}|SI[0-9]{8}|SK[0-9]{10})$/i";
 
@@ -79,7 +78,6 @@ class WooCommerce_Italian_add_on {
 			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'my_account_my_address_formatted_address'), 10, 3 );
 			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'formatted_address_replacements'), 10, 2 );
 			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'localisation_address_format') );
-			add_action( 'woocommerce_checkout_update_order_review', array($this, 'check_vat_exempt') );
 			
 			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
 				add_filter( 'woocommerce_found_customer_details', array( $this, 'found_customer_details') );
@@ -118,19 +116,6 @@ class WooCommerce_Italian_add_on {
 	}
 */
  
-	function check_vat_exempt( $post_data ) {
-		if($this->vat_exempt_if_UE_business) {
-			WC()->customer->set_is_vat_exempt( false );
-			$location = wc_get_base_location();
-			parse_str($post_data);
-			if(in_array($location["country"], $this->eu_vat_countries) && $billing_country != $location["country"]) {
-				if( ($billing_invoice_type == "invoice") ) {
-					WC()->customer->set_is_vat_exempt( true );
-				}
-			}
-		}
-	}
-
 	public function init_integration() {
 		include_once 'includes/class-wc-settings.php';
 		$this->settings = new WooCommerce_Italian_add_on_Settings();
@@ -138,7 +123,6 @@ class WooCommerce_Italian_add_on {
 		$this->invoice_required = isset($this->options["invoice_required"]) && $this->options["invoice_required"] == "required" ? true: false;
 		$this->hide_outside_UE = !empty($this->options["hide_outside_UE"]);
 		$this->invoice_required_non_UE = !empty($this->options["invoice_required_non_UE"]);
-		$this->vat_exempt_if_UE_business = empty($this->options["vat_exempt_if_UE_business"]) ? false : true;
 		$this->has_error = false;
 
 		$this->eu_vat_countries = WC()->countries->get_european_union_countries('eu_vat');
@@ -220,7 +204,6 @@ class WooCommerce_Italian_add_on {
 			'txtPersonal' => __('Please enter your Tax Code', WCPDF_IT_DOMAIN),
 			'lblBusiness' => __('VAT number', WCPDF_IT_DOMAIN),
 			'txtBusiness' => __('Please enter your VAT number', WCPDF_IT_DOMAIN),
-			'vat_exempt_if_UE_business' => ($this->vat_exempt_if_UE_business ? true : false),
 			'required_text' => ' <abbr class="required" title="' . __("required", "woocommerce") . '">*</abbr>'
 		) );
 		wp_enqueue_script( 'wc_italian_add_on' );
