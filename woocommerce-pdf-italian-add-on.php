@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce PDF Invoices Italian Add-on
  * Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
  * Description: Italian Add-on for PDF invoices & packing slips for WooCommerce.
- * Version: 0.5.1.2
+ * Version: 0.5.2
  * Author: laboratorio d'Avanguardia
  * Author URI: https://ldav.it/
  * License: GPLv2 or later
@@ -11,7 +11,7 @@
  * Text Domain: woocommerce-pdf-invoices-italian-add-on
  * Domain Path: /languages
  * WC requires at least: 2.6.0
- * WC tested up to: 3.2.6
+ * WC tested up to: 3.3.1
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.5.1.1';
+	public $version = '0.5.2';
 	protected static $instance = null;
 	
 	public $settings;
@@ -34,8 +34,8 @@ class WooCommerce_Italian_add_on {
 	public $default_country;
 	public $has_error;
 	public $regexCF = "/^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i";
-	public $regexPIVA = "/^(ATU[0-9]{8}|BE0[0-9]{9}|BG[0-9]{9,10}|CY[0-9]{8}L| CZ[0-9]{8,10}|DE[0-9]{9}|DK[0-9]{8}|EE[0-9]{9}|(EL|GR)[0-9]{9}|ES[0-9A-Z][0-9]{7}[0-9A-Z]|FI[0-9]{8}|FR[0-9A-Z]{2}[0-9]{9}|GB([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{13})|HU[0-9]{8}|IE[0-9]S[0-9]{5}L|IT[0-9]{11}|LT([0-9]{9}|[0-9]{12})|LU[0-9]{8}|LV[0-9]{11}|MT[0-9]{8}|NL[0-9]{9}B[0-9]{2}|PL[0-9]{10}|PT[0-9]{9}|RO[0-9]{2,10}|SE[0-9]{12}|SI[0-9]{8}|SK[0-9]{10})$/i";
-
+	public $regexPIVA = "/^(ATU[0-9]{8}|BE0[0-9]{9}|BG[0-9]{9,10}|CY[0-9]{8}L|CZ[0-9]{8,10}|DE[0-9]{9}|DK[0-9]{8}|EE[0-9]{9}|(EL|GR)[0-9]{9}|ES[0-9A-Z][0-9]{7}[0-9A-Z]|FI[0-9]{8}|FR[0-9A-Z]{2}[0-9]{9}|GB([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{13})|HU[0-9]{8}|IE[0-9][A-Z0-9][0-9]{5}[A-Z]{1,2}|IT[0-9]{11}|LT([0-9]{9}|[0-9]{12})|LU[0-9]{8}|LV[0-9]{11}|MT[0-9]{8}|NL[0-9]{9}B[0-9]{2}|PL[0-9]{10}|PT[0-9]{9}|RO[0-9]{2,10}|SE[0-9]{12}|SI[0-9]{8}|SK[0-9]{10})$/i";
+	
 	public $invoice_required;
 	public $hide_outside_UE;
 	public $invoice_required_non_UE;
@@ -224,7 +224,7 @@ class WooCommerce_Italian_add_on {
 					$this->has_error = true;
 				}
 			} elseif(in_array($_POST["billing_country"], $this->eu_vat_countries)) {
-				if(empty($_POST['billing_cf']) || strlen($_POST['billing_cf']) < 9) {
+				if(empty($_POST['billing_cf']) || strlen($_POST['billing_cf']) < 8) {
 					wc_add_notice(__('Please enter your VAT number or Tax Code', WCPDF_IT_DOMAIN),$notice_type = 'error');
 					$this->has_error = true;
 				} elseif(!preg_match($this->regexPIVA, $_POST["billing_country"].$_POST['billing_cf'])) {
@@ -247,13 +247,8 @@ class WooCommerce_Italian_add_on {
 	}
 	
 	public function woocommerce_order_formatted_billing_address( $fields, $order) {
-		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-			$fields['invoice_type'] = $order->billing_invoice_type;
-			$fields['cf'] = $order->billing_cf;
-		} else {
-			$fields['invoice_type'] = $order->get_meta("_billing_invoice_type",true);
-			$fields['cf'] = $order->get_meta("_billing_cf",true);
-		}
+		$fields['invoice_type'] = $this->get_billing_invoice_type($order);
+		$fields['cf'] = $this->get_billing_cf($order);
 		return $fields;
 	}
 	
@@ -339,16 +334,27 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 		return($invoicetype);
 	}
 
+	public function get_billing_cf($order) {
+		$cf = "";
+		if($order) {
+			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
+				$cf = get_post_meta($order->id,"_billing_cf",true);
+			} else {
+				$cf = $order->get_meta("_billing_cf",true);
+			}
+		}
+		return($cf);
+	}
+
 	public function invoice_type_column_data( $column ) {
 		global $post, $the_order;
 		if ( $column === 'invoice_type' ) {
 			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
 				if ( empty( $the_order ) || $the_order->id != $post->ID ) $the_order = wc_get_order( $post->ID );
-				$invoicetype = get_post_meta($the_order->id,"_billing_invoice_type",true);
 			} else {
 				if ( empty( $the_order ) || $the_order->get_id() != $post->ID ) $the_order = wc_get_order( $post->ID );
-				$invoicetype = $the_order->get_meta("_billing_invoice_type",true);
 			}
+			$invoicetype = $this->get_billing_invoice_type($the_order);
 			switch($invoicetype) {
 				case "invoice": echo "<i class=\"dashicons dashicons-media-document tips\" data-tip=\"" . __( 'invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
 				case "receipt": echo "<i class=\"dashicons dashicons-media-default tips\" data-tip=\"" . __( 'receipt', WCPDF_IT_DOMAIN ) . "\"></i>"; break;

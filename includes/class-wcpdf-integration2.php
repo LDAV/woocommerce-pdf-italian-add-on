@@ -47,7 +47,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		$order = wc_get_order($order_id);
 		$invoicetype = $this->get_billing_invoice_type($order);
 		if($invoicetype && $invoicetype === "receipt") {
-			if($invoicetype && $invoicetype === "receipt") remove_meta_box( 'wpo_wcpdf-data-input-box', 'shop_order', 'normal' );
+			remove_meta_box( 'wpo_wcpdf-data-input-box', 'shop_order', 'normal' );
 			add_meta_box(
 				'wcpdf-data-input-box-receipt',
 				__( 'PDF Receipt data', 'woocommerce-pdf-italian-add-on' ),
@@ -154,7 +154,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		if($invoicetype == "receipt") {
 			unset($meta_actions['invoice']);
 		}
-		if($invoicetype == "invoice") {
+		if(!$invoicetype || $invoicetype == "invoice") {
 			unset($meta_actions['receipt']);
 		}
 		return $meta_actions;
@@ -162,11 +162,10 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	
 	public function wcpdf_listing_actions( $listing_actions, $order) {
 		$invoicetype = $this->get_billing_invoice_type($order);
-		//echo $invoicetype;
 		if($invoicetype == "receipt") {
 			unset($listing_actions['invoice']);
 		}
-		if($invoicetype == "invoice") {
+		if(!$invoicetype || $invoicetype == "invoice") {
 			unset($listing_actions['receipt']);
 		}
 		return $listing_actions;
@@ -255,6 +254,19 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		if(file_exists( $file_path )) return($file_path);
 		$file_path = "{$path}/receipt.php";
 		if(file_exists( $file_path )) return($file_path);
+
+		// if WCPDF premium template is selected, use that
+		if ( defined('WPO_WCPDF_TEMPLATES_VERSION') && version_compare( WPO_WCPDF_TEMPLATES_VERSION, '2.4', '>' ) ) {
+			// use setting, fallback to basename
+			$template_name = !empty($wcpdf_IT->options['template_name']) ? $wcpdf_IT->options['template_name'] : basename( WPO_WCPDF()->settings->get_template_path() );
+
+			if ($template_name != 'Simple') {
+				$file_path = WooCommerce_Italian_add_on::$plugin_path . "templates/pdf/{$template_name}/receipt.php";
+				if(file_exists( $file_path )) return($file_path);
+			}
+		}
+
+		// use default (Simple)
 		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt2.php';
 		if(file_exists( $file_path )) return($file_path);
 		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt.php';

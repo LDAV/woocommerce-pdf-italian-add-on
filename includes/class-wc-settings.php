@@ -246,6 +246,33 @@ jQuery(function($) {
 				)
 			);
 
+			if ( defined('WPO_WCPDF_TEMPLATES_VERSION') && version_compare( WPO_WCPDF_TEMPLATES_VERSION, '2.4', '>' ) ) {
+				if ( defined('WPO_WCPDF_VERSION') && version_compare( WPO_WCPDF_VERSION, '2.0', '>' ) ) {
+					$default = basename( WPO_WCPDF()->settings->get_template_path() );
+				} else {
+					$default = 'Simple Premium';
+				}
+				add_settings_field(
+					'template_name',
+					__( 'Template', WCPDF_IT_DOMAIN ),
+					array( &$this, 'select_element_callback' ),
+					$this->general_settings_key,
+					$this->general_settings_key,
+					array(
+						'menu'			=> $this->general_settings_key,
+						'id'			=> 'template_name',
+						'description'	=> __( "Select the base template you want to use", WCPDF_IT_DOMAIN ),
+						'default'		=> $default,
+						'options' 		=> array(
+							'Simple Premium'	=> 'Simple Premium',
+							'Business'			=> 'Business',
+							'Modern'			=> 'Modern',
+							'Simple'			=> 'Simple',
+						),
+					)
+				);
+			}
+
 			register_setting( $this->general_settings_key, $this->general_settings_key, array( &$this, 'validate_options' ) );
 
 		}
