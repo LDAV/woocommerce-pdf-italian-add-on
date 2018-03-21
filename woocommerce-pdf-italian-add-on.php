@@ -11,7 +11,7 @@
  * Text Domain: woocommerce-pdf-invoices-italian-add-on
  * Domain Path: /languages
  * WC requires at least: 2.6.0
- * WC tested up to: 3.3.1
+ * WC tested up to: 3.3.4
 
 */
 
