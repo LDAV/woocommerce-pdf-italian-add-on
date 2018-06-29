@@ -159,6 +159,43 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 					'description'	=> !is_writable( WPO_WCPDF()->main->get_tmp_path( 'attachments' ) ) ? '<span class="wpo-warning">' . sprintf( __( 'It looks like the temp folder (<code>%s</code>) is not writable, check the permissions for this folder! Without having write access to this folder, the plugin will not be able to email invoices.', 'woocommerce-pdf-invoices-packing-slips' ), WPO_WCPDF()->main->get_tmp_path( 'attachments' ) ).'</span>':'',
 				)
 			),
+
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'display_shipping_address',
+				'title'			=> __( 'Display shipping address', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'receipt',
+				'args'			=> array(
+					'option_name'		=> $option_name,
+					'id'				=> 'display_shipping_address',
+					'description'		=> __( 'Display shipping address (in addition to the default billing address) if different from billing address', 'woocommerce-pdf-invoices-packing-slips' ),
+				)
+			),
+
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'display_email',
+				'title'			=> __( 'Display email address', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'receipt',
+				'args'			=> array(
+					'option_name'		=> $option_name,
+					'id'				=> 'display_email',
+				)
+			),
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'display_phone',
+				'title'			=> __( 'Display phone number', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'receipt',
+				'args'			=> array(
+					'option_name'		=> $option_name,
+					'id'				=> 'display_phone',
+				)
+			),
+
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'display_date',
@@ -220,6 +257,17 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 							'description'	=> __( 'enter the number of digits here - enter "6" to display 42 as 000042' , 'woocommerce-pdf-italian-add-on' ),
 						),
 					),
+				)
+			),
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'reset_number_yearly',
+				'title'			=> __( 'Reset receipt number yearly', 'woocommerce-pdf-italian-add-on' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'receipt',
+				'args'			=> array(
+					'option_name'		=> $option_name,
+					'id'				=> 'reset_number_yearly',
 				)
 			),
 		);

@@ -2,8 +2,8 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
-Tested up to: 4.9.4
-Stable tag: 0.5.2
+Tested up to: 4.9.6
+Stable tag: 0.6.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -11,9 +11,7 @@ Donate link: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 
 == Description ==
 
-= IT =
-
-Questo plugin aggiunge tutto il necessario per un' e-shop italiano. 
+Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano.
 
 Per funzionare al meglio delle sue possibilità consigliamo di associare un modulo per la generazione automatica delle fatture, come il plugin gratuito di Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) che consente di numerare automaticamente le fatture e di stamparle o inviarle in formato PDF.
 
@@ -49,11 +47,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.3.4
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.1.6
+* WooCommerce v. 3.4.3
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.1.10
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 3.9.3
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.2.9
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.0.3
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.3.2.1
 
 = Translations in your language =
 
@@ -101,8 +99,14 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.5.2 =
+= 0.6.1 =
+* Now is compatible with Paypal Express Checkout
 * bug fixes.
+
+= 0.5.2 - 0.5.2.3 =
+* small bug fixes.
+* Added an option to reset receipt number yearly
+* Added an option to display email, phone number and shipping address if different from billing address
 
 = 0.5.1 - 0.5.1.3 =
 * bug fixes.

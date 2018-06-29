@@ -11,7 +11,6 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 		private $invoice_templates_key = 'wcpdf_IT_invoice_templates';
 		private $plugin_options_key = 'wcpdf_IT_options_page';
 		private $plugin_settings_tabs = array();
-		
 
 		public function __construct() {
 			add_action( 'admin_menu', array( &$this, 'add_admin_menus' ) ); // Add menu.
@@ -21,7 +20,7 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 			add_filter( 'plugin_action_links_'. WooCommerce_Italian_add_on::$plugin_basename, array( &$this, 'add_settings_link' ) );
 			add_filter( 'plugin_row_meta', array( $this, 'add_support_links' ), 10, 2 );
 		}
-		
+
 		public function add_admin_menus() {
 			$parent_slug = 'woocommerce';
 			
@@ -48,7 +47,6 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 		}
 
 		public function settings_page() {
-			global $wcpdf_IT;
 			$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->general_settings_key;
 			echo '<h2>WooCommerce Italian Add-on</h2>';
 			echo '<div class="wrap">';
@@ -150,17 +148,20 @@ jQuery(function($) {
 		}
 		
 		public function register_general_settings() {
-			global $wcpdf_IT;
 			$this->plugin_settings_tabs[$this->general_settings_key] = __( 'Settings', WCPDF_IT_DOMAIN );
 
-			if ( false === get_option( $this->general_settings_key ) ) {
-				$default = array(
-					'invoice_width'	=> 'wide',
-					'invoice_required'	=> 'not-required',
-					'hide_outside_UE'	=> "0",
-					'invoice_required_non_UE' => 0
-				);
+			$default = array(
+				'invoice_width'	=> 'wide',
+				'invoice_required'	=> 'not-required',
+				'what_if_no_invoicetype'	=> 'noinvoice',
+				'hide_outside_UE'	=> "0",
+				'invoice_required_non_UE' => 0
+			);
+			$args = get_option( $this->general_settings_key );
+			if ( $args === false ) {
 				add_option( $this->general_settings_key, $default );
+			} else {
+				update_option( $this->general_settings_key, wp_parse_args($args, $default) );
 			}
 
 			add_settings_section(
@@ -227,6 +228,26 @@ jQuery(function($) {
 				)
 			);
 
+			add_settings_field(
+				'what_if_no_invoicetype',
+				__( 'If customer does not choose between invoice or receipt', WCPDF_IT_DOMAIN ),
+				array( &$this, 'radio_element_callback' ),
+				$this->general_settings_key,
+				$this->general_settings_key,
+				array(
+					'menu'			=> $this->general_settings_key,
+					'id'			=> 'what_if_no_invoicetype',
+					'help'			=> "What to do if customer doesn't choose between invoice or receipt (e.g. if customer pays directly by Paypal Express)",
+					'description' => __( "What to do if customer doesn't choose between invoice or receipt (e.g. if customer pays directly by Paypal Express)", WCPDF_IT_DOMAIN ),
+					'default' => "noinvoice",
+					'options' 		=> array(
+						"noinvoice"	=> __( "Don't issue any invoice or receipt" , WCPDF_IT_DOMAIN ),
+						"invoice"	=> __( 'Issue an invoice' , WCPDF_IT_DOMAIN ),
+						"receipt"	=> __( 'Issue a receipt' , WCPDF_IT_DOMAIN ),
+					),
+				)
+			);
+			
 			add_settings_field(
 				'invoice_width',
 				__( 'VAT/Tax Code field width', WCPDF_IT_DOMAIN ),
@@ -640,3 +661,4 @@ jQuery(function($) {
 	} // end class WooCommerce_Italian_add_on_Settings
 
 } // end class_exists
+return new WooCommerce_Italian_add_on_Settings();
