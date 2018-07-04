@@ -27,7 +27,7 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 			);
 			$orders = wc_get_orders( $args );
 			foreach($orders as $order) {
-				$order_id = $order->get_ID();
+				$order_id = WCPDF_IT()->get_order_id($order);
 				$invoicetype = $order->get_meta("_billing_invoice_type",true);
 				$customertype = $order->get_meta("_billing_customer_type",true);
 				$cf = $order->get_meta("_billing_cf",true);
