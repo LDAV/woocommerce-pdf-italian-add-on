@@ -19,13 +19,7 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 			}
 		}
 
-		public function update_db(){
-			if($this->dbv && version_compare($this->dbv, "0.6.0", ">=") ) return;
-			$args = array(
-				'limit' => 99999,
-				'type' => 'shop_order'
-			);
-			$orders = wc_get_orders( $args );
+		public function update_orders($orders){
 			foreach($orders as $order) {
 				$order_id = WCPDF_IT()->get_order_id($order);
 				$invoicetype = WCPDF_IT()->get_billing_invoice_type($order);
@@ -35,6 +29,23 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 					$customertype = $customertype ? $customertype : ((strlen($cf) === 16) ? "personal" : "business");
 					update_post_meta( $order_id, '_billing_customer_type', $customertype ); 
 				}
+			}
+		}
+		
+		public function update_db(){
+			if($this->dbv && version_compare($this->dbv, "0.6.0", ">=") ) return;
+			$limit = 500;
+			$paged = 1;
+			while(true){
+				$args = array(
+					'limit' => $limit,
+					'paged' => $paged,
+					'type' => 'shop_order'
+				);
+				$orders = wc_get_orders( $args );
+				if(!$orders) break;
+				$this->update_orders($orders);
+				$paged++;
 			}
 			update_option('wcpdf_IT_db_version', "0.6.0");
 			//die("OK");
