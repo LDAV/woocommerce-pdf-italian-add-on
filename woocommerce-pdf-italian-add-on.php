@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano
-Version: 0.6.1.3
+Version: 0.6.1.4
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.6.1.3';
+	public $version = '0.6.1.4';
 	protected static $instance = null;
 	
 	public $settings;
@@ -74,7 +74,7 @@ class WooCommerce_Italian_add_on {
 			add_action( 'init', array( $this, 'init_integration' ) );
 			add_filter( 'woocommerce_billing_fields' , array( $this, 'billing_fields'), 10, 1);
 			add_filter( 'woocommerce_admin_billing_fields' , array( $this, 'admin_field_cfpiva' ));
-			add_action( 'woocommerce_after_edit_address_form_billing', array( $this, 'after_order_notes') );
+			add_action( 'woocommerce_after_edit_address_form_billing', array( $this, 'after_edit_address_form_billing') );
 			add_action( 'woocommerce_after_order_notes', array( $this, 'after_order_notes') );
 			add_action( 'woocommerce_checkout_fields', array( $this, 'checkout_fields'));
 			add_action( 'woocommerce_checkout_process', array( $this, 'piva_checkout_field_process'));
@@ -226,7 +226,7 @@ class WooCommerce_Italian_add_on {
 		return $fields;
 	}
 	
-	public function after_order_notes($checkout) {
+	public function add_js_and_fields($customer_type){
 		wp_register_script( 'wc_italian_add_on', self::$plugin_url.'includes/checkout.js' );
 		wp_localize_script( 'wc_italian_add_on', 'wcpdf_IT', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -244,7 +244,19 @@ class WooCommerce_Italian_add_on {
 			'required_text' => ' <abbr class="required" title="' . __("required", "woocommerce") . '">*</abbr>'
 		) );
 		wp_enqueue_script( 'wc_italian_add_on' );
-		echo '<input type="hidden" name="billing_customer_type" id="billing_customer_type" value="' . $checkout->get_value( 'billing_customer_type' ) . '">';
+		echo '<input type="hidden" name="billing_customer_type" id="billing_customer_type" value="' . $customer_type . '">';
+	}
+
+	public function after_edit_address_form_billing() {
+		$billing_customer_type = get_user_meta( get_current_user_id(), 'billing_customer_type', true );
+		$customer_type = empty($billing_customer_type) ? "personal" : $billing_customer_type;
+		$this->add_js_and_fields($customer_type);
+	}
+
+	public function after_order_notes($checkout) {
+		$billing_customer_type = $checkout->get_value( 'billing_customer_type' );
+		$customer_type = empty($billing_customer_type) ? "personal" : $billing_customer_type;
+		$this->add_js_and_fields($customer_type);
 	}
 	
 	public function checkout_fields($fields) {
