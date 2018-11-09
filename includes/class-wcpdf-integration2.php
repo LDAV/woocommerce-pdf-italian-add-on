@@ -9,18 +9,22 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		add_filter( 'wpo_wcpdf_meta_box_actions' , array( $this, 'wcpdf_meta_box_actions'), 20, 2 );
 		add_filter( 'wpo_wcpdf_listing_actions' , array( $this, 'wcpdf_listing_actions'), 20, 2 );
 		add_filter( 'wpo_wcpdf_bulk_actions' , array( $this, 'wcpdf_bulk_actions') );
-//		add_filter( 'wpo_wcpdf_process_template_order' , array( $this, 'wcpdf_process_template_order'), 20,2);
 
 		add_filter( 'wpo_wcpdf_custom_attachment_condition' , array( $this, 'wcpdf_custom_email_condition'), 8,4);
 		add_filter( 'wpo_wcpdf_myaccount_actions', array( $this, 'wcpdf_my_account'), 10, 2 );
 		add_filter( 'wpo_wcpdf_template_file', array( $this, 'wcpdf_template_files'), 20, 3 );
-//		add_filter( 'wpo_wcpdf_attach_documents', array( $this, 'wcpdf_attach_receipt'), 20, 1 );
 
 		add_action( 'add_meta_boxes_shop_order', array( $this, 'wcpdf_add_meta_boxes' ), 20, 1 );
 		add_action( 'save_post', array( $this,'wcpdf_save_receipt_number_date' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wcpdf_admin_enqueue_scripts' ) );
 		add_filter( 'wpo_wcpdf_document_classes', array( $this, 'wcpdf_register_documents' ), 10, 1 );
-//		add_filter( 'wpo_wcpdf_template_file', array( $this, 'wcpdf_custom_template_files' ), 10, 2 );
+		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'wcpdf_after_order_details' ), 10, 2 );
+
+		add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_receipt_number_column' ), 999 );
+		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'receipt_number_column_data' ), 2 );
+		add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'receipt_number_column_sortable' ) );
+		add_filter( 'pre_get_posts', array( $this, 'sort_by_receipt_number' ) );
+
 	}
 
 	public function wcpdf_register_documents( $documents ) {
@@ -47,7 +51,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	public function wcpdf_add_meta_boxes( $post ) {
 		$order_id = $post->ID;
 		$order = wc_get_order($order_id);
-		$invoicetype = $this->get_billing_invoice_type($order);
+		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 		if($invoicetype === "receipt"  || (!$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "receipt")) {
 			remove_meta_box( 'wpo_wcpdf-data-input-box', 'shop_order', 'normal' );
 			add_meta_box(
@@ -70,8 +74,8 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		do_action( 'wpo_wcpdf_meta_box_start', $post->ID );
 
 		?>
-		<div class="wcpdf-data-fields">
-			<h4><?php _e( 'Receipt', WCPDF_IT_DOMAIN ) ?><?php if ($receipt->exists()) : ?><span id="edit-receipt-date-number" class="dashicons dashicons-edit"></span><?php endif; ?></h4>
+		<div class="wcpdf-data-fields" data-document="receipt" data-order_id="<?php echo $post->ID; ?>">
+			<h4><?php _e( 'Receipt', WCPDF_IT_DOMAIN ) ?><?php if ($receipt->exists()) : ?><span id="edit-receipt-date-number" class="dashicons dashicons-edit"></span><span class="wpo-wcpdf-delete-document dashicons dashicons-trash" data-nonce="<?php echo wp_create_nonce( "wpo_wcpdf_delete_document" ); ?>"></span><?php endif; ?></h4>
 
 			<!-- Read only -->
 			<div class="read-only">
@@ -152,7 +156,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	
 	public function wcpdf_meta_box_actions( $meta_actions, $post_id ) {
 		$order = wc_get_order($post_id);
-		$invoicetype = $this->get_billing_invoice_type($order);
+		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 		if($invoicetype == "receipt" || (!$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "receipt")) {
 			unset($meta_actions['invoice']);
 		}
@@ -167,7 +171,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	}
 	
 	public function wcpdf_listing_actions( $listing_actions, $order) {
-		$invoicetype = $this->get_billing_invoice_type($order);
+		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 		if($invoicetype == "receipt" || (!$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "receipt")) {
 			unset($listing_actions['invoice']);
 		}
@@ -190,15 +194,15 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	public function wcpdf_process_template_order($template_type, $order_id) {
 		if($template_type == 'invoice') {
 			$order = wc_get_order($order_id);
-			$invoicetype = $this->get_billing_invoice_type($order);
+			$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 			$template_type = $invoicetype ? $invoicetype : "invoice";
 		}
 		return $template_type;
 	}
 */
-
+	
 	public function wcpdf_custom_email_condition($attach, $order, $email_id, $document_type) {
-		$invoicetype = $this->get_billing_invoice_type($order);
+		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 		if(($invoicetype === "invoice" && $document_type === "receipt") || 
 			 ($invoicetype === "receipt" && $document_type === "invoice") )
 			return false;
@@ -209,59 +213,104 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			) ) return(false);
 		return $attach;
 	}
-	
-	public function wcpdf_my_account( $actions, $order ) {
-		$invoicetype = $this->get_billing_invoice_type($order);
-		if (!$invoicetype && WCPDF_IT()->what_if_no_invoicetype !== "invoice") {
-			unset($actions['invoice']);
-		}
-		if ( $invoicetype == 'receipt' || (!$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "receipt") ) {
-			$order_id = $this->get_order_id($order);
-			$wpo_wcpdf_general_settings = get_option('wpo_wcpdf_general_settings');
-			$pdf_url = wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $order_id . '&my-account'), 'generate_wpo_wcpdf' );
-			if (isset($wpo_wcpdf_general_settings['my_account_buttons'])) {
-				switch ($wpo_wcpdf_general_settings['my_account_buttons']) {
-					case 'available':
-/*
-						$invoice_allowed = get_post_meta($order->id,'_wcpdf_invoice_exists',true);
-						break;
-*/
-					case 'always':
-						$invoice_allowed = true;
-						break;
-					case 'never':
-						$invoice_allowed = false;
-						break;
-					case 'custom':
-						if ( isset( $wpo_wcpdf_general_settings['my_account_restrict'] ) && in_array( $order->status, array_keys( $wpo_wcpdf_general_settings['my_account_restrict'] ) ) ) {
-							$invoice_allowed = true;
-						} else {
-							$invoice_allowed = false;							
-						}
-						break;
-				}
-			} elseif ( !$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "noinvoice") {
-				$invoice_allowed = false;
-			} else {
-				$invoice_allowed = true; //get_post_meta($order->id,'_wcpdf_invoice_exists',true);
+
+/*	
+	public function my_account_pdf_link( $actions, $order ) {
+		$receipt = wcpdf_get_document( 'receipt', $order );
+		if ( $receipt && $receipt->is_enabled() ) {
+			$pdf_url = wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&document_type=receipt&order_ids=' . $order->order_id . '&my-account'), 'generate_wpo_wcpdf' );
+
+			// check my account button settings
+			$button_setting = $receipt->get_setting('my_account_buttons', 'available');
+			switch ($button_setting) {
+				case 'available':
+					$receipt_allowed = $receipt->exists();
+					break;
+				case 'always':
+					$receipt_allowed = true;
+					break;
+				case 'never':
+					$receipt_allowed = false;
+					break;
+				case 'custom':
+					$allowed_statuses = $button_setting = $receipt->get_setting('my_account_restrict', array());
+					if ( !empty( $allowed_statuses ) && in_array( $order->get_status(), array_keys( $allowed_statuses ) ) ) {
+						$receipt_allowed = true;
+					} else {
+						$receipt_allowed = false;
+					}
+					break;
 			}
-			if ($invoice_allowed) {
+
+			// Check if receipt has been created already or if status allows download (filter your own array of allowed statuses)
+			if ( $receipt_allowed || in_array($order->get_status(), apply_filters( 'wpo_wcpdf_myaccount_allowed_order_statuses', array() ) ) ) {
+				$button_text = __( 'Download receipt (PDF)', 'woocommerce-pdf-italian-add-on' );
 				$actions['receipt'] = array(
 					'url'  => $pdf_url,
-					'name' => __( 'Download Receipt (PDF)', WCPDF_IT_DOMAIN )
-				);				
+					'name' => $button_text
+				);
 			}
+		}
+
+		return apply_filters( 'wpo_wcpdf_myaccount_actions', $actions, $order );
+	}
+*/
+
+	public function wcpdf_my_account( $actions, $order ) {
+		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
+		if(!$invoicetype && WCPDF_IT()->what_if_no_invoicetype !== "invoice") {
 			unset($actions['invoice']);
+		}
+		if ($invoicetype == 'receipt' || (!$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "receipt") ) {
+			$receipt = wcpdf_get_document( 'receipt', $order );
+			if ( $receipt && $receipt->is_enabled() ) {
+				$order_id = wcpdf_it_get_order_id($order);
+				$wpo_wcpdf_general_settings = get_option('wpo_wcpdf_general_settings');
+				$pdf_url = wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&document_type=receipt&order_ids=' . $order_id . '&my-account'), 'generate_wpo_wcpdf' );
+				$button_setting = $receipt->get_setting('my_account_buttons', 'available');
+				if($button_setting) {
+					switch ($button_setting) {
+						case 'available':
+							$receipt_allowed = $receipt->exists();
+							break;
+						case 'always':
+							$receipt_allowed = true;
+							break;
+						case 'never':
+							$receipt_allowed = false;
+							break;
+						case 'custom':
+							$allowed_statuses = $button_setting = $receipt->get_setting('my_account_restrict', array());
+							if ( !empty( $allowed_statuses ) && in_array( $order->get_status(), array_keys( $allowed_statuses ) ) ) {
+								$receipt_allowed = true;
+							} else {
+								$receipt_allowed = false;
+							}
+							break;
+					}
+				} elseif ( !$invoicetype && WCPDF_IT()->what_if_no_invoicetype === "noinvoice") {
+					$receipt_allowed = false;
+				} else {
+					$receipt_allowed = $receipt->exists();
+				}
+				if ($receipt_allowed) {
+					$actions['receipt'] = array(
+						'url'  => $pdf_url,
+						'name' => __( 'Download Receipt (PDF)', WCPDF_IT_DOMAIN )
+					);				
+				}
+				unset($actions['invoice']);
+			}
 /*
 			$actions['receipt'] = array(
-				'url'  => wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&template_type=receipt&order_ids=' . $order->id . '&my-account' ), 'generate_wpo_wcpdf' ),
+				'url'  => wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&document_type=receipt&order_ids=' . $order->id . '&my-account' ), 'generate_wpo_wcpdf' ),
 				'name' => __( 'Download Receipt (PDF)', WCPDF_IT_DOMAIN )
 			);				
 */
 		}
 		return $actions;
 	}
-	
+
 	public function wcpdf_template_files( $file_path, $type, $order ) {
 		if($type !== "receipt" || strpos($file_path, "receipt") === false) return $file_path;
 		
@@ -311,7 +360,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 /*
 	public function wcpdf_attach_receipt( $documents ) {
 		global $order;
-		$invoicetype = $this->get_billing_invoice_type($order);
+		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 		if ( $invoicetype == 'receipt') {
 			$documents['receipt'] = $documents['invoice'];
 			unset($documents['invoice']);
@@ -319,6 +368,73 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		return $documents;
 	}
 */
+
+	function wcpdf_after_order_details($type, $order) {
+		if($type === "invoice" || $type === "receipt") {
+			$country = $order->get_billing_country();
+			$taxes = $order->get_total_tax();
+			//controlla solo se l'IVA è 0 e non se vat_exempt_if_UE_business = true perché potrebbero essere cambiate le condizioni di esenzione.
+			if($taxes == 0) {
+				if($country == WCPDF_IT()->default_country) {
+					if(!empty(WCPDF_IT()->options["txtVatExempt"])){
+						echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExempt"><strong>' . WCPDF_IT()->options["txtVatExempt"] . '</strong></div>';
+					}
+				} else {
+					$is_UE = in_array($country, WCPDF_IT()->eu_vat_countries);
+					$azienda = (wcpdf_it_get_billing_customer_type($order) == "business" || wcpdf_it_get_billing_invoice_type($order) == "invoice");
+					if(!$is_UE) {
+						echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExemptUE"><strong>' . WCPDF_IT()->options["txtVatExemptUE"] . '</strong></div>';
+					} else {
+						if($azienda || !empty(WCPDF_IT()->options["txtVatExempt"])) {
+							echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExemptExtraUE"><strong>' . WCPDF_IT()->options["txtVatExemptExtraUE"] . '</strong></div>';
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public function add_receipt_number_column( $columns ) {
+		$receipt = wcpdf_get_document( 'receipt', null );
+		$receipt_settings = $receipt->get_settings();
+		if ( !isset( $receipt_settings['receipt_number_column'] ) ) {
+			return $columns;
+		}
+
+		$new_columns = array_slice($columns, 0, 3, true) +
+			array( 'pdf_receipt_number' => __( 'Receipt Number', WCPDF_IT_DOMAIN ) ) +
+			array_slice($columns, 3, count($columns) - 1, true) ;
+		return $new_columns;
+	}
+
+	public function receipt_number_column_data( $column ) {
+		global $post, $the_order;
+
+		$invoicetype = wcpdf_it_get_billing_invoice_type($the_order);
+		if($invoicetype === "receipt") {
+			$receipt = wcpdf_get_document( 'receipt', $the_order );
+			if ( $column == 'pdf_receipt_number' ) {
+				if ( $receipt ) {
+					echo $receipt->get_number();
+				}
+			}
+		}
+	}
+
+	public function receipt_number_column_sortable( $columns ) {
+		$columns['pdf_receipt_number'] = 'pdf_receipt_number';
+		return $columns;
+	}
+
+	public function sort_by_receipt_number( $query ) {
+		if( ! is_admin() )
+			return;
+		$orderby = $query->get( 'orderby');
+		if( 'pdf_receipt_number' == $orderby ) {
+			$query->set('meta_key','_wcpdf_receipt_number');
+			$query->set('orderby','meta_value_num');
+		}
+	}
 
 }
 endif;

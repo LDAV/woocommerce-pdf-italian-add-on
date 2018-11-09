@@ -118,12 +118,6 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 		echo $this->get_receipt_date();
 	}
 
-	public function get_settings() {
-		$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
-		$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
-		return (array) $document_settings + (array) $common_settings;
-	}
-
 	public function init_settings() {
 		// Register settings.
 		$page = $option_group = $option_name = 'wpo_wcpdf_documents_settings_receipt';
@@ -270,6 +264,44 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 					'id'				=> 'reset_number_yearly',
 				)
 			),
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'my_account_buttons',
+				'title'			=> __( 'Allow My Account receipt download', 'woocommerce-pdf-italian-add-on' ),
+				'callback'		=> 'select',
+				'section'		=> 'receipt',
+				'args'			=> array(
+					'option_name'	=> $option_name,
+					'id'			=> 'my_account_buttons',
+					'options' 		=> array(
+						'available'	=> __( 'Only when an receipt is already created/emailed' , 'woocommerce-pdf-italian-add-on' ),
+						'custom'	=> __( 'Only for specific order statuses (define below)' , 'woocommerce-pdf-italian-add-on' ),
+						'always'	=> __( 'Always' , 'woocommerce-pdf-italian-add-on' ),
+						'never'		=> __( 'Never' , 'woocommerce-pdf-italian-add-on' ),
+					),
+					'custom'		=> array(
+						'type'		=> 'multiple_checkboxes',
+						'args'		=> array(
+							'option_name'	=> $option_name,
+							'id'			=> 'my_account_restrict',
+							'fields'		=> $this->get_wc_order_status_list(),
+						),
+					),
+				)
+			),
+			
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'receipt_number_column',
+				'title'			=> __( 'Enable receipt number column in the orders list', 'woocommerce-pdf-italian-add-on' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'receipt',
+				'args'			=> array(
+					'option_name'	=> $option_name,
+					'id'			=> 'receipt_number_column',
+				)
+			),
+
 		);
 
 		// allow plugins to alter settings fields

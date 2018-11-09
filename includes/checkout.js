@@ -6,6 +6,7 @@ function wcpdf_IT_billing_customer_type_change(wcpdf_IT_country_selected) {
 		jQuery("#billing_cf_field label").html(wcpdf_IT.lblPersonal);
 		jQuery("#billing_cf").attr("placeholder", wcpdf_IT.txtPersonal);
 	}
+	wcpdf_IT_check_PEC();
 }
 
 function wcpdf_IT_check_required() {
@@ -13,19 +14,38 @@ function wcpdf_IT_check_required() {
 	var wcpdf_IT_country_selected = jQuery("#billing_country").val();
 	wcpdf_IT_billing_customer_type_change(wcpdf_IT_country_selected);
 	if(wcpdf_IT.hide_outside_UE) {wcpdf_IT_hide_outside_UE(wcpdf_IT_country_selected);}
-	if(wcpdf_IT.invoice_required) {return(false);}
-	jQuery("#billing_cf_field").removeClass("validate-required woocommerce-invalid woocommerce-invalid-required-field");
-	jQuery("#billing_cf_field label abbr").remove();
-	if(jQuery("#billing_invoice_type").val() === "invoice") {
-		if(jQuery.inArray(wcpdf_IT_country_selected, wcpdf_IT.eu_vat_countries) >= 0) {
-			jQuery("#billing_cf_field").addClass("validate-required");
-			if(wcpdf_IT.has_error) {jQuery("#billing_cf_field").addClass("woocommerce-invalid woocommerce-invalid-required-field");}
-			jQuery("#billing_cf_field label").append(wcpdf_IT.required_text);
-		} else {
-			if(wcpdf_IT.invoice_required_non_UE) {
+	if(wcpdf_IT.invoice_required !== "1") {
+		jQuery("#billing_cf_field").removeClass("validate-required woocommerce-invalid woocommerce-invalid-required-field");
+		jQuery("#billing_cf_field label abbr").remove();
+		if(jQuery("#billing_invoice_type").val() === "invoice") {
+			if(jQuery.inArray(wcpdf_IT_country_selected, wcpdf_IT.eu_vat_countries) >= 0) {
 				jQuery("#billing_cf_field").addClass("validate-required");
 				if(wcpdf_IT.has_error) {jQuery("#billing_cf_field").addClass("woocommerce-invalid woocommerce-invalid-required-field");}
 				jQuery("#billing_cf_field label").append(wcpdf_IT.required_text);
+			} else {
+				if(wcpdf_IT.invoice_required_non_UE) {
+					jQuery("#billing_cf_field").addClass("validate-required");
+					if(wcpdf_IT.has_error) {jQuery("#billing_cf_field").addClass("woocommerce-invalid woocommerce-invalid-required-field");}
+					jQuery("#billing_cf_field label").append(wcpdf_IT.required_text);
+				}
+			}
+		}
+	}
+}
+
+function wcpdf_IT_check_PEC() {
+	if(jQuery("#billing_country").length !== 0 && wcpdf_IT.add_PEC > 0) {
+		var wcpdf_IT_country_selected = jQuery("#billing_country").val();
+		jQuery("#billing_PEC_field").hide().addClass("hidden wcpdf_IT_hidden");
+		jQuery("#billing_PEC_field label abbr").remove();
+		jQuery("#billing_PEC_field label .optional").remove();
+		jQuery("#billing_PEC_field label").append(wcpdf_IT.optional_text);
+		if(wcpdf_IT_country_selected === "IT" && jQuery("#billing_invoice_type").val() === "invoice"){
+			jQuery("#billing_PEC_field").show().removeClass("hidden wcpdf_IT_hidden");
+			if(wcpdf_IT.add_PEC > 0){
+				jQuery("#billing_PEC_field").addClass("validate-required");
+				jQuery("#billing_PEC_field label").append(wcpdf_IT.required_text);
+				jQuery("#billing_PEC_field label .optional").remove();
 			}
 		}
 	}

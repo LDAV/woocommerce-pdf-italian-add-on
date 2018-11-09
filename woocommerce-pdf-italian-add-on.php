@@ -2,16 +2,16 @@
 /**
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
-Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano
-Version: 0.6.1.4
+Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
+Version: 0.7.0
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
-Text Domain: woocommerce-pdf-invoices-italian-add-on
+Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
 WC requires at least: 2.6.0
-WC tested up to: 3.4.3
+WC tested up to: 3.5.1
 
 */
 
@@ -19,27 +19,32 @@ WC tested up to: 3.4.3
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if ( !class_exists( 'WooCommerce_Italian_add_on' ) ) :
-define('WCPDF_IT_DOMAIN', 'woocommerce-pdf-italian-add-on');
+if ( ! defined( 'WCPDF_IT_DOMAIN' ) ) define('WCPDF_IT_DOMAIN', 'woocommerce-pdf-italian-add-on');
 
 class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.6.1.4';
+	public $version = '0.7.0';
 	protected static $instance = null;
 	
 	public $settings;
 	public $options;
+	public $fpa_options;
 	public $eu_vat_countries;
 	public $default_country;
 	public $has_error;
 	public $what_if_no_invoicetype;
+	public $fields_priority;
 	public $regexCF = "/^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i";
 	public $regexPIVA = "/^(ATU[0-9]{8}|BE0[0-9]{9}|BG[0-9]{9,10}|CY[0-9]{8}L|CZ[0-9]{8,10}|DE[0-9]{9}|DK[0-9]{8}|EE[0-9]{9}|(EL|GR)[0-9]{9}|ES[0-9A-Z][0-9]{7}[0-9A-Z]|FI[0-9]{8}|FR[0-9A-Z]{2}[0-9]{9}|GB([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{13})|HU[0-9]{8}|IE[0-9][A-Z0-9][0-9]{5}[A-Z]{1,2}|IT[0-9]{11}|LT([0-9]{9}|[0-9]{12})|LU[0-9]{8}|LV[0-9]{11}|MT[0-9]{8}|NL[0-9]{9}B[0-9]{2}|PL[0-9]{10}|PT[0-9]{9}|RO[0-9]{2,10}|SE[0-9]{12}|SI[0-9]{8}|SK[0-9]{10})$/i";
+	public $regexCodiceDestinatario = "/^[A-Z0-9]{6,7}$/i";
 	
 	public $invoice_required;
 	public $hide_outside_UE;
 	public $invoice_required_non_UE;
+	public $add_cf2;
+	public $add_PEC;
 
 	public static function instance() {
 		if ( is_null( self::$instance ) ) self::$instance = new self();
@@ -73,7 +78,7 @@ class WooCommerce_Italian_add_on {
 		if ($this->is_wc_active()) {
 			add_action( 'init', array( $this, 'init_integration' ) );
 			add_filter( 'woocommerce_billing_fields' , array( $this, 'billing_fields'), 10, 1);
-			add_filter( 'woocommerce_admin_billing_fields' , array( $this, 'admin_field_cfpiva' ));
+			add_filter( 'woocommerce_admin_billing_fields' , array( $this, 'admin_billing_fields' ));
 			add_action( 'woocommerce_after_edit_address_form_billing', array( $this, 'after_edit_address_form_billing') );
 			add_action( 'woocommerce_after_order_notes', array( $this, 'after_order_notes') );
 			add_action( 'woocommerce_checkout_fields', array( $this, 'checkout_fields'));
@@ -119,13 +124,17 @@ class WooCommerce_Italian_add_on {
 		$message = sprintf( __( 'WooCommerce Italian Add-on with <strong>%sWooCommerce PDF Invoices & Packing Slips%s</strong> could be more powerful!' , WCPDF_IT_DOMAIN ), '<a href="https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/">', '</a>' );
 		echo"<div class=\"$class\"> <p>$message</p></div>";
 	}
-*/
- 
+
+	public function check_wpo_wcpdf_updated( $fields ) {
+		$class = "updated fade";
+		$message = sprintf( __( 'WooCommerce Italian Add-on requires that <strong>%sWooCommerce PDF Invoices & Packing Slips%s</strong> must be updated at least to version 2.0!' , WCPDF_IT_DOMAIN ), '<a href="https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/">', '</a>' );
+		echo"<div class=\"$class\"> <p>$message</p></div>";
+	}
+ */
+
 	public function init_integration() {
-		//include_once 'includes/class-wc-settings.php';
-		//$this->settings = new WooCommerce_Italian_add_on_Settings();
-		$this->settings = include_once(self::$plugin_path . '/includes/class-wc-settings.php');
-		
+		include_once 'includes/class-wc-settings.php';
+		$this->settings = new WooCommerce_Italian_add_on_Settings();
 		$this->options = get_option($this->settings->general_settings_key);
 		
 		$this->invoice_required = isset($this->options["invoice_required"]) && $this->options["invoice_required"] == "required" ? true: false;
@@ -134,6 +143,9 @@ class WooCommerce_Italian_add_on {
 		$this->hide_outside_UE = !empty($this->options["hide_outside_UE"]);
 		$this->invoice_required_non_UE = !empty($this->options["invoice_required_non_UE"]);
 		$this->has_error = false;
+		$this->fields_priority = empty($this->options["fields_priority"]) ? 120 : intval($this->options["fields_priority"]);
+		$this->add_cf2 = empty($this->options["add_cf2"]) ? 0 : intval($this->options["add_cf2"]);
+		$this->add_PEC = empty($this->options["add_FPA"]) ? 0 : 1;
 
 		$this->eu_vat_countries = WC()->countries->get_european_union_countries('eu_vat');
 		$this->default_country = WC()->countries->get_base_country();
@@ -143,7 +155,7 @@ class WooCommerce_Italian_add_on {
 		$update->test();
 
 		if ( class_exists( 'WPO_WCPDF' ) ) {
-			if(version_compare( WPO_WCPDF()->version, '1.7', '<' ) ) {
+			if(version_compare( WPO_WCPDF()->version, '2.0', '<' ) ) {
 				include_once 'includes/class-wcpdf-integration.php';
 			} else {
 				include_once 'includes/class-wcpdf-integration2.php';
@@ -166,6 +178,7 @@ class WooCommerce_Italian_add_on {
 			'required'    => false,
 			'class'       => array( $cl1, 'update_totals_on_change'),
 			'clear'       => false,
+			'priority' => $this->fields_priority,
 			'type'        => 'select',
 			'options'     => array(
 				'receipt' => __('Receipt', WCPDF_IT_DOMAIN ),
@@ -180,6 +193,7 @@ class WooCommerce_Italian_add_on {
 			'required'    => false,
 			'class'       => array("hidden"),
 			'clear'       => false,
+			'priority' => $this->fields_priority,
 			'type'        => 'hidden',
 			'value'       => get_user_meta( get_current_user_id(), 'billing_customer_type', true )
 		);
@@ -189,12 +203,33 @@ class WooCommerce_Italian_add_on {
 			'placeholder' => __('Please enter your VAT number or Tax Code', WCPDF_IT_DOMAIN),
 			'required'    => $req,
 			'class'       => array( $cl2 ),
+			'priority' => $this->fields_priority,
 			'value'       => get_user_meta( get_current_user_id(), 'billing_cf', true )
 		);
+		if($this->add_cf2) {
+			$fields['billing_cf2'] = array(
+				'label'       => __('Tax Code', WCPDF_IT_DOMAIN),
+				'placeholder' => __('Please enter your Tax Code', WCPDF_IT_DOMAIN),
+				'required'    => false, //va inizialmente impostato non obbligatorio, per poterlo attivare solo nei casi richiesti
+				'class'       => array( "hidden", "wcpdf_IT_hidden" ),
+				'priority' => $this->fields_priority,
+				'value'       => get_user_meta( get_current_user_id(), 'billing_cf2', true )
+			);
+		}
+		if($this->add_PEC) {
+			$fields['billing_PEC'] = array(
+				'label'       => __('Certified Email Address or Recipient Code', WCPDF_IT_DOMAIN),
+				'placeholder' => __('Please enter your Certified Email Address or Recipient Code', WCPDF_IT_DOMAIN),
+				'required'    => false, //va inizialmente impostato non obbligatorio, per poterlo attivare solo nei casi richiesti
+				'class'       => array( "hidden", "wcpdf_IT_hidden" ),
+				'priority' => $this->fields_priority,
+				'value'       => get_user_meta( get_current_user_id(), 'billing_PEC', true )
+			);
+		}
 		return $fields;
 	}
 	
-	public function admin_field_cfpiva( $fields ) {
+	public function admin_billing_fields( $fields ) {
 		$fields['invoice_type'] = array(
 		'label' => __('Invoice or Receipt', WCPDF_IT_DOMAIN),
 		'show' => false,
@@ -222,6 +257,21 @@ class WooCommerce_Italian_add_on {
 		'wrapper_class' => 'form-field-wide',
 		'show' => false
 		);
+		
+		if($this->add_cf2) {
+			$fields['cf2'] = array(
+				'label'       => __('Tax Code', WCPDF_IT_DOMAIN),
+				'wrapper_class' => 'form-field-wide',
+				'show' => false
+			);
+		}
+		if($this->add_PEC) {
+			$fields['PEC'] = array(
+				'label'       => __('Certified Email Address or Recipient Code', WCPDF_IT_DOMAIN),
+				'wrapper_class' => 'form-field-wide',
+				'show' => false
+			);
+		}
 	
 		return $fields;
 	}
@@ -234,6 +284,8 @@ class WooCommerce_Italian_add_on {
 			'hide_outside_UE' => ($this->hide_outside_UE ? true : false),
 			'invoice_required' => ($this->invoice_required ? true : false),
 			'invoice_required_non_UE' => ($this->invoice_required_non_UE ? true : false),
+			'add_cf2' => $this->add_cf2,
+			'add_PEC' => $this->add_PEC,
 			'has_error' => ($this->has_error ? true : false),
 			'lblCommon' => __('VAT number or Tax Code', WCPDF_IT_DOMAIN),
 			'txtCommon' => __('Please enter your VAT number or Tax Code', WCPDF_IT_DOMAIN),
@@ -245,6 +297,7 @@ class WooCommerce_Italian_add_on {
 		) );
 		wp_enqueue_script( 'wc_italian_add_on' );
 		echo '<input type="hidden" name="billing_customer_type" id="billing_customer_type" value="' . $customer_type . '">';
+		echo '<style>.wcpdf_IT_hidden{display:none !important}</style>';
 	}
 
 	public function after_edit_address_form_billing() {
@@ -295,6 +348,21 @@ class WooCommerce_Italian_add_on {
 				}
 			}
 		}
+		
+		if($this->add_cf2 > 0 && $_POST["billing_invoice_type"] == "invoice" && $_POST["billing_country"] == 'IT') {
+			if( (!empty($_POST["billing_cf2"]) && !(preg_match($this->regexCF, $_POST['billing_cf2']) || preg_match($this->regexPIVA, "IT" . $_POST['billing_cf2']) ) ) ||
+					(empty($_POST["billing_cf2"]) && $this->add_cf2 == 2) ) {
+				wc_add_notice(sprintf(__('<strong>Tax Code %1$s</strong> is not correct', WCPDF_IT_DOMAIN) , "<strong>". strtoupper($_POST['billing_cf2']) . "</strong>" . "<!-- wcpdf_IT_error_billing_cf2 -->"), $notice_type = 'error');
+			}
+		}
+
+		if($this->add_PEC && $_POST["billing_invoice_type"] == "invoice" && $_POST["billing_country"] == 'IT' && strlen($_POST['billing_cf']) == 16) {
+			if( empty($_POST["billing_PEC"]) || 
+				 !(is_email($_POST['billing_PEC']) || preg_match($this->regexCodiceDestinatario,  $_POST['billing_PEC']) ) ) {
+				wc_add_notice(sprintf(__('<strong>Certified Email Address or Recipient Code %1$s</strong> is not correct', WCPDF_IT_DOMAIN) , "<strong>". strtolower($_POST['billing_PEC']) . "</strong>" . "<!-- wcpdf_IT_error_billing_PEC -->"), $notice_type = 'error');
+			}
+		}
+
 		if($_POST["billing_invoice_type"] == "receipt" && $_POST['billing_cf'] && $_POST["billing_country"] == 'IT'){
 			if(!preg_match($this->regexCF, $_POST['billing_cf']) && !preg_match("/^([0-9]{11})$/i", $_POST['billing_cf'])) {
 				wc_add_notice(sprintf(__('Tax Identification Number %1$s is not correct', WCPDF_IT_DOMAIN), "<strong>". strtoupper($_POST['billing_cf']) . "</strong>"),$notice_type = 'error');
@@ -304,9 +372,11 @@ class WooCommerce_Italian_add_on {
 	}
 
 	public function woocommerce_order_formatted_billing_address( $fields, $order) {
-		$fields['customer_type'] = $this->get_billing_customer_type($order);
-		$fields['invoice_type'] = $this->get_billing_invoice_type($order);
-		$fields['cf'] = $this->get_billing_cf($order);
+		$fields['customer_type'] = wcpdf_it_get_billing_customer_type($order);
+		$fields['invoice_type'] = wcpdf_it_get_billing_invoice_type($order);
+		$fields['cf'] = wcpdf_it_get_billing_cf($order);
+		if($this->add_cf2) $fields['cf2'] = wcpdf_it_get_billing_cf2($order);
+		if($this->add_PEC) $fields['PEC'] = wcpdf_it_get_billing_PEC($order);
 		return $fields;
 	}
 	
@@ -315,6 +385,8 @@ class WooCommerce_Italian_add_on {
 			$fields['customer_type'] = get_user_meta( $customer_id, 'billing_customer_type', true );
 			$fields['invoice_type'] = get_user_meta( $customer_id, 'billing_invoice_type', true );
 			$fields['cf'] = get_user_meta( $customer_id, 'billing_cf', true );
+			if($this->add_cf2) $fields['cf2'] = get_user_meta( $customer_id, 'billing_cf2', true );
+			if($this->add_PEC) $fields['PEC'] = get_user_meta( $customer_id, 'billing_PEC', true );
 		}
 		return $fields;
 	}
@@ -323,18 +395,36 @@ class WooCommerce_Italian_add_on {
 		$address['{customer_type}'] = '';
 		$address['{invoice_type}'] = '';
 		$address['{cf}'] = '';
+		$address['{cf2}'] = '';
+		$address['{PEC}'] = '';
 	
 		if (!empty($args['cf'])) {
 			$pre = preg_match($this->regexCF, $args['cf']) ? __('Tax Code', WCPDF_IT_DOMAIN) . ': ' : __('VAT', WCPDF_IT_DOMAIN) . ": " . ((in_array($args['country'], $this->eu_vat_countries)) ? $args['country'] : "");
 			$address['{cf}'] = $pre . strtoupper($args['cf']);
 		}
-	
+		
+		if($this->add_cf2) {
+			if ( ! empty( $args['cf2']) ) {
+				$pre = __('Tax Code', WCPDF_IT_DOMAIN) . ': ';
+				$address['{cf2}'] = $pre . strtoupper($args['cf2']);
+			}
+		}
+		
+		if($this->add_PEC) {
+			if ( ! empty( $args['PEC']) ) {
+				$pre = preg_match($this->regexCodiceDestinatario, $args['PEC']) ? __('Recipient Code', WCPDF_IT_DOMAIN) : __('Certified Email Address', WCPDF_IT_DOMAIN);
+				$address['{PEC}'] = $pre . ': ' . strtolower($args['PEC']);
+			}
+		}
+
 		return $address;
 	}
 	
 	public function localisation_address_format( $formats ) {
 		foreach($formats as $country => $value) {
 			$formats[$country] = $value . "\n{cf}";
+			if($this->add_cf2) $formats[$country] .= "\n{cf2}";
+			if($this->add_PEC) $formats[$country] .= "\n{PEC}";
 		}
 		return $formats;
 	}
@@ -343,6 +433,8 @@ class WooCommerce_Italian_add_on {
 		$data['billing']['invoice_type'] = get_user_meta( $user_id, 'billing_invoice_type', true );
 		$data['billing']['customer_type'] = get_user_meta( $user_id, 'billing_customer_type', true );
 		$data['billing']["cf"] = get_user_meta( $user_id, 'billing_cf', true );
+		if($this->add_cf2) $data['billing']["cf2"] = get_user_meta( $user_id, 'billing_cf2', true );
+		if($this->add_PEC) $data['billing']["PEC"] = get_user_meta( $user_id, 'billing_PEC', true );
 		return $data;
 	}
 
@@ -350,6 +442,8 @@ class WooCommerce_Italian_add_on {
 		$customer_data['billing_invoice_type'] = get_user_meta( $_POST['user_id'], 'billing_invoice_type', true );
 		$customer_data['billing_customer_type'] = get_user_meta( $_POST['user_id'], 'billing_customer_type', true );
 		$customer_data['billing_cf'] = get_user_meta( $_POST['user_id'], 'billing_cf', true );
+		if($this->add_cf2) $customer_data['billing_cf2'] = get_user_meta( $_POST['user_id'], 'billing_cf2', true );
+		if($this->add_PEC) $customer_data['billing_PEC'] = get_user_meta( $_POST['user_id'], 'billing_PEC', true );
 		return $customer_data;
 	}
 	
@@ -368,6 +462,18 @@ class WooCommerce_Italian_add_on {
 			'label'       => __('VAT number', WCPDF_IT_DOMAIN),
 			'description'       => ""
 		);
+		if($this->add_cf2) {
+			$fields['billing']['fields']['billing_cf2'] = array(
+				'label'       => __('Tax Code', WCPDF_IT_DOMAIN),
+				'description'       => ""
+			);
+		}
+		if($this->add_PEC) {
+			$fields['billing']['fields']['billing_PEC'] = array(
+				'label'       => __('Certified Email Address or Recipient Code', WCPDF_IT_DOMAIN),
+				'description'       => ""
+			);
+		}
 		return $fields;
 	}
 
@@ -382,42 +488,6 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 </style>
 <?php
 		return $new_columns;
-	}
-
-	public function get_billing_invoice_type($order) {
-		$invoicetype = $this->what_if_no_invoicetype;
-		if($order) {
-			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-				$invoicetype = get_post_meta($order->id,"_billing_invoice_type",true);
-			} else {
-				$invoicetype = $order->get_meta("_billing_invoice_type",true);
-			}
-		}
-		return($invoicetype);
-	}
-	
-	public function get_billing_customer_type($order) {
-		$customer_type = "personal";
-		if($order) {
-			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-				$customer_type = get_post_meta($order->id,"_billing_customer_type",true);
-			} else {
-				$customer_type = $order->get_meta("_billing_customer_type",true);
-			}
-		}
-		return($customer_type);
-	}
-
-	public function get_billing_cf($order) {
-		$cf = "";
-		if($order) {
-			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-				$cf = get_post_meta($order->id,"_billing_cf",true);
-			} else {
-				$cf = $order->get_meta("_billing_cf",true);
-			}
-		}
-		return($cf);
 	}
 
 	public function get_order_id($order) {
@@ -437,7 +507,7 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 			} else {
 				if ( empty( $the_order ) || $the_order->get_id() != $post->ID ) $the_order = wc_get_order( $post->ID );
 			}
-			$invoicetype = $this->get_billing_invoice_type($the_order);
+			$invoicetype = wcpdf_it_get_billing_invoice_type($the_order);
 			switch($invoicetype) {
 				case "invoice": echo "<i class=\"dashicons dashicons-media-document tips\" data-tip=\"" . __( 'invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
 				case "receipt": echo "<i class=\"dashicons dashicons-media-default tips\" data-tip=\"" . __( 'receipt', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
@@ -449,11 +519,14 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 }
 endif;
 
-function WCPDF_IT() {
-	return WooCommerce_Italian_add_on::instance();
+include_once("includes/wcpdf-it-functions.php");
+
+if(!function_exists('WCPDF_IT')) {
+	function WCPDF_IT() {
+		return WooCommerce_Italian_add_on::instance();
+	}
+
+	WCPDF_IT(); // load plugin
 }
-
-WCPDF_IT(); // load plugin
-
 
 //$wcpdf_IT = new WooCommerce_Italian_add_on();

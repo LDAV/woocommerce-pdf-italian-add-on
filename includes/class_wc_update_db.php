@@ -21,10 +21,10 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 
 		public function update_orders($orders){
 			foreach($orders as $order) {
-				$order_id = WCPDF_IT()->get_order_id($order);
-				$invoicetype = WCPDF_IT()->get_billing_invoice_type($order);
-				$customertype = WCPDF_IT()->get_billing_customer_type($order);
-				$cf = WCPDF_IT()->get_billing_cf($order);
+				$order_id = wcpdf_it_get_order_id($order);
+				$invoicetype = wcpdf_it_get_billing_invoice_type($order);
+				$customertype = wcpdf_it_get_billing_customer_type($order);
+				$cf = wcpdf_it_get_billing_cf($order);
 				if($cf) {
 					$customertype = $customertype ? $customertype : ((strlen($cf) === 16) ? "personal" : "business");
 					update_post_meta( $order_id, '_billing_customer_type', $customertype ); 

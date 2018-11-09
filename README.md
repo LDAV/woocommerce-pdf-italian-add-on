@@ -2,8 +2,9 @@
 **Contributors:** labdav  
 **Tags:** WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, WooCommerce PDF Invoices & Packing Slips, ldav  
 **Requires at least:** 3.8  
-**Tested up to:** 4.9.6
-**Stable tag:** 0.6.1.4
+**Requires PHP:** 5.6
+**Tested up to:** 4.9.8
+**Stable tag:** 0.7.0
 **License:** GPLv3 or later  
 **License URI:** http://www.gnu.org/licenses/gpl.html  
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -16,12 +17,15 @@ Italian Add-on for PDF invoices & packing slips for WooCommerce.
 ### IT 
 
 Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano.
+Comprende l'opzione per la raccolta dei dati necessari alla Fatturazione Elettronica B2B in vigore da gennaio 2019.
 
 Per funzionare al meglio delle sue possibilità consigliamo di associare un modulo per la generazione automatica delle fatture, come il plugin gratuito di Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) che consente di numerare automaticamente le fatture e di stamparle o inviarle in formato PDF.
 
 Il plugin può essere utilizzato anche senza un plugin per la generazione automatica delle fatture. Tutti i dati necessari vengono sempre registrati negli ordini di WooCommerce, e sono quindi esportabili verso un qualsiasi gestionale esterno.
 
 Il Codice Fiscale o il Numero della Partita IVA vengono aggiunti alla pagina del checkout. Il cliente può scegliere fra Fattura o Ricevuta. Nel caso in cui scelga la Fattura, il campo Partita IVA è obbligatorio.
+
+Se attivata l'opzione per la raccolta dati per la Fatturazione Elettronica, viene aggiunto un campo per l'inserimento del Codice Destinatario o della PEC del cliente, nel caso sia richiesta fattura e il cliente sia italiano. Viene nascosto negli altri casi.
 
 Se il cliente ha un indirizzo di fatturazione fuori della UE, si può scegliere di escludere i campi di Partita IVA o Codice Fiscale.
 
@@ -52,11 +56,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.4.3
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.1.10
+* WooCommerce v. 3.5.1
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.2.4
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.0.3
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.3.2.1
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.0.8
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.3.7
 
 
 ### Translations in your language 
@@ -90,6 +94,16 @@ Be sure you're running WooCommerce 2.0+ and (optional) WooCommerce PDF Invoices 
 1. Modifica i file receipt.php, invoice.php e packing-slip.php come meglio credi.
 1. Ripeti queste operazioni per avere altri modelli di fattura o ricevuta a disposizione.
 
+### Come posso esportare i dati delle fatture per la Fatturazione Elettronica B2B?
+Rispetto ai campi previsti da WooCommerce, il nostro plugin aggiunge a WooCommerce due campi specifici, che vanno aggiunti in fase di esportazione. E sono:
+* _billing_cf (che contiene il codice fiscale o la partita IVA fornita dal cliente)
+* _billing_PEC (che contiene il Codice Destinatario o l'indirizzo PEC indicato dal cliente)
+
+Gli altri campi aggiunti dal plugin sono:
+* _billing_invoice_type (che indica se il cliente ha richiesto una fattura o una ricevuta). Vale "invoice" o "receipt".
+* _billing_customer_type (che indica la tipologia del cliente in base all'input inserito in _billing_cf). Vale "personal" o "business".
+
+Il nostro plugin versione Premium [WooCommerce Italian Add-on](https://ldav.it/shop/plugin/woocommerce-italian-add-on/) consente l'esportazione verificata in formato XML (FPA1.2) conforme con le specifiche del Sistema di Interscambio dell'Agenzia delle Entrate, quindi utilizzabile con altri software di gestione o direttamente con [Fatture e Corrispettivi](https://ivaservizi.agenziaentrate.gov.it/portale/) dell'Agenzia dell'Entrate.
 
 ### Avete dei modelli di fattura già pronti e adatti per l'Italia? 
 Difficile mettere tutti d'accordo in Italia. Partendo da quello gratuito a corredo di WC-PDF, abbiamo sviluppato un paio di modelli che riportano correttamente imponibile, aliquote e importi IVA, spese di spedizione e quant'altro richiesto. Prova a confrontare le tue esigenze con i nostri [Modelli di fattura WooCommerce (PDF Invoice) validi per l'Italia](https://ldav.it/plugin/modelli-di-fattura-woocommerce-pdf-invoice-validi-per-litalia/) e nel caso chiedici una modifica.
@@ -121,6 +135,14 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 ## Changelog 
 
+### 0.7.0
+* Fatturazione Elettronica B2B. Aggiunta l'opzione per la raccolta dei dati in conformità con la norma in vigore da gennaio 2019.
+* È possibile modificare il posizionamento dei campi nella pagina del checkout.
+
+### 0.6.2 - 0.6.2.4
+* Allow My Account receipt download
+* bug fixes 
+
 ### 0.6.1 - 0.6.1.4
 * fix MyAccount page error
 * Now is compatible with Paypal Express Checkout
@@ -140,30 +162,24 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 * You can check if VAT number is required for non-EU customer;
 * bug fixes.
 
-
 ### 0.5.0
 * Now is possible to set a number for receipts, that increase indipendently.
 * updated for WooCommerce PDF Invoices & Packing Slips 2.0.x
 * bug fixes (new order blank page)
 
-
 ### 0.4.9 
 * updated for WooCommerce up to 3.0.8
 
-
 ### 0.4.8 
 * minor bug fixes
-
 
 ### 0.4.7 
 * È possibile nascondere il campo partita IVA o codice fiscale quando l'indirizzo di fatturazione non è nella Unione Europea.
 * You can choose if you want to hide VAT fields if customer's billing country is outside UE.
 
-
 ### 0.4.6 
 * Modificata la visualizzazione di Codice fiscale e numero di Partita IVA negli indirizzi di fatturazione di tutti i Paesi UE 
 * Changed the display of Tax Code and VAT Number in the billing addresses for EU Countries 
-
 
 ### 0.4.5 - 2015/09/15 - 2016/02/25 
 
@@ -172,7 +188,6 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 * Add WP Multisite Network support
 * Download receipt in MyAccount page follows the PDF Invoice settings
 * Some bug fix
-
 
 ### 0.4.4 - 2015/08/12 
 
@@ -253,8 +268,9 @@ EN
 ## Upgrade Notice 
 
 
-### 0.6.1
-Corretti alcuni bug. È consigliato l'upgrade. 
+### 0.7.0
+Fatturazione Elettronica B2B. Aggiunta l'opzione per la raccolta dei dati in conformità con la norma in vigore da gennaio 2019
+È consigliato l'upgrade.
 
 
 ## Support 
