@@ -4,7 +4,7 @@ Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Cod
 Requires at least: 3.8
 Requires PHP: 5.6
 Tested up to: 5.0.3
-Stable tag: 0.7.0.5
+Stable tag: 0.7.0.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -51,10 +51,10 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.5.3
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.2.5
+* WooCommerce v. 3.5.4
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.2.6
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.1.3
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.1.4
 * [WooCommerce Multilingual](https://wpml.org/) v. 4.3.7
 
 = Translations in your language =
@@ -114,7 +114,7 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.0 - 0.7.0.5 =
+= 0.7.0 - 0.7.0.6 =
 * Fatturazione Elettronica B2B. Aggiunta l'opzione per la raccolta dei dati in conformità con la norma in vigore da gennaio 2019.
 * È possibile modificare il posizionamento dei campi nella pagina del checkout.
 * Aggiunto un filtro all'elenco degli ordini per quelli che hanno richiesto la fattura
@@ -241,10 +241,8 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.0.5 - 2019.01.10 =
-* Fatturazione Elettronica B2B. Aggiunta l'opzione per la raccolta dei dati in conformità con la norma in vigore da gennaio 2019
-* Corretto un bug che nascondeva i campi aggiuntivi
-* Corretto un bug sulle regole per il codice destinatario obbligatorio
+= 0.7.0.6 - 2019.01.30 =
+* Corretto un errore sul reset annuale del numero di ricevuta
 È consigliato l'upgrade.
 
 == Support ==

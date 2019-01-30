@@ -48,13 +48,42 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 	}
 
 	public function init_number() {
-		$number_store = new Sequential_Number_Store( 'receipt_number' );
-		$document_date = $this->get_date();
-		$document_number = $number_store->increment( $this->order_id, $document_date->date_i18n( 'Y-m-d H:i:s' ) );
+		global $wpdb;
+		// If a third-party plugin claims to generate receipt numbers, trigger this instead
+		if ( apply_filters( 'woocommerce_receipt_number_by_plugin', false ) || apply_filters( 'wpo_wcpdf_external_receipt_number_enabled', false, $this ) ) {
+			$receipt_number = apply_filters( 'woocommerce_generate_receipt_number', null, $this->order );
+			$receipt_number = apply_filters( 'wpo_wcpdf_external_receipt_number', $receipt_number, $this );
+			if ( is_numeric($receipt_number) || $receipt_number instanceof Document_Number ) {
+				$this->set_number( $receipt_number );
+			} else {
+				// receipt number is not numeric, treat as formatted
+				// try to extract meaningful number data
+				$formatted_number = $receipt_number;
+				$number = (int) preg_replace('/\D/', '', $receipt_number);
+				$receipt_number = compact( 'number', 'formatted_number' );
+				$this->set_number( $receipt_number );				
+			}
+			return $receipt_number;
+		}
 
-		$this->set_number( $document_number );
+		$number_store_method = WPO_WCPDF()->settings->get_sequential_number_store_method();
+		$number_store = new Sequential_Number_Store( 'receipt_number', $number_store_method );
+		// reset receipt number yearly
+		if ( isset( $this->settings['reset_number_yearly'] ) ) {
+			$current_year = date("Y");
+			$last_number_year = $number_store->get_last_date('Y');
+			// check if we need to reset
+			if ( $current_year != $last_number_year ) {
+				$number_store->set_next( 1 );
+			}
+		}
 
-		return $document_number;
+		$receipt_date = $this->get_date();
+		$receipt_number = $number_store->increment( $this->order_id, $receipt_date->date_i18n( 'Y-m-d H:i:s' ) );
+
+		$this->set_number( $receipt_number );
+
+		return $receipt_number;
 	}
 
 	public function get_filename( $context = 'download', $args = array() ) {

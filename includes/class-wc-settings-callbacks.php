@@ -35,9 +35,10 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			$setting_name = $this->get_setting_name($args);
 			$id = $args['id'];
 			$size = isset( $args['size'] ) ? $args['size'] : '400px';
+			$maxlength = empty($args['maxlength']) ? "" : sprintf(' maxlength="%s"', $args["maxlength"]);
 			$placeholder = empty($args["placeholder"]) ? "" : sprintf(' placeholder="%s"', $args["placeholder"]);
 		
-			$html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" style="width:%4$s"%5$s/>', $id, $setting_name, $current, $size, $placeholder );
+			$html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" style="width:%4$s"%5$s%6$s/>', $id, $setting_name, $current, $size, $placeholder, $maxlength );
 		
 			// Displays option description.
 			if ( isset( $args['description'] ) ) {
