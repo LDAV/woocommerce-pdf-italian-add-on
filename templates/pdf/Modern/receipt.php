@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <?php do_action( 'wpo_wcpdf_before_document', $this->get_type(), $this->order ); ?>
 <table class="head container">
 	<tr class="underline">
@@ -22,7 +23,9 @@
 	<tr>
 		<td class="address billing-address">
 			<h3>&nbsp;<!-- empty spacer to keep adjecent cell content aligned --></h3>
+			<?php do_action( 'wpo_wcpdf_before_billing_address', $this->type, $this->order ); ?>
 			<?php $this->billing_address(); ?>
+			<?php do_action( 'wpo_wcpdf_after_billing_address', $this->type, $this->order ); ?>
 			<?php if ( isset($this->settings['display_email']) ) { ?>
 			<div class="billing-email"><?php $this->billing_email(); ?></div>
 			<?php } ?>
@@ -33,7 +36,9 @@
 		<td class="address shipping-address">
 			<?php if ( isset($this->settings['display_shipping_address']) && $this->ships_to_different_address()) { ?>
 			<h3><?php _e( 'Ship To:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3>
+			<?php do_action( 'wpo_wcpdf_before_shipping_address', $this->type, $this->order ); ?>
 			<?php $this->shipping_address(); ?>
+			<?php do_action( 'wpo_wcpdf_after_shipping_address', $this->type, $this->order ); ?>
 			<?php } ?>
 		</td>
 		<td class="order-data">
@@ -73,13 +78,15 @@
 
 <table class="order-details">
 	<thead>
+		<?php if ( $headers = wpo_wcpdf_templates_get_table_headers( $this ) ): ?>
 		<tr>
 			<?php 
-			foreach ( wpo_wcpdf_templates_get_table_headers( $this ) as $column_key => $header_data ) {
+			foreach ( $headers as $column_key => $header_data ) {
 				printf('<th class="%s"><span>%s</span></th>', $header_data['class'], $header_data['title']);
 			}
 			?>
 		</tr>
+		<?php endif ?>
 	</thead>
 	<tbody>
 		<?php
@@ -110,6 +117,8 @@
 <?php endif; ?>
 
 <?php do_action( 'wpo_wcpdf_after_customer_notes', $this->get_type(), $this->order ); ?>
+
+<div class="cut-off"></div>
 
 <div class="foot">
 	<table class="footer container">

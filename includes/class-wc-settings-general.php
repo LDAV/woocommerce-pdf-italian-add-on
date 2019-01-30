@@ -4,10 +4,48 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings_general' ) ) {
 
 	class WooCommerce_Italian_add_on_Settings_general {
+
+		private $invoice_meta_key_name;
 	
 		public function __construct() {
 			add_action( 'admin_init', array(&$this, 'init_settings' ));
 			add_action( 'wcpdf_IT_general_settings_output', array( $this, 'output' ) );
+			add_action( 'views_edit-shop_order', array( $this, 'views_edit_shop_order') );
+			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '3.0', '>=' ) ) {
+				add_filter( 'request', array( $this, 'request_query_filter_by_invoice_exists' ) );
+			} else {
+				add_filter( 'pre_get_posts', array( $this, 'pre_get_posts_filter_by_invoice_exists' ) );
+			}
+			$this->invoice_meta_key_name = class_exists( 'WPO_WCPDF' ) ? "_wcpdf_invoice_number" : "woo_pdf_invoice_id";
+		}
+
+		public function pre_get_posts_filter_by_invoice_exists( $query ) {
+			if( is_admin() && $query->get('post_type') == 'shop_order' && !empty($_GET["invoiced"])) {
+				$query->set('meta_key',$this->invoice_meta_key_name);
+				$query->set('compare','EXISTS');
+			}
+		}
+
+		public function request_query_filter_by_invoice_exists( $query_vars ) {
+			global $typenow;
+			if ( is_admin() && $typenow == 'shop_order' && !empty($_GET["invoiced"])) {
+				$query_vars = array_merge( $query_vars, array(
+					'meta_key'  => $this->invoice_meta_key_name,
+					'compare'   => 'EXISTS',
+				) );
+			}
+			return $query_vars;
+		}
+
+		function views_edit_shop_order($views) {
+			if (!isset($_GET['post_type']) || sanitize_text_field( $_GET['post_type'] ) !='shop_order') return false;
+
+			global $wpdb;
+			$invoice_count = $wpdb->get_var( $wpdb->prepare( "SELECT count(*) FROM {$wpdb->postmeta} WHERE meta_key = %s", $this->invoice_meta_key_name ) );
+			$qs = "?" . str_replace("&invoiced=1", "", $_SERVER['QUERY_STRING']) . "&invoiced=1";
+
+			$views["invoiced"] = '<a href="' . $_SERVER['SCRIPT_NAME'] . $qs . '">' . __("Invoiced", 'woocommerce-italian-add-on-plus') . ' <span class="count">(' . $invoice_count . ')</span></a>';
+			return $views;
 		}
 
 		public function output( $section ) {

@@ -382,7 +382,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 				} else {
 					$is_UE = in_array($country, WCPDF_IT()->eu_vat_countries);
 					$azienda = (wcpdf_it_get_billing_customer_type($order) == "business" || wcpdf_it_get_billing_invoice_type($order) == "invoice");
-					if(!$is_UE) {
+					if($is_UE) {
 						echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExemptUE"><strong>' . WCPDF_IT()->options["txtVatExemptUE"] . '</strong></div>';
 					} else {
 						if($azienda || !empty(WCPDF_IT()->options["txtVatExempt"])) {

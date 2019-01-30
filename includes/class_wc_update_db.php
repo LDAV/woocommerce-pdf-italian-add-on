@@ -22,33 +22,39 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 		public function update_orders($orders){
 			foreach($orders as $order) {
 				$order_id = wcpdf_it_get_order_id($order);
-				$invoicetype = wcpdf_it_get_billing_invoice_type($order);
-				$customertype = wcpdf_it_get_billing_customer_type($order);
+				//$invoicetype = wcpdf_it_get_billing_invoice_type($order);
+				//$customertype = wcpdf_it_get_billing_customer_type($order);
 				$cf = wcpdf_it_get_billing_cf($order);
-				if($cf) {
-					$customertype = $customertype ? $customertype : ((strlen($cf) === 16) ? "personal" : "business");
-					update_post_meta( $order_id, '_billing_customer_type', $customertype ); 
-				}
+				$customertype = (!$cf || strlen($cf) === 16) ? "personal" : "business";
+				update_post_meta( $order_id, '_billing_customer_type', $customertype ); 
 			}
 		}
 		
 		public function update_db(){
 			if($this->dbv && version_compare($this->dbv, "0.6.0", ">=") ) return;
-			$limit = 500;
-			$paged = 1;
-			while(true){
+			$limit = 100;
+			//$paged = 1;
+			//while(true){
 				$args = array(
 					'limit' => $limit,
-					'paged' => $paged,
-					'type' => 'shop_order'
+					//'paged' => $paged,
+					'type' => 'shop_order',
+					'orderby' => 'ID',
+					'order' => 'DESC',
+					'meta_key' => '_billing_customer_type',
+					'meta_compare' => 'NOT EXISTS',
 				);
 				$orders = wc_get_orders( $args );
-				if(!$orders) break;
+				if(!$orders) {
+					update_option('wcpdf_IT_db_version', "0.6.0");
+					return;
+					//break;
+				}
 				$this->update_orders($orders);
-				$paged++;
-			}
-			update_option('wcpdf_IT_db_version', "0.6.0");
-			//die("OK");
+				unset($orders);
+				//$paged++;
+			//}
+			//update_option('wcpdf_IT_db_version', "0.6.0");
 		}
 		
 		public function update_notice() {

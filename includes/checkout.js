@@ -40,9 +40,10 @@ function wcpdf_IT_check_PEC() {
 		jQuery("#billing_PEC_field label abbr").remove();
 		jQuery("#billing_PEC_field label .optional").remove();
 		jQuery("#billing_PEC_field label").append(wcpdf_IT.optional_text);
+		jQuery("#billing_PEC_field").removeClass("validate-required");
 		if(wcpdf_IT_country_selected === "IT" && jQuery("#billing_invoice_type").val() === "invoice"){
 			jQuery("#billing_PEC_field").show().removeClass("hidden wcpdf_IT_hidden");
-			if(wcpdf_IT.add_PEC > 0){
+			if(wcpdf_IT.add_PEC > 0 && jQuery("#billing_cf").val().length < 16 && jQuery("#billing_cf").val().length > 0){
 				jQuery("#billing_PEC_field").addClass("validate-required");
 				jQuery("#billing_PEC_field label").append(wcpdf_IT.required_text);
 				jQuery("#billing_PEC_field label .optional").remove();
@@ -75,6 +76,7 @@ function wcpdf_IT_hide_outside_UE(wcpdf_IT_country_selected) {
 jQuery(function($){
 	if(typeof(jQuery.fn.select2) === "function"){$("#billing_invoice_type").select2({minimumResultsForSearch: Infinity});}
 	$("#billing_country").change(wcpdf_IT_check_required);
+	$("#billing_cf").change(wcpdf_IT_check_PEC);
 	$("#billing_invoice_type").change(wcpdf_IT_check_required);
 	//wcpdf_IT_billing_customer_type_change();
 	wcpdf_IT_check_required();

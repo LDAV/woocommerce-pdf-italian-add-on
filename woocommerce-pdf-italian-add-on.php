@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-Version: 0.7.0
+Version: 0.7.0.5
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
 WC requires at least: 2.6.0
-WC tested up to: 3.5.1
+WC tested up to: 3.5.4
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.0';
+	public $version = '0.7.0.5';
 	protected static $instance = null;
 	
 	public $settings;
@@ -136,6 +136,7 @@ class WooCommerce_Italian_add_on {
 		include_once 'includes/class-wc-settings.php';
 		$this->settings = new WooCommerce_Italian_add_on_Settings();
 		$this->options = get_option($this->settings->general_settings_key);
+		$this->fpa_options = get_option($this->settings->fpa_settings_key);
 		
 		$this->invoice_required = isset($this->options["invoice_required"]) && $this->options["invoice_required"] == "required" ? true: false;
 		$this->what_if_no_invoicetype = isset($this->options["what_if_no_invoicetype"]) ? $this->options["what_if_no_invoicetype"] : "noinvoice";
@@ -145,7 +146,7 @@ class WooCommerce_Italian_add_on {
 		$this->has_error = false;
 		$this->fields_priority = empty($this->options["fields_priority"]) ? 120 : intval($this->options["fields_priority"]);
 		$this->add_cf2 = empty($this->options["add_cf2"]) ? 0 : intval($this->options["add_cf2"]);
-		$this->add_PEC = empty($this->options["add_FPA"]) ? 0 : 1;
+		$this->add_PEC = empty($this->fpa_options["add_FPA"]) ? 0 : 1;
 
 		$this->eu_vat_countries = WC()->countries->get_european_union_countries('eu_vat');
 		$this->default_country = WC()->countries->get_base_country();
@@ -356,7 +357,7 @@ class WooCommerce_Italian_add_on {
 			}
 		}
 
-		if($this->add_PEC && $_POST["billing_invoice_type"] == "invoice" && $_POST["billing_country"] == 'IT' && strlen($_POST['billing_cf']) == 16) {
+		if($this->add_PEC && $_POST["billing_invoice_type"] == "invoice" && $_POST["billing_country"] == 'IT' && strlen($_POST['billing_cf']) < 16 && strlen($_POST['billing_cf']) > 0) {
 			if( empty($_POST["billing_PEC"]) || 
 				 !(is_email($_POST['billing_PEC']) || preg_match($this->regexCodiceDestinatario,  $_POST['billing_PEC']) ) ) {
 				wc_add_notice(sprintf(__('<strong>Certified Email Address or Recipient Code %1$s</strong> is not correct', WCPDF_IT_DOMAIN) , "<strong>". strtolower($_POST['billing_PEC']) . "</strong>" . "<!-- wcpdf_IT_error_billing_PEC -->"), $notice_type = 'error');
@@ -519,7 +520,7 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 }
 endif;
 
-include_once("includes/wcpdf-it-functions.php");
+if(!function_exists('wcpdf_it_get_billing_invoice_type')) include_once "includes/wcpdf-it-functions.php";
 
 if(!function_exists('WCPDF_IT')) {
 	function WCPDF_IT() {
