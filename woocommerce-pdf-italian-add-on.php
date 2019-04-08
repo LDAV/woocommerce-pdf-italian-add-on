@@ -97,6 +97,8 @@ class WooCommerce_Italian_add_on {
 			add_filter( 'woocommerce_customer_meta_fields', array( $this, 'customer_meta_fields') );
 			add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_invoice_type_column' ));
 			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'invoice_type_column_data' ));
+			/* === Add new foleds to Billing Address === */
+			add_filter( 'woocommerce_get_order_address', array( $this, 'add_fields_to_order_address' ), 10, 3 );
 
 		} else {
 			add_action( 'admin_notices', array ( $this, 'check_wc' ) );
@@ -517,6 +519,32 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 		}
 		return $column;
 	}
+
+	/**
+	 * Filter get address method for WC_Order
+	 *
+	 * @author Andrea Grillo <info@andreagrillo.it>
+	 * @param array $address
+	 * @param string $type
+	 * @param \WC_Order $order
+	 * @return array
+	 */
+	public function add_fields_to_order_address( $address, $type, $order ){
+		if( 'billing' == $type ){
+			$custom_fields = array(
+                '_billing_invoice_type',
+                '_billing_cf'
+            );
+
+			foreach( $custom_fields as $key ) {
+				$value  = $order->get_meta( $key );
+				$key    = str_replace( '_' .$type . '_', '', $key );
+				$value && $address[ $key ] = $value;
+			}
+		}
+
+		return $address;
+    }
 }
 endif;
 
