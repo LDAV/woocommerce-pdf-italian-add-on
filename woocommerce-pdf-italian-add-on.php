@@ -3,15 +3,15 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-Version: 0.7.0.7
+Version: 0.7.0.8
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
-WC requires at least: 2.6.0
-WC tested up to: 3.5.4
+WC requires at least: 3.0
+WC tested up to: 3.6.1
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.0.7';
+	public $version = '0.7.0.8';
 	protected static $instance = null;
 	
 	public $settings;
@@ -88,6 +88,7 @@ class WooCommerce_Italian_add_on {
 			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'my_account_my_address_formatted_address'), 10, 3 );
 			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'formatted_address_replacements'), 10, 2 );
 			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'localisation_address_format') );
+			add_action( 'woocommerce_get_order_address', array($this, 'get_order_address'), 10, 3 );
 		
 			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
 				add_filter( 'woocommerce_found_customer_details', array( $this, 'found_customer_details') );
@@ -166,6 +167,30 @@ class WooCommerce_Italian_add_on {
 			add_action( 'admin_notices', array ( $this, 'check_wpo_wcpdf' ) );
 */
 		}
+	}
+
+	// thanks to Andrea Grillo, YITHemes member
+	public function get_order_address($address, $type, $order){
+		/**
+		 * Filter get address method for WC_Order
+		 *
+		 * @author Andrea Grillo <info@andreagrillo.it>
+		 * @param array $address
+		 * @param string $type
+		 * @param \WC_Order $order
+		 * @return array
+	 */
+		if( 'billing' == $type ){
+			$custom_fields = array( '_billing_invoice_type', '_billing_cf' );
+			if($this->add_cf2) $custom_fields[] = "_billing_cf2";
+			if($this->add_PEC) $custom_fields[] = "_billing_PEC";
+			foreach( $custom_fields as $key ) {
+				$value = $order->get_meta( $key );
+				$key = str_replace( '_' .$type . '_', '', $key );
+				$value && $address[$key] = $value;
+			}
+		}
+		return $address;
 	}
 
 	public function billing_fields( $fields ) {

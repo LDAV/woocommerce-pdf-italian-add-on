@@ -3,8 +3,8 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
 Requires PHP: 5.6
-Tested up to: 5.1
-Stable tag: 0.7.0.7
+Tested up to: 5.1.1
+Stable tag: 0.7.0.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -51,11 +51,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.5.4
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.2.7
+* WooCommerce v. 3.6.1
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.2.11
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
 * [WPML Multilingual CMS](https://wpml.org/) v. 4.2.1
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.4.2.1
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.6.0
 
 = Translations in your language =
 
@@ -113,6 +113,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 4. Il codice Fiscale o la Partita IVA vengono riportate nei dati dell'indirizzo, e quindi anche nelle email o nel pdf di fattura o ricevuta
 
 == Changelog ==
+
+= 0.7.0.8 =
+* WC 3.6.1 test
+* add new fields to WC order billing address list (woocommerce_get_order_address). thanks to Andrea Grillo, YITHemes member
 
 = 0.7.0.7 =
 * HR-Croatia VAT Regex updated  
