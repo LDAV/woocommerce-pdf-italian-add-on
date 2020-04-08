@@ -3,8 +3,8 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
 Requires PHP: 5.6
-Tested up to: 5.1.1
-Stable tag: 0.7.0.8
+Tested up to: 5.4.0
+Stable tag: 0.7.0.13
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -51,11 +51,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 3.6.1
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.2.11
+* WooCommerce v. 4.0.1
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.4.7
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.2.1
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.6.0
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.3.11
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.8.0
 
 = Translations in your language =
 
@@ -113,6 +113,16 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 4. Il codice Fiscale o la Partita IVA vengono riportate nei dati dell'indirizzo, e quindi anche nelle email o nel pdf di fattura o ricevuta
 
 == Changelog ==
+
+= 0.7.2.13
+* Correzione di alcuni bug
+* Aggiunta action hook per controllo dati
+* Compatibilità con WC 4.0.0 e WP 5.4
+
+= 0.7.0.9 - 0.7.0.12 =
+* WC 4.0.0 test
+* Removes initial Country code in VAT if inserted
+* bug fixes
 
 = 0.7.0.8 =
 * WC 3.6.1 test
@@ -248,11 +258,10 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.0.7 - 2019.02.18 =
-* HR-Croatia VAT Regex updated  
-* Fatturazione Elettronica B2B. Aggiunta l'opzione per la raccolta dei dati in conformità con la norma in vigore da gennaio 2019
-* Corretto un bug che nascondeva i campi aggiuntivi
-* Corretto un bug sulle regole per il codice destinatario obbligatorio
+= 0.7.2.13 - 2020-04-03 =
+* Correzione di alcuni bug
+* Aggiunta action hook per controllo dati
+* Compatibilità con WC 4.0.0 e WP 5.4
 È consigliato l'upgrade. 
 
 == Support ==

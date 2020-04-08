@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-Version: 0.7.0.8
+Version: 0.7.0.13
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
 WC requires at least: 3.0
-WC tested up to: 3.6.1
+WC tested up to: 4.0.1
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.0.8';
+	public $version = '0.7.0.13';
 	protected static $instance = null;
 	
 	public $settings;
@@ -149,7 +149,7 @@ class WooCommerce_Italian_add_on {
 		$this->add_cf2 = empty($this->options["add_cf2"]) ? 0 : intval($this->options["add_cf2"]);
 		$this->add_PEC = empty($this->fpa_options["add_FPA"]) ? 0 : 1;
 
-		$this->eu_vat_countries = WC()->countries->get_european_union_countries('eu_vat');
+		$this->eu_vat_countries = WC()->countries->get_european_union_countries();
 		$this->default_country = WC()->countries->get_base_country();
 			
 		include_once 'includes/class_wc_update_db.php';
@@ -360,6 +360,7 @@ class WooCommerce_Italian_add_on {
 					$this->has_error = true;
 				}
 			} elseif(in_array($_POST["billing_country"], $this->eu_vat_countries)) {
+				if(strtoupper(substr($_POST['billing_cf'],0,2)) == $_POST["billing_country"]) $_POST['billing_cf'] = substr($_POST['billing_cf'],2);
 				if(empty($_POST['billing_cf']) || strlen($_POST['billing_cf']) < 8) {
 					wc_add_notice(__('Please enter your VAT number or Tax Code', WCPDF_IT_DOMAIN),$notice_type = 'error');
 					$this->has_error = true;
@@ -395,6 +396,7 @@ class WooCommerce_Italian_add_on {
 				$this->has_error = true;
 			}
 		}
+		do_action( 'wcpdf_IT_after_checkout_process', $this, $_POST );
 	}
 
 	public function woocommerce_order_formatted_billing_address( $fields, $order) {
@@ -478,6 +480,7 @@ class WooCommerce_Italian_add_on {
 		$fields['billing']['fields']['billing_invoice_type'] = array(
 			'label'       => __('Invoice or Receipt', WCPDF_IT_DOMAIN),
 			'type'        => 'select',
+			'class' => '',
 			'options'     => array(
 				'receipt' => __('Receipt', WCPDF_IT_DOMAIN ),
 				'invoice' => __('Invoice', WCPDF_IT_DOMAIN )
@@ -486,17 +489,20 @@ class WooCommerce_Italian_add_on {
 		);
 		$fields['billing']['fields']['billing_cf'] = array(
 			'label'       => __('VAT number', WCPDF_IT_DOMAIN),
+			'class' => 'regular-text',
 			'description'       => ""
 		);
 		if($this->add_cf2) {
 			$fields['billing']['fields']['billing_cf2'] = array(
 				'label'       => __('Tax Code', WCPDF_IT_DOMAIN),
+				'class' => 'regular-text',
 				'description'       => ""
 			);
 		}
 		if($this->add_PEC) {
 			$fields['billing']['fields']['billing_PEC'] = array(
 				'label'       => __('Certified Email Address or Recipient Code', WCPDF_IT_DOMAIN),
+				'class' => 'regular-text',
 				'description'       => ""
 			);
 		}
