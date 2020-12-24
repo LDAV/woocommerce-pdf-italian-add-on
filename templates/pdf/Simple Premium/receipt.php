@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <?php do_action( 'wpo_wcpdf_before_document', $this->get_type(), $this->order ); ?>
 <table class="head container">
 	<tr>
@@ -11,8 +12,12 @@
 		?>
 		</td>
 		<td class="shop-info">
+			<?php do_action( 'wpo_wcpdf_before_shop_name', $this->type, $this->order ); ?>
 			<div class="shop-name"><h3><?php $this->shop_name(); ?></h3></div>
+			<?php do_action( 'wpo_wcpdf_after_shop_name', $this->type, $this->order ); ?>
+			<?php do_action( 'wpo_wcpdf_before_shop_address', $this->type, $this->order ); ?>
 			<div class="shop-address"><?php $this->shop_address(); ?></div>
+			<?php do_action( 'wpo_wcpdf_after_shop_address', $this->type, $this->order ); ?>
 		</td>
 	</tr>
 </table>
@@ -27,7 +32,9 @@
 	<tr>
 		<td class="address billing-address">
 			<!-- <h3><?php _e( 'Billing Address:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3> -->
+			<?php do_action( 'wpo_wcpdf_before_billing_address', $this->type, $this->order ); ?>
 			<?php $this->billing_address(); ?>
+			<?php do_action( 'wpo_wcpdf_after_billing_address', $this->type, $this->order ); ?>
 			<?php if ( isset($this->settings['display_email']) ) { ?>
 			<div class="billing-email"><?php $this->billing_email(); ?></div>
 			<?php } ?>
@@ -38,7 +45,9 @@
 		<td class="address shipping-address">
 			<?php if ( isset($this->settings['display_shipping_address']) && $this->ships_to_different_address()) { ?>
 			<h3><?php _e( 'Ship To:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3>
+			<?php do_action( 'wpo_wcpdf_before_shipping_address', $this->type, $this->order ); ?>
 			<?php $this->shipping_address(); ?>
+			<?php do_action( 'wpo_wcpdf_after_shipping_address', $this->type, $this->order ); ?>
 			<?php } ?>
 		</td>
 		<td class="order-data">
@@ -78,25 +87,29 @@
 
 <table class="order-details">
 	<thead>
+		<?php if ( $headers = wpo_wcpdf_templates_get_table_headers( $this ) ): ?>
 		<tr>
 			<?php 
-			foreach ( wpo_wcpdf_templates_get_table_headers( $this ) as $column_key => $header_data ) {
+			foreach ( $headers as $column_key => $header_data ) {
 				printf('<th class="%s"><span>%s</span></th>', $header_data['class'], $header_data['title']);
 			}
 			?>
 		</tr>
+		<?php endif ?>
 	</thead>
 	<tbody>
 		<?php
 		$tbody = wpo_wcpdf_templates_get_table_body( $this );
 		if( sizeof( $tbody ) > 0 ) {
 			foreach( $tbody as $item_id => $item_columns ) {
+				do_action( 'wpo_wcpdf_templates_before_order_details_row', $this, $item_id, $item_columns );
 				$row_class = apply_filters( 'wpo_wcpdf_item_row_class', $item_id, $this->get_type(), $this->order, $item_id );
 				printf('<tr class="%s">', $row_class);
 				foreach ($item_columns as $column_key => $column_data) {
 					printf('<td class="%s"><span>%s</span></td>', $column_data['class'], $column_data['data']);
 				}
 				echo '</tr>';
+				do_action( 'wpo_wcpdf_templates_after_order_details_row', $this, $item_id, $item_columns );
 			}
 		}
 		?>

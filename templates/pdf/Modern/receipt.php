@@ -8,13 +8,17 @@
 			if ($this->has_header_logo()) {
 				$this->header_logo();
 			} else {
+				do_action( 'wpo_wcpdf_before_shop_name', $this->get_type(), $this->order );
 				$this->shop_name();
+				do_action( 'wpo_wcpdf_after_shop_name', $this->get_type(), $this->order );
 			}
 			?>
 			</div>
 		</td>
 		<td class="shop-info">
+			<?php do_action( 'wpo_wcpdf_before_shop_address', $this->get_type(), $this->order ); ?>
 			<div class="shop-address"><?php $this->shop_address(); ?></div>
+			<?php do_action( 'wpo_wcpdf_after_shop_address', $this->get_type(), $this->order ); ?>
 		</td>
 	</tr>
 </table>
@@ -93,12 +97,14 @@
 		$tbody = wpo_wcpdf_templates_get_table_body( $this );
 		if( sizeof( $tbody ) > 0 ) {
 			foreach( $tbody as $item_id => $item_columns ) {
+				do_action( 'wpo_wcpdf_templates_before_order_details_row', $this, $item_id, $item_columns );
 				$row_class = apply_filters( 'wpo_wcpdf_item_row_class', $item_id, $this->get_type(), $this->order, $item_id );
 				printf('<tr class="%s">', $row_class);
 				foreach ($item_columns as $column_key => $column_data) {
 					printf('<td class="%s"><span>%s</span></td>', $column_data['class'], $column_data['data']);
 				}
 				echo '</tr>';
+				do_action( 'wpo_wcpdf_templates_after_order_details_row', $this, $item_id, $item_columns );
 			}
 		}
 		?>
