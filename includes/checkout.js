@@ -1,9 +1,11 @@
 var wcpdf_IT;
-function wcpdf_IT_billing_customer_type_change(wcpdf_IT_country_selected) {
-	jQuery("#billing_cf_field label").html(wcpdf_IT.lblCommon);
+function wcpdf_IT_billing_customer_type_change() {
+	var abbr = jQuery("#billing_cf_field label abbr");
+	var suffix = abbr.length > 0 ? "&nbsp" + abbr.prop("outerHTML") : "";
+	jQuery("#billing_cf_field label").html(wcpdf_IT.lblCommon + suffix);
 	jQuery("#billing_cf").attr("placeholder", wcpdf_IT.txtCommon);
 	if(jQuery("#billing_invoice_type").val() === "receipt" ) {
-		jQuery("#billing_cf_field label").html(wcpdf_IT.lblPersonal);
+		jQuery("#billing_cf_field label").html(wcpdf_IT.lblPersonal + suffix);
 		jQuery("#billing_cf").attr("placeholder", wcpdf_IT.txtPersonal);
 	}
 	wcpdf_IT_check_PEC();
@@ -12,7 +14,7 @@ function wcpdf_IT_billing_customer_type_change(wcpdf_IT_country_selected) {
 function wcpdf_IT_check_required() {
 	if(jQuery("#billing_country").length === 0) {return(false);}
 	var wcpdf_IT_country_selected = jQuery("#billing_country").val();
-	wcpdf_IT_billing_customer_type_change(wcpdf_IT_country_selected);
+	wcpdf_IT_billing_customer_type_change();
 	if(wcpdf_IT.hide_outside_UE) {wcpdf_IT_hide_outside_UE(wcpdf_IT_country_selected);}
 	if(wcpdf_IT.invoice_required !== "1") {
 		jQuery("#billing_cf_field").removeClass("validate-required woocommerce-invalid woocommerce-invalid-required-field");

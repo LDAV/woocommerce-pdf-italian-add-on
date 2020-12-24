@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-Version: 0.7.0.13
+Version: 0.7.0.20
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
 WC requires at least: 3.0
-WC tested up to: 4.0.1
+WC tested up to: 4.8.0
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.0.13';
+	public $version = '0.7.0.20';
 	protected static $instance = null;
 	
 	public $settings;
@@ -37,7 +37,7 @@ class WooCommerce_Italian_add_on {
 	public $what_if_no_invoicetype;
 	public $fields_priority;
 	public $regexCF = "/^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i";
-	public $regexPIVA = "/^(ATU[0-9]{8}|BE0[0-9]{9}|BG[0-9]{9,10}|CY[0-9]{8}L|CZ[0-9]{8,10}|DE[0-9]{9}|DK[0-9]{8}|EE[0-9]{9}|(EL|GR)[0-9]{9}|ES[0-9A-Z][0-9]{7}[0-9A-Z]|FI[0-9]{8}|FR[0-9A-Z]{2}[0-9]{9}|GB([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{13})|HR[0-9]{11}|HU[0-9]{8}|IE[0-9][A-Z0-9][0-9]{5}[A-Z]{1,2}|IT[0-9]{11}|LT([0-9]{9}|[0-9]{12})|LU[0-9]{8}|LV[0-9]{11}|MT[0-9]{8}|NL[0-9]{9}B[0-9]{2}|PL[0-9]{10}|PT[0-9]{9}|RO[0-9]{2,10}|SE[0-9]{12}|SI[0-9]{8}|SK[0-9]{10})$/i";
+	public $regexPIVA = "/^(ATU[0-9]{8}|BE0[0-9]{9}|BG[0-9]{9,10}|CY[0-9]{8}L|CZ[0-9]{8,10}|DE[0-9]{9}|DK[0-9]{8}|EE[0-9]{9}|(EL|GR)[0-9]{9}|ES[0-9A-Z][0-9]{7}[0-9A-Z]|FI[0-9]{8}|FR[0-9A-Z]{2}[0-9]{9}|GB([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{13})|HR[0-9]{11}|HU[0-9]{8}|IE[0-9][A-Z0-9][0-9]{5}[A-Z]{1,2}|IT[0-9]{11}|LT([0-9]{9}|[0-9]{12})|LU[0-9]{8}|LV[0-9]{11}|MT[0-9]{8}|NL[0-9]{9}B[0-9]{2}|PL[0-9]{10}|PT[0-9]{9}|RO[0-9]{2,10}|SE[0-9]{12}|SI[0-9]{8}|SM[0-9]{3,5}|SK[0-9]{10})$/i";
 	public $regexCodiceDestinatario = "/^[A-Z0-9]{6,7}$/i";
 	
 	public $invoice_required;
@@ -149,8 +149,9 @@ class WooCommerce_Italian_add_on {
 		$this->add_cf2 = empty($this->options["add_cf2"]) ? 0 : intval($this->options["add_cf2"]);
 		$this->add_PEC = empty($this->fpa_options["add_FPA"]) ? 0 : 1;
 
-		$this->eu_vat_countries = WC()->countries->get_european_union_countries();
 		$this->default_country = WC()->countries->get_base_country();
+		$this->eu_vat_countries = WC()->countries->get_european_union_countries();
+		if($this->default_country == "IT") $this->eu_vat_countries[] = "SM"; // aggiunge San Marino
 			
 		include_once 'includes/class_wc_update_db.php';
 		$update = new WooCommerce_Italian_add_on_Update();
@@ -217,7 +218,7 @@ class WooCommerce_Italian_add_on {
 			'label' => __('Personal or Business', WCPDF_IT_DOMAIN),
 			'placeholder' => __( 'Personal or Business', WCPDF_IT_DOMAIN ),
 			'required'    => false,
-			'class'       => array("hidden"),
+			'class'       => array("hidden", "wcpdf_IT_hidden"),
 			'clear'       => false,
 			'priority' => $this->fields_priority,
 			'type'        => 'hidden',
@@ -225,7 +226,7 @@ class WooCommerce_Italian_add_on {
 		);
 		
 		$fields['billing_cf'] = array(
-			'label'       => __('VAT number', WCPDF_IT_DOMAIN),
+			'label'       => __('VAT number or Tax Code', WCPDF_IT_DOMAIN),
 			'placeholder' => __('Please enter your VAT number or Tax Code', WCPDF_IT_DOMAIN),
 			'required'    => $req,
 			'class'       => array( $cl2 ),
@@ -322,7 +323,7 @@ class WooCommerce_Italian_add_on {
 			'required_text' => ' <abbr class="required" title="' . __("required", "woocommerce") . '">*</abbr>'
 		) );
 		wp_enqueue_script( 'wc_italian_add_on' );
-		echo '<input type="hidden" name="billing_customer_type" id="billing_customer_type" value="' . $customer_type . '">';
+		//echo '<input type="hidden" name="billing_customer_type" id="billing_customer_type" value="' . $customer_type . '">'; //WC 4.5 supports hidden fields
 		echo '<style>.wcpdf_IT_hidden{display:none !important}</style>';
 	}
 
@@ -353,6 +354,11 @@ class WooCommerce_Italian_add_on {
 	}
 	
 	public function piva_checkout_field_process() {
+		$_POST = apply_filters( 'wcpdf_IT_before_checkout_process', $_POST, $this );
+		$_POST["billing_cf"] = !empty($_POST["billing_cf"]) ? preg_replace("/[^0-9A-Za-z]+/i", "", $_POST["billing_cf"]) : "";
+		$_POST["billing_cf2"] = !empty($_POST["billing_cf2"]) ? preg_replace("/[^0-9A-Za-z]+/i", "", $_POST["billing_cf2"]) : "";
+		$_POST["billing_PEC"] = !empty($_POST["billing_PEC"]) ? preg_replace("/[^0-9A-Za-z@_\-\.]+/i", "", $_POST["billing_PEC"]) : "";
+
 		if($_POST["billing_invoice_type"] == "invoice") {
 			if($_POST["billing_country"] == 'IT' && strlen($_POST['billing_cf']) > 13) {
 				if(!preg_match($this->regexCF, $_POST['billing_cf'])) {
@@ -431,17 +437,19 @@ class WooCommerce_Italian_add_on {
 			$address['{cf}'] = $pre . strtoupper($args['cf']);
 		}
 		
-		if($this->add_cf2) {
-			if ( ! empty( $args['cf2']) ) {
-				$pre = __('Tax Code', WCPDF_IT_DOMAIN) . ': ';
-				$address['{cf2}'] = $pre . strtoupper($args['cf2']);
+		if(!empty($args['invoice_type']) && $args['invoice_type'] == "invoice") {
+			if($this->add_cf2) {
+				if ( ! empty( $args['cf2']) ) {
+					$pre = __('Tax Code', WCPDF_IT_DOMAIN) . ': ';
+					$address['{cf2}'] = $pre . strtoupper($args['cf2']);
+				}
 			}
-		}
-		
-		if($this->add_PEC) {
-			if ( ! empty( $args['PEC']) ) {
-				$pre = preg_match($this->regexCodiceDestinatario, $args['PEC']) ? __('Recipient Code', WCPDF_IT_DOMAIN) : __('Certified Email Address', WCPDF_IT_DOMAIN);
-				$address['{PEC}'] = $pre . ': ' . strtolower($args['PEC']);
+
+			if($this->add_PEC) {
+				if ( ! empty( $args['PEC']) ) {
+					$pre = preg_match($this->regexCodiceDestinatario, $args['PEC']) ? __('Recipient Code', WCPDF_IT_DOMAIN) : __('Certified Email Address', WCPDF_IT_DOMAIN);
+					$address['{PEC}'] = $pre . ': ' . strtolower($args['PEC']);
+				}
 			}
 		}
 

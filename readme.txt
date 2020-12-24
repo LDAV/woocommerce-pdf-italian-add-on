@@ -3,8 +3,8 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, WooCommerce PDF Invoices & Packing Slips, ldav
 Requires at least: 3.8
 Requires PHP: 5.6
-Tested up to: 5.4.1
-Stable tag: 0.7.0.13
+Tested up to: 5.6
+Stable tag: 0.7.0.20
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -51,11 +51,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 4.0.1
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.4.9
+* WooCommerce v. 4.8.0
+* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.7.3
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.3.12
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.8.0
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.4.8
+* [WooCommerce Multilingual](https://wpml.org/) v. 4.10.4
 
 = Translations in your language =
 
@@ -114,7 +114,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.2.13
+= 0.7.0.14 - 0.7.0.20 =
+* Correzione di alcuni bug
+
+= 0.7.0.13 =
 * Correzione di alcuni bug
 * Aggiunta action hook per controllo dati
 * Compatibilità con WC 4.0.0 e WP 5.4.1
@@ -258,10 +261,8 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.2.13 - 2020-04-03 =
+= 0.7.0.20 - 2020-12-24 =
 * Correzione di alcuni bug
-* Aggiunta action hook per controllo dati
-* Compatibilità con WC 4.0.0 e WP 5.4
 È consigliato l'upgrade. 
 
 == Support ==

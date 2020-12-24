@@ -67,11 +67,11 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 
 	public function wcpdf_data_input_box_content ( $post ) {
 		$order = wc_get_order( $post->ID );
-		$receipt = wcpdf_get_document( 'receipt', $order );
-		$receipt_number = $receipt->get_number();
-		$receipt_date = $receipt->get_date();
+		if ( $receipt = wcpdf_get_document( 'receipt', $order )) {
+			$receipt_number = $receipt->get_number();
+			$receipt_date = $receipt->get_date();
 
-		do_action( 'wpo_wcpdf_meta_box_start', $post->ID );
+			do_action( 'wpo_wcpdf_meta_box_start', $post->ID );
 
 		?>
 		<div class="wcpdf-data-fields" data-document="receipt" data-order_id="<?php echo $post->ID; ?>">
@@ -123,8 +123,8 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			</div>
 		</div>
 		<?php
-
-		do_action( 'wpo_wcpdf_meta_box_end', $post->ID );
+			do_action( 'wpo_wcpdf_meta_box_end', $post->ID );
+		}
 	}
 
 	public function wcpdf_save_receipt_number_date($post_id) {
@@ -136,21 +136,21 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			}
 			
 			$order = wc_get_order( $post_id );
-			$receipt = wcpdf_get_document( 'receipt', $order );
-		
-			if ( isset( $_POST['wcpdf_receipt_date'] ) ) {
-				$date = $_POST['wcpdf_receipt_date'];
-				$receipt_date = "{$date} 00:00:00";
-				$receipt->set_date( $receipt_date );
-			} elseif ( empty( $_POST['wcpdf_receipt_date'] ) && !empty( $_POST['_wcpdf_receipt_number'] ) ) {
-				$receipt->set_date( current_time( 'timestamp', true ) );
-			}
+			if ( $receipt = wcpdf_get_document( 'receipt', $order )) {
+				if ( isset( $_POST['wcpdf_receipt_date'] ) ) {
+					$date = $_POST['wcpdf_receipt_date'];
+					$receipt_date = "{$date} 00:00:00";
+					$receipt->set_date( $receipt_date );
+				} elseif ( empty( $_POST['wcpdf_receipt_date'] ) && !empty( $_POST['_wcpdf_receipt_number'] ) ) {
+					$receipt->set_date( current_time( 'timestamp', true ) );
+				}
 
-			if ( isset( $_POST['_wcpdf_receipt_number'] ) ) {
-				$receipt->set_number( $_POST['_wcpdf_receipt_number'] );
-			}
+				if ( isset( $_POST['_wcpdf_receipt_number'] ) ) {
+					$receipt->set_number( $_POST['_wcpdf_receipt_number'] );
+				}
 
-			$receipt->save();
+				$receipt->save();
+			}
 		}
 	}
 	
