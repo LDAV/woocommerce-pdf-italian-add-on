@@ -40,11 +40,3 @@ Tax Code or VAT number are added to WooCommerce checkout page. The customer coul
 1. Copy the "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" in your (child) theme, and customize it.
 
 Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/getting-started-guide/string-translation/).
-
-Tested up to/Testato fino alle versioni:
-
-* WooCommerce v. 4.0.1
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.4.9
-* WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.3.12
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.8.0
