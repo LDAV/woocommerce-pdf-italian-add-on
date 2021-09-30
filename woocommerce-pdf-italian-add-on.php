@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-Version: 0.7.0.20
+Version: 0.7.0.21
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
@@ -11,7 +11,7 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
 WC requires at least: 3.0
-WC tested up to: 5.2.1
+WC tested up to: 5.7.1
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.0.20';
+	public $version = '0.7.0.21';
 	protected static $instance = null;
 	
 	public $settings;
@@ -160,8 +160,10 @@ class WooCommerce_Italian_add_on {
 		if ( class_exists( 'WPO_WCPDF' ) ) {
 			if(version_compare( WPO_WCPDF()->version, '2.0', '<' ) ) {
 				include_once 'includes/class-wcpdf-integration.php';
-			} else {
+			} elseif(version_compare( WPO_WCPDF()->version, '2.7', '<' ) ) {
 				include_once 'includes/class-wcpdf-integration2.php';
+			} else {
+				include_once 'includes/class-wcpdf-integration3.php';
 			}
 /*
 		} else {
