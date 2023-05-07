@@ -51,11 +51,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 7.0.1
-* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.2.3
+* WooCommerce v. 7.6.1
+* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.5.2
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.5.12
-* [WooCommerce Multilingual & Multicurrency](https://wpml.org/) v. 5.0.2
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.6.3
+* [WooCommerce Multilingual & Multicurrency](https://wpml.org/) v. 5.1.3
 
 = Translations in your language =
 
