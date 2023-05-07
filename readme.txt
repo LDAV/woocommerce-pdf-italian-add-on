@@ -1,10 +1,10 @@
 === WooCommerce PDF Invoices Italian Add-on ===
 Contributors: labdav
-Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, WooCommerce PDF Invoices & Packing Slips, ldav
-Requires at least: 3.8
-Requires PHP: 7.2
-Tested up to: 5.8.1
-Stable tag: 0.7.0.21
+Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, PDF Invoices & Packing Slips for WooCommerce, ldav
+Requires at least: 4.4
+Requires PHP: 7.4
+Tested up to: 6.2
+Stable tag: 0.7.0.22
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -15,7 +15,7 @@ Donate link: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano.
 Comprende l'opzione per la raccolta dei dati necessari alla Fatturazione Elettronica B2B in vigore da gennaio 2019.
 
-Per funzionare al meglio delle sue possibilità consigliamo di associare un modulo per la generazione automatica delle fatture, come il plugin gratuito di Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) che consente di numerare automaticamente le fatture e di stamparle o inviarle in formato PDF.
+Per funzionare al meglio delle sue possibilità consigliamo di associare un modulo per la generazione automatica delle fatture, come il plugin gratuito di Ewout Fernhout's [PDF Invoices & Packing Slips for WooCommerce plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) che consente di numerare automaticamente le fatture e di stamparle o inviarle in formato PDF.
 
 Il plugin può essere utilizzato anche senza un plugin per la generazione automatica delle fatture. Tutti i dati necessari vengono sempre registrati negli ordini di WooCommerce, e sono quindi esportabili verso un qualsiasi gestionale esterno.
 
@@ -25,7 +25,7 @@ Se attivata l'opzione per la raccolta dati per la Fatturazione Elettronica, vien
 
 Se il cliente ha un indirizzo di fatturazione fuori della UE, si può scegliere di escludere i campi di Partita IVA o Codice Fiscale.
 
-Il plugin [WooCommerce PDF Invoices & Packing Slips](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) permette di definire i template della fattura. Con questo add-on va definito anche il template della ricevuta:
+Il plugin [PDF Invoices & Packing Slips for WooCommerce](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/) permette di definire i template della fattura. Con questo add-on va definito anche il template della ricevuta:
 
 1. Segui le istruzioni per [Come personalizzare il mio template](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/faq/).
 1. Copia il file "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" nel tuo tema (o tema figlio) e modificalo come credi opportuno.
@@ -40,7 +40,7 @@ Se il nostro plugin gratuito non dovesse soddisfare le tue esigenze, prova a con
 
 It adds all you need for your Italian WooCommerce e-shop
 
-Make its best (optionally) with the Ewout Fernhout's [WooCommerce PDF Invoices & Packing Slips plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/).
+Make its best (optionally) with the Ewout Fernhout's [PDF Invoices & Packing Slips for WooCommerce plugin](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/).
 
 Tax Code or VAT number are added to WooCommerce checkout page. The customer could choice between Invoice or Receipt option. In case of Invoice VAT is complimentary.
 
@@ -51,11 +51,11 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 5.7.1
-* WooCommerce PDF Invoices & Packing Slips [Ewout Fernhout] v. 2.9.3
+* WooCommerce v. 7.0.1
+* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.2.3
 * WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.4.12
-* [WooCommerce Multilingual](https://wpml.org/) v. 4.12.0
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.5.12
+* [WooCommerce Multilingual & Multicurrency](https://wpml.org/) v. 5.0.2
 
 = Translations in your language =
 
@@ -67,7 +67,7 @@ Tested up to/Testato fino alle versioni:
 
 Steps to install this plugin.
 
-Be sure you're running WooCommerce 2.0+ and (optional) WooCommerce PDF Invoices & Packing Slips
+Be sure you're running WooCommerce 2.0+ and (optional) PDF Invoices & Packing Slips for WooCommerce
 
 1. In the downloaded zip file, there is a folder with name 'woocommerce-pdf-invoices-italian-add-on'
 1. Upload the 'woocommerce-pdf-italian-add-on' folder to the '/wp-content/plugins/' directory
@@ -114,8 +114,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.0.14 - 0.7.0.21 =
+= 0.7.0.14 - 0.7.0.22 =
 * Correzione di alcuni bug
+* Verifica compatibilità con WooCommerce 7.0.1
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.2.3
 
 = 0.7.0.13 =
 * Correzione di alcuni bug
@@ -261,10 +263,10 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.0.21 - 2021-09-30 =
+= 0.7.0.22 - 2021-11-01 - 2022/11/05 =
 * Correzione di alcuni bug
-* Verifica compatibilità con WooCommerce 5.7.1
-* Verifica compatibilità con WooCommerce PDF Invoices & Packing Slips 2.9.3
+* Verifica compatibilità con WooCommerce 7.0.1
+* Verifica compatibilità con WooCommerce PDF Invoices & Packing Slips 3.2.3
 È consigliato l'upgrade. 
 
 == Support ==
