@@ -26,7 +26,8 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 				//$customertype = wcpdf_it_get_billing_customer_type($order);
 				$cf = wcpdf_it_get_billing_cf($order);
 				$customertype = (!$cf || strlen($cf) === 16) ? "personal" : "business";
-				update_post_meta( $order_id, '_billing_customer_type', $customertype ); 
+				$order->update_meta_data( '_billing_customer_type', $customertype );
+				$order->save();
 			}
 		}
 		

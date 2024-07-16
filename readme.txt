@@ -3,8 +3,8 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, PDF Invoices & Packing Slips for WooCommerce, ldav
 Requires at least: 4.4
 Requires PHP: 7.4
-Tested up to: 6.2
-Stable tag: 0.7.0.22
+Tested up to: 6.5.3
+Stable tag: 0.7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -51,11 +51,10 @@ Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/g
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 7.6.1
-* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.5.2
-* WooCommerce PDF Invoice [RightPress] v. 2.1.6
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.6.3
-* [WooCommerce Multilingual & Multicurrency](https://wpml.org/) v. 5.1.3
+* WooCommerce v. 8.8.3
+* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.8.2
+* [WPML Multilingual CMS](https://wpml.org/) v. 4.6.10
+* [WooCommerce Multilingual & Multicurrency](https://wpml.org/) v. 5.3.6
 
 = Translations in your language =
 
@@ -113,6 +112,14 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 4. Il codice Fiscale o la Partita IVA vengono riportate nei dati dell'indirizzo, e quindi anche nelle email o nel pdf di fattura o ricevuta
 
 == Changelog ==
+
+= 0.7.2 - 0.7.4  - 2024-05-08 =
+* Verifica compatibilità con WooCommerce 8.8.3
+* Verifica compatibilità con WooCommerce High-Performance Order Storage (HPOS)
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.2
+
+= 0.7.0.23 =
+* Verifica compatibilità con WooCommerce 7.7.2
 
 = 0.7.0.14 - 0.7.0.22 =
 * Correzione di alcuni bug
@@ -263,10 +270,10 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.0.22 - 2021-11-01 - 2022/11/05 =
-* Correzione di alcuni bug
-* Verifica compatibilità con WooCommerce 7.0.1
-* Verifica compatibilità con WooCommerce PDF Invoices & Packing Slips 3.2.3
+= 0.7.2 - 0.7.4  - 2024-05-08 =
+* Verifica compatibilità con WooCommerce 8.8.3
+* Verifica compatibilità con WooCommerce High-Performance Order Storage (HPOS)
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.2
 È consigliato l'upgrade. 
 
 == Support ==

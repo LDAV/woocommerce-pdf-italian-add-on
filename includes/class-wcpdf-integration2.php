@@ -65,16 +65,17 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		}
 	}
 
-	public function wcpdf_data_input_box_content ( $post ) {
-		$order = wc_get_order( $post->ID );
+	public function wcpdf_data_input_box_content ( $post_or_order_object ) {
+		$order = ( $post_or_order_object instanceof WP_Post ) ? wc_get_order( $post_or_order_object->ID ) : $post_or_order_object;
+		$order_id = $order->get_id();
 		if ( $receipt = wcpdf_get_document( 'receipt', $order )) {
 			$receipt_number = $receipt->get_number();
 			$receipt_date = $receipt->get_date();
 
-			do_action( 'wpo_wcpdf_meta_box_start', $post->ID );
+			do_action( 'wpo_wcpdf_meta_box_start', $order_id );
 
 		?>
-		<div class="wcpdf-data-fields" data-document="receipt" data-order_id="<?php echo $post->ID; ?>">
+		<div class="wcpdf-data-fields" data-document="receipt" data-order_id="<?php echo $order_id; ?>">
 			<h4><?php _e( 'Receipt', WCPDF_IT_DOMAIN ) ?><?php if ($receipt->exists()) : ?><span id="edit-receipt-date-number" class="dashicons dashicons-edit"></span><span class="wpo-wcpdf-delete-document dashicons dashicons-trash" data-nonce="<?php echo wp_create_nonce( "wpo_wcpdf_delete_document" ); ?>"></span><?php endif; ?></h4>
 
 			<!-- Read only -->
@@ -107,23 +108,23 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 				<p class="form-field _wcpdf_receipt_number_field ">
 					<label for="_wcpdf_receipt_number"><?php _e( 'Receipt Number (unformatted!)', WCPDF_IT_DOMAIN ); ?>:</label>
 					<?php if ( $receipt->exists() && !empty($receipt_number) ) : ?>
-					<input type="text" class="short" style="" name="_wcpdf_receipt_number" id="_wcpdf_receipt_number" value="<?php echo $receipt_number->number ?>">
+					<input type="text" class="short" name="_wcpdf_receipt_number" id="_wcpdf_receipt_number" value="<?php echo $receipt_number->number ?>" style="width: auto">
 					<?php else : ?>
-					<input type="text" class="short" style="" name="_wcpdf_receipt_number" id="_wcpdf_receipt_number" value="" disabled="disabled" >
+					<input type="text" class="short" name="_wcpdf_receipt_number" id="_wcpdf_receipt_number" value="" disabled="disabled" style="width: auto">
 					<?php endif; ?>
 				</p>
 				<p class="form-field form-field-wide">
 					<label for="wcpdf_receipt_date"><?php _e( 'Receipt Date:', WCPDF_IT_DOMAIN ); ?></label>
 					<?php if ( $receipt->exists() && !empty($receipt_date) ) : ?>
-					<input type="text" class="date-picker-field" name="wcpdf_receipt_date" id="wcpdf_receipt_date" maxlength="10" value="<?php echo $receipt_date->date_i18n( 'Y-m-d' ); ?>" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+					<input type="text" class="date-picker-field" name="wcpdf_receipt_date" id="wcpdf_receipt_date" maxlength="10" value="<?php echo $receipt_date->date_i18n( 'Y-m-d' ); ?>" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" style="width: auto" />
 					<?php else : ?>
-					<input type="text" class="date-picker-field" name="wcpdf_receipt_date" id="wcpdf_receipt_date" maxlength="10" disabled="disabled" value="" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+					<input type="text" class="date-picker-field" name="wcpdf_receipt_date" id="wcpdf_receipt_date" maxlength="10" disabled="disabled" value="" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" style="width: auto" />
 					<?php endif; ?>
 				</p>
 			</div>
 		</div>
 		<?php
-			do_action( 'wpo_wcpdf_meta_box_end', $post->ID );
+			do_action( 'wpo_wcpdf_meta_box_end', $order_id );
 		}
 	}
 
@@ -136,21 +137,23 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			}
 			
 			$order = wc_get_order( $post_id );
-			if ( $receipt = wcpdf_get_document( 'receipt', $order )) {
-				if ( isset( $_POST['wcpdf_receipt_date'] ) ) {
-					$date = $_POST['wcpdf_receipt_date'];
-					$receipt_date = "{$date} 00:00:00";
-					$receipt->set_date( $receipt_date );
-				} elseif ( empty( $_POST['wcpdf_receipt_date'] ) && !empty( $_POST['_wcpdf_receipt_number'] ) ) {
-					$receipt->set_date( current_time( 'timestamp', true ) );
-				}
-
-				if ( isset( $_POST['_wcpdf_receipt_number'] ) ) {
-					$receipt->set_number( $_POST['_wcpdf_receipt_number'] );
-				}
-
-				$receipt->save();
+			$receipt = wcpdf_get_document( 'receipt', $order );
+			if(!$receipt) return;
+		
+			if ( isset( $_POST['wcpdf_receipt_date'] ) ) {
+				$date = $_POST['wcpdf_receipt_date'];
+				$receipt_date = "{$date} 00:00:00";
+				$receipt->set_date( $receipt_date );
+			} elseif ( empty( $_POST['wcpdf_receipt_date'] ) && !empty( $_POST['_wcpdf_receipt_number'] ) ) {
+				$receipt->set_date( current_time( 'timestamp', true ) );
 			}
+
+			if ( isset( $_POST['_wcpdf_receipt_number'] ) ) {
+				$invoice_number = sanitize_text_field( $_POST['_wcpdf_receipt_number'] );
+				$receipt->set_number( $invoice_number );
+			}
+
+			$receipt->save();
 		}
 	}
 	
@@ -189,18 +192,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		$bulk_actions['receipt'] = __( 'PDF Receipts', WCPDF_IT_DOMAIN );
 		return $bulk_actions;
 	}
-	
-/*
-	public function wcpdf_process_template_order($template_type, $order_id) {
-		if($template_type == 'invoice') {
-			$order = wc_get_order($order_id);
-			$invoicetype = wcpdf_it_get_billing_invoice_type($order);
-			$template_type = $invoicetype ? $invoicetype : "invoice";
-		}
-		return $template_type;
-	}
-*/
-	
+
 	public function wcpdf_custom_email_condition($attach, $order, $email_id, $document_type) {
 		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 		if(($invoicetype === "invoice" && $document_type === "receipt") || 
@@ -213,48 +205,6 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			) ) return(false);
 		return $attach;
 	}
-
-/*	
-	public function my_account_pdf_link( $actions, $order ) {
-		$receipt = wcpdf_get_document( 'receipt', $order );
-		if ( $receipt && $receipt->is_enabled() ) {
-			$pdf_url = wp_nonce_url( admin_url( 'admin-ajax.php?action=generate_wpo_wcpdf&document_type=receipt&order_ids=' . $order->order_id . '&my-account'), 'generate_wpo_wcpdf' );
-
-			// check my account button settings
-			$button_setting = $receipt->get_setting('my_account_buttons', 'available');
-			switch ($button_setting) {
-				case 'available':
-					$receipt_allowed = $receipt->exists();
-					break;
-				case 'always':
-					$receipt_allowed = true;
-					break;
-				case 'never':
-					$receipt_allowed = false;
-					break;
-				case 'custom':
-					$allowed_statuses = $button_setting = $receipt->get_setting('my_account_restrict', array());
-					if ( !empty( $allowed_statuses ) && in_array( $order->get_status(), array_keys( $allowed_statuses ) ) ) {
-						$receipt_allowed = true;
-					} else {
-						$receipt_allowed = false;
-					}
-					break;
-			}
-
-			// Check if receipt has been created already or if status allows download (filter your own array of allowed statuses)
-			if ( $receipt_allowed || in_array($order->get_status(), apply_filters( 'wpo_wcpdf_myaccount_allowed_order_statuses', array() ) ) ) {
-				$button_text = __( 'Download receipt (PDF)', 'woocommerce-pdf-italian-add-on' );
-				$actions['receipt'] = array(
-					'url'  => $pdf_url,
-					'name' => $button_text
-				);
-			}
-		}
-
-		return apply_filters( 'wpo_wcpdf_myaccount_actions', $actions, $order );
-	}
-*/
 
 	public function wcpdf_my_account( $actions, $order ) {
 		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
@@ -293,7 +243,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 				} else {
 					$receipt_allowed = $receipt->exists();
 				}
-				if ($receipt_allowed) {
+				if (!empty($receipt_allowed)) {
 					$actions['receipt'] = array(
 						'url'  => $pdf_url,
 						'name' => __( 'Download Receipt (PDF)', WCPDF_IT_DOMAIN )
@@ -338,36 +288,6 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt.php';
 		return $file_path;
 	}
-/*
-	public function wcpdf_custom_template_files( $template, $template_type ) {
-		// bail out if file already exists in default or custom path!
-		if( file_exists( $template ) ){
-			return $template;
-		}
-
-		$custom_template_file = plugin_dir_path( __FILE__ ) . 'templates/' . $template_type . '.php';
-
-		if( file_exists( $custom_template_file ) ){
-			// default to bundled Simple template
-			return $custom_template_file;
-		} else {
-			// unknown document type! This will inevitably throw an error unless there's another filter after this one.
-			return $template;
-		}
-	}
-*/
-
-/*
-	public function wcpdf_attach_receipt( $documents ) {
-		global $order;
-		$invoicetype = wcpdf_it_get_billing_invoice_type($order);
-		if ( $invoicetype == 'receipt') {
-			$documents['receipt'] = $documents['invoice'];
-			unset($documents['invoice']);
-		}
-		return $documents;
-	}
-*/
 
 	function wcpdf_after_order_details($type, $order) {
 		if($type === "invoice" || $type === "receipt") {

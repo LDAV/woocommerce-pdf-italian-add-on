@@ -37,14 +37,42 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			$size = isset( $args['size'] ) ? $args['size'] : '400px';
 			$maxlength = empty($args['maxlength']) ? "" : sprintf(' maxlength="%s"', $args["maxlength"]);
 			$placeholder = empty($args["placeholder"]) ? "" : sprintf(' placeholder="%s"', $args["placeholder"]);
+			$type = isset( $args['type'] ) ? $args['type'] : "text";
 		
-			$html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" style="width:%4$s"%5$s%6$s/>', $id, $setting_name, $current, $size, $placeholder, $maxlength );
+			$html = sprintf( '<input type="' .$type . '" id="%1$s" name="%2$s[%1$s]" value="%3$s" style="width:%4$s"%5$s%6$s/>', $id, $setting_name, $current, $size, $placeholder, $maxlength );
 		
 			// Displays option description.
 			if ( isset( $args['description'] ) ) {
 				$html .= sprintf( '<p class="description">%s</p>', $args['description'] );
 			}
-		
+
+			if (isset($args['additional'])) {
+				$additional = $args['additional'];
+
+				$additional_id = $id.'_additional';
+
+				printf( '<div id="%s" style="margin-top:4px">', $additional_id );
+
+				switch ($additional['callback']) {
+					case 'text_element_callback':
+						$this->text_element_callback( $additional['args'] );
+						break;		
+					case 'select_element_callback':
+						$this->select_element_callback( $additional['args'] );
+						break;		
+					case 'multiple_text_element_callback':
+						$this->multiple_text_element_callback( $additional['args'] );
+						break;		
+					case 'multiple_checkbox_element_callback':
+						$this->multiple_checkbox_element_callback( $additional['args'] );
+						break;		
+					default:
+						break;
+				}
+
+				echo '</div>';
+			}
+
 			echo $html;
 		}
 		
@@ -78,8 +106,9 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			$setting_name = $this->get_setting_name($args);
 			$id = $args['id'];
 			$value = isset( $args['value'] ) ? $args['value'] : 1;
+			$label = isset( $args['label'] ) ? $args['label'] : "";
 		
-			$html = sprintf( '<input type="checkbox" id="%1$s" name="%2$s[%1$s]" value="%3$s"%4$s />', $id, $setting_name, $value, checked( $value, $current, false ) );
+			$html = sprintf( '<label><input type="checkbox" id="%1$s" name="%2$s[%1$s]" value="%3$s"%4$s /> %5$s</label>', $id, $setting_name, $value, checked( $value, $current, false ), $label );
 		
 			// Displays option description.
 			if ( isset( $args['description'] ) ) {
@@ -173,17 +202,18 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			$current = $this->get_current($args);
 			$setting_name = $this->get_setting_name($args);
 			$id = $args['id'];
+			$size = empty($args["size"]) ? "" : sprintf(' style="width:%s"', $args["size"]);
+			$class = empty($args["class"]) ? "" : sprintf(' class="%s"', $args["class"]);
 			$placeholder = empty($args["placeholder"]) ? "" : sprintf(' data-placeholder="%s"', $args["placeholder"]);
 		
-			printf( '<select id="%1$s" name="%2$s[%1$s]"%3$s>', $id, $setting_name,$placeholder );
+			printf( '<select id="%1$s" name="%2$s[%1$s]"%3$s%4$s%5$s>', $id, $setting_name, $size, $placeholder,$class );
 	
 			foreach ( $args['options'] as $key => $label ) {
 				printf( '<option value="%s"%s>%s</option>', $key, selected( $current, $key, false ), $label );
 			}
 	
 			echo '</select>';
-		
-
+			
 			if (isset($args['custom'])) {
 				$custom = $args['custom'];
 
@@ -233,6 +263,33 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			// Displays option description.
 			if ( isset( $args['description'] ) ) {
 				printf( '<p class="description">%s</p>', $args['description'] );
+			}
+		
+			if (isset($args['additional'])) {
+				$additional = $args['additional'];
+
+				$additional_id = $id.'_additional';
+
+				printf( '<div id="%s" style="margin-top:4px">', $additional_id );
+
+				switch ($additional['callback']) {
+					case 'text_element_callback':
+						$this->text_element_callback( $additional['args'] );
+						break;		
+					case 'select_element_callback':
+						$this->select_element_callback( $additional['args'] );
+						break;		
+					case 'multiple_text_element_callback':
+						$this->multiple_text_element_callback( $additional['args'] );
+						break;		
+					case 'multiple_checkbox_element_callback':
+						$this->multiple_checkbox_element_callback( $additional['args'] );
+						break;		
+					default:
+						break;
+				}
+
+				echo '</div>';
 			}
 
 		}

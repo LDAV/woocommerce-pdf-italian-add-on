@@ -3,15 +3,15 @@
 Plugin Name: WooCommerce PDF Invoices Italian Add-on
 Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-Version: 0.7.0.22
+Version: 0.7.4
 Author: laboratorio d'Avanguardia
 Author URI: https://ldav.it/
 License: GPLv2 or later
 License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
-WC requires at least: 4.4
-WC tested up to: 7.6.1
+WC requires at least: 8.0
+WC tested up to: 8.8.3
 
 */
 
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.0.22';
+	public $version = '0.7.4';
 	protected static $instance = null;
 	
 	public $settings;
@@ -55,7 +55,14 @@ class WooCommerce_Italian_add_on {
 		self::$plugin_basename = plugin_basename(__FILE__);
 		self::$plugin_url = plugin_dir_url(self::$plugin_basename);
 		self::$plugin_path = trailingslashit(dirname(__FILE__));
+		add_action( 'before_woocommerce_init', array( $this, 'woocommerce_hpos_compatible' ) );
 		$this->init_hooks();
+	}
+	
+	public function woocommerce_hpos_compatible() {
+		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		}
 	}
 
 	public function plugin_path() {
@@ -89,16 +96,12 @@ class WooCommerce_Italian_add_on {
 			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'formatted_address_replacements'), 10, 2 );
 			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'localisation_address_format') );
 			add_action( 'woocommerce_get_order_address', array($this, 'get_order_address'), 10, 3 );
-		
-			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-				add_filter( 'woocommerce_found_customer_details', array( $this, 'found_customer_details') );
-			} else {
-				add_filter( 'woocommerce_ajax_get_customer_details', array( $this, 'ajax_get_customer_details'), 10, 3 );
-			}
+			add_filter( 'woocommerce_ajax_get_customer_details', array( $this, 'ajax_get_customer_details'), 10, 3 );
 			add_filter( 'woocommerce_customer_meta_fields', array( $this, 'customer_meta_fields') );
+			add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'add_invoice_type_column' ), 999 );
+			add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'invoice_type_column_data' ), 10, 2 );
 			add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_invoice_type_column' ));
-			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'invoice_type_column_data' ));
-
+			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'invoice_type_column_data' ), 10, 2);
 		} else {
 			add_action( 'admin_notices', array ( $this, 'check_wc' ) );
 		}
@@ -118,20 +121,6 @@ class WooCommerce_Italian_add_on {
 		$message = sprintf( __( 'WooCommerce Italian Add-on requires %sWooCommerce%s to be installed and activated!' , WCPDF_IT_DOMAIN ), '<a href="https://wordpress.org/plugins/woocommerce/">', '</a>' );
 		echo"<div class=\"$class\"> <p>$message</p></div>";
 	}	
-
-/*
-	public function check_wpo_wcpdf( $fields ) {
-		$class = "updated fade";
-		$message = sprintf( __( 'WooCommerce Italian Add-on with <strong>%sWooCommerce PDF Invoices & Packing Slips%s</strong> could be more powerful!' , WCPDF_IT_DOMAIN ), '<a href="https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/">', '</a>' );
-		echo"<div class=\"$class\"> <p>$message</p></div>";
-	}
-
-	public function check_wpo_wcpdf_updated( $fields ) {
-		$class = "updated fade";
-		$message = sprintf( __( 'WooCommerce Italian Add-on requires that <strong>%sWooCommerce PDF Invoices & Packing Slips%s</strong> must be updated at least to version 2.0!' , WCPDF_IT_DOMAIN ), '<a href="https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/">', '</a>' );
-		echo"<div class=\"$class\"> <p>$message</p></div>";
-	}
- */
 
 	public function init_integration() {
 		include_once 'includes/class-wc-settings.php';
@@ -351,7 +340,9 @@ class WooCommerce_Italian_add_on {
 	public function checkout_update_order_meta($order_id) {
 		if (!empty($_POST['billing_cf'])) {
 			$value = strlen($_POST['billing_cf']) > 15 ? "personal" : "business";
-			update_post_meta( $order_id, 'billing_customer_type', $value );
+			$order = wc_get_order( $order_id );
+			$order->update_meta_data( 'billing_customer_type', $value );
+			$order->save();
     }
 	}
 	
@@ -533,26 +524,17 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 	}
 
 	public function get_order_id($order) {
-		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-			$order_id = $order->id;
-		} else {
-			$order_id = $order->get_id();
-		}
+		$order_id = $order->get_id();
 		return($order_id);
 	}
 	
-	public function invoice_type_column_data( $column ) {
-		global $post, $the_order;
+	public function invoice_type_column_data( $column, $order ) {
 		if ( $column === 'invoice_type' ) {
-			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.7', '<' ) ) {
-				if ( empty( $the_order ) || $the_order->id != $post->ID ) $the_order = wc_get_order( $post->ID );
-			} else {
-				if ( empty( $the_order ) || $the_order->get_id() != $post->ID ) $the_order = wc_get_order( $post->ID );
-			}
-			$invoicetype = wcpdf_it_get_billing_invoice_type($the_order);
+			$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 			switch($invoicetype) {
 				case "invoice": echo "<i class=\"dashicons dashicons-media-document tips\" data-tip=\"" . __( 'invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
 				case "receipt": echo "<i class=\"dashicons dashicons-media-default tips\" data-tip=\"" . __( 'receipt', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
+				case "noinvoice": echo "<i class=\"dashicons dashicons-no tips\" data-tip=\"" . __( 'No Invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
 				default: echo "-"; break;
 			}
 		}
@@ -570,5 +552,3 @@ if(!function_exists('WCPDF_IT')) {
 
 	WCPDF_IT(); // load plugin
 }
-
-//$wcpdf_IT = new WooCommerce_Italian_add_on();

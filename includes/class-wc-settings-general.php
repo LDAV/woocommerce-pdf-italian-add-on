@@ -1,4 +1,5 @@
 <?php
+use Automattic\WooCommerce\Utilities\OrderUtil;
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings_general' ) ) {
@@ -10,30 +11,41 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings_general' ) ) {
 		public function __construct() {
 			add_action( 'admin_init', array(&$this, 'init_settings' ));
 			add_action( 'wcpdf_IT_general_settings_output', array( $this, 'output' ) );
-			add_action( 'views_edit-shop_order', array( $this, 'views_edit_shop_order') );
-			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '3.0', '>=' ) ) {
-				add_filter( 'request', array( $this, 'request_query_filter_by_invoice_exists' ) );
-			} else {
-				add_filter( 'pre_get_posts', array( $this, 'pre_get_posts_filter_by_invoice_exists' ) );
+			if ( !class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) || !OrderUtil::custom_orders_table_usage_is_enabled() ) {
+				add_action( 'views_edit-shop_order', array( $this, 'views_edit_shop_order') );
 			}
+			add_filter( 'request', array( $this, 'request_query_filter_by_invoice_exists' ) );
 			$this->invoice_meta_key_name = class_exists( 'WPO_WCPDF' ) ? "_wcpdf_invoice_number" : "woo_pdf_invoice_id";
-		}
-
-		public function pre_get_posts_filter_by_invoice_exists( $query ) {
-			if( is_admin() && $query->get('post_type') == 'shop_order' && !empty($_GET["invoiced"])) {
-				$query->set('meta_key',$this->invoice_meta_key_name);
-				$query->set('compare','EXISTS');
-			}
 		}
 
 		public function request_query_filter_by_invoice_exists( $query_vars ) {
 			global $typenow;
 			if ( is_admin() && $typenow == 'shop_order' && !empty($_GET["invoiced"])) {
-				$query_vars = array_merge( $query_vars, array(
-					'meta_key'  => $this->invoice_meta_key_name,
-					'compare'   => 'EXISTS',
-				) );
+				if($_GET["invoiced"] == "1") {
+					$query_vars = array_merge( $query_vars, array(
+						'meta_key'  => $this->invoice_meta_key_name,
+						'compare'   => 'EXISTS',
+					) );
+				} elseif($_GET["invoiced"] == "0") {
+					$query_vars = array_merge( $query_vars, array(
+						'meta_query' => array(
+								'relation' => 'OR',
+								array(
+										'key' => $this->invoice_meta_key_name,
+										'value' => '',
+										'type' => 'string'
+								),
+								array(
+										'key' => $this->invoice_meta_key_name,
+										'compare' => 'NOT EXISTS'
+								)
+						)
+					) );
+
+				
+				}
 			}
+
 			return $query_vars;
 		}
 
@@ -44,7 +56,7 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings_general' ) ) {
 			$invoice_count = $wpdb->get_var( $wpdb->prepare( "SELECT count(*) FROM {$wpdb->postmeta} WHERE meta_key = %s", $this->invoice_meta_key_name ) );
 			$qs = "?" . str_replace("&invoiced=1", "", $_SERVER['QUERY_STRING']) . "&invoiced=1";
 
-			$views["invoiced"] = '<a href="' . $_SERVER['SCRIPT_NAME'] . $qs . '">' . __("Invoiced", 'woocommerce-italian-add-on-plus') . ' <span class="count">(' . $invoice_count . ')</span></a>';
+			$views["invoiced"] = '<a href="' . $_SERVER['SCRIPT_NAME'] . $qs . '">' . __("Invoiced", WCPDF_IT_DOMAIN) . ' <span class="count">(' . $invoice_count . ')</span></a>';
 			return $views;
 		}
 

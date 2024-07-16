@@ -30,8 +30,8 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 	public function __construct( $order = 0 ) {
 		// set properties
 		$this->type		= 'receipt';
-		$this->title	= __( 'Receipt', 'woocommerce-pdf-italian-add-on' );
-		$this->icon		= plugin_dir_url(dirname(__FILE__)) . "images/receipt.png";
+		$this->title	= __( 'Receipt', WCPDF_IT_DOMAIN );
+		$this->icon		= plugin_dir_url(dirname(__FILE__)) . "images/receipt.svg";
 
 		// Call parent constructor
 		parent::__construct( $order );
@@ -39,7 +39,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 
 	public function get_title() {
 		// override/not using $this->title to allow for language switching!
-		return apply_filters( "wpo_wcpdf_{$this->slug}_title", __( 'Receipt', 'woocommerce-pdf-italian-add-on' ) );
+		return apply_filters( "wpo_wcpdf_{$this->slug}_title", __( 'Receipt', WCPDF_IT_DOMAIN ) );
 	}
 
 	public function init() {
@@ -89,7 +89,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 	public function get_filename( $context = 'download', $args = array() ) {
 		$order_count = isset($args['order_ids']) ? count($args['order_ids']) : 1;
 
-		$name = _n( 'receipt', 'receipts', $order_count, 'woocommerce-pdf-italian-add-on' );
+		$name = _n( 'receipt', 'receipts', $order_count, WCPDF_IT_DOMAIN );
 
 		if ( $order_count == 1 ) {
 			if ( isset( $this->settings['display_number'] ) ) {
@@ -161,7 +161,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'enabled',
-				'title'			=> __( 'Enable', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Enable', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'checkbox',
 				'section'		=> 'receipt',
 				'args'			=> array(
@@ -172,7 +172,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'attach_to_email_ids',
-				'title'			=> __( 'Attach to:', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Attach to:', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'multiple_checkboxes',
 				'section'		=> 'receipt',
 				'args'			=> array(
@@ -222,7 +222,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'display_date',
-				'title'			=> __( 'Display receipt date', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Display receipt date', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'checkbox',
 				'section'		=> 'receipt',
 				'args'			=> array(
@@ -233,7 +233,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'display_number',
-				'title'			=> __( 'Display receipt number', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Display receipt number', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'checkbox',
 				'section'		=> 'receipt',
 				'args'			=> array(
@@ -244,19 +244,19 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'next_receipt_number',
-				'title'			=> __( 'Next receipt number', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Next receipt number', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'next_number_edit',
 				'section'		=> 'receipt',
 				'args'			=> array(
 					'store'			=> 'receipt_number',
 					'size'			=> '10',
-					'description'	=> __( 'This is the number that will be used for the next document. By default, numbering starts from 1 and increases for every new document. Note that if you override this and set it lower than the current/highest number, this could create duplicate numbers!', 'woocommerce-pdf-italian-add-on' ),
+					'description'	=> __( 'This is the number that will be used for the next document. By default, numbering starts from 1 and increases for every new document. Note that if you override this and set it lower than the current/highest number, this could create duplicate numbers!', WCPDF_IT_DOMAIN ),
 				)
 			),
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'number_format',
-				'title'			=> __( 'Number format', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Number format', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'multiple_text_input',
 				'section'		=> 'receipt',
 				'args'			=> array(
@@ -264,20 +264,20 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 					'id'					=> 'number_format',
 					'fields'				=> array(
 						'prefix'			=> array(
-							'placeholder'	=> __( 'Prefix' , 'woocommerce-pdf-italian-add-on' ),
+							'placeholder'	=> __( 'Prefix' , WCPDF_IT_DOMAIN ),
 							'size'			=> 20,
-							'description'	=> __( 'to use the receipt year and/or month, use [receipt_year] or [receipt_month] respectively' , 'woocommerce-pdf-italian-add-on' ),
+							'description'	=> __( 'to use the receipt year and/or month, use [receipt_year] or [receipt_month] respectively' , WCPDF_IT_DOMAIN ),
 						),
 						'suffix'			=> array(
-							'placeholder'	=> __( 'Suffix' , 'woocommerce-pdf-italian-add-on' ),
+							'placeholder'	=> __( 'Suffix' , WCPDF_IT_DOMAIN ),
 							'size'			=> 20,
 							'description'	=> '',
 						),
 						'padding'			=> array(
-							'placeholder'	=> __( 'Padding' , 'woocommerce-pdf-italian-add-on' ),
+							'placeholder'	=> __( 'Padding' , WCPDF_IT_DOMAIN ),
 							'size'			=> 20,
 							'type'			=> 'number',
-							'description'	=> __( 'enter the number of digits here - enter "6" to display 42 as 000042' , 'woocommerce-pdf-italian-add-on' ),
+							'description'	=> __( 'enter the number of digits here - enter "6" to display 42 as 000042' , WCPDF_IT_DOMAIN ),
 						),
 					),
 				)
@@ -285,7 +285,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'reset_number_yearly',
-				'title'			=> __( 'Reset receipt number yearly', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Reset receipt number yearly', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'checkbox',
 				'section'		=> 'receipt',
 				'args'			=> array(
@@ -296,17 +296,17 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'my_account_buttons',
-				'title'			=> __( 'Allow My Account receipt download', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Allow My Account receipt download', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'select',
 				'section'		=> 'receipt',
 				'args'			=> array(
 					'option_name'	=> $option_name,
 					'id'			=> 'my_account_buttons',
 					'options' 		=> array(
-						'available'	=> __( 'Only when an receipt is already created/emailed' , 'woocommerce-pdf-italian-add-on' ),
-						'custom'	=> __( 'Only for specific order statuses (define below)' , 'woocommerce-pdf-italian-add-on' ),
-						'always'	=> __( 'Always' , 'woocommerce-pdf-italian-add-on' ),
-						'never'		=> __( 'Never' , 'woocommerce-pdf-italian-add-on' ),
+						'available'	=> __( 'Only when an receipt is already created/emailed' , WCPDF_IT_DOMAIN ),
+						'custom'	=> __( 'Only for specific order statuses (define below)' , WCPDF_IT_DOMAIN ),
+						'always'	=> __( 'Always' , WCPDF_IT_DOMAIN ),
+						'never'		=> __( 'Never' , WCPDF_IT_DOMAIN ),
 					),
 					'custom'		=> array(
 						'type'		=> 'multiple_checkboxes',
@@ -322,7 +322,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'receipt_number_column',
-				'title'			=> __( 'Enable receipt number column in the orders list', 'woocommerce-pdf-italian-add-on' ),
+				'title'			=> __( 'Enable receipt number column in the orders list', WCPDF_IT_DOMAIN ),
 				'callback'		=> 'checkbox',
 				'section'		=> 'receipt',
 				'args'			=> array(
