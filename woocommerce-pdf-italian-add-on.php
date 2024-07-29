@@ -11,7 +11,7 @@ License URI: http://www.opensource.org/licenses/gpl-license.php
 Text Domain: woocommerce-pdf-italian-add-on
 Domain Path: /languages
 WC requires at least: 8.0
-WC tested up to: 8.8.3
+WC tested up to: 9.1.4
 
 */
 

@@ -3,7 +3,7 @@ Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, PDF Invoices & Packing Slips for WooCommerce, ldav
 Requires at least: 4.4
 Requires PHP: 7.4
-Tested up to: 6.5.3
+Tested up to: 6.6.1
 Stable tag: 0.7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -32,8 +32,6 @@ Il plugin [PDF Invoices & Packing Slips for WooCommerce](https://wordpress.org/p
 
 Nel caso di una ricevuta, come ovvio, la numerazione automatica delle fatture viene sospesa e riprende solamente per le successive fatture.
 
-Il nostro plugin è certificato fully [WPML Compatible](https://wpml.org/documentation/getting-started-guide/string-translation/).
-
 Se il nostro plugin gratuito non dovesse soddisfare le tue esigenze, prova a confrontare [le caratteristiche del nostro plugin premium](https://ldav.it/plugin/woocommerce-italian-add-on/) o [chiedici una personalizzazione](https://ldav.it/servizi/assistenza-tecnica-wordpress-woocommerce/).
 
 = EN =
@@ -47,20 +45,15 @@ Tax Code or VAT number are added to WooCommerce checkout page. The customer coul
 1. Read the istructions for [How to create my own custom template](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/faq/).
 1. Copy the "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" in your (child) theme, and customize it.
 
-Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/getting-started-guide/string-translation/).
-
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 8.8.3
-* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.8.2
-* [WPML Multilingual CMS](https://wpml.org/) v. 4.6.10
-* [WooCommerce Multilingual & Multicurrency](https://wpml.org/) v. 5.3.6
+* WooCommerce v. 9.1.4
+* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.8.6
 
 = Translations in your language =
 
 * English
 * Italian (it_IT)
-* Our plugin is certified fully [WPML Compatible](https://wpml.org/documentation/getting-started-guide/string-translation/).
 
 == Installation ==
 
@@ -113,10 +106,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.2 - 0.7.4  - 2024-05-08 =
-* Verifica compatibilità con WooCommerce 8.8.3
+= 0.7.2 - 0.7.4  - 2024-07-27 =
+* Verifica compatibilità con WooCommerce 9.1.4
 * Verifica compatibilità con WooCommerce High-Performance Order Storage (HPOS)
-* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.2
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.6
 
 = 0.7.0.23 =
 * Verifica compatibilità con WooCommerce 7.7.2
@@ -270,10 +263,10 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.2 - 0.7.4  - 2024-05-08 =
-* Verifica compatibilità con WooCommerce 8.8.3
+= 0.7.2 - 0.7.4  - 2024-07-27 =
+* Verifica compatibilità con WooCommerce 9.1.4
 * Verifica compatibilità con WooCommerce High-Performance Order Storage (HPOS)
-* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.2
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.6
 È consigliato l'upgrade. 
 
 == Support ==
