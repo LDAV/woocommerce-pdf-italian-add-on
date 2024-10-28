@@ -1,3 +1,8 @@
+<?php 
+if(defined("WP_PLUGIN_DIR") && file_exists(WP_PLUGIN_DIR . "/woocommerce-pdf-invoices-packing-slips/templates/Business/invoice.php")){
+	include_once WP_PLUGIN_DIR . "/woocommerce-pdf-invoices-packing-slips/templates/Business/invoice.php";
+} else {
+?>
 <?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <?php do_action( 'wpo_wcpdf_before_document', $this->get_type(), $this->order ); ?>
 <table class="head container">
@@ -68,7 +73,7 @@
 				<?php do_action( 'wpo_wcpdf_before_order_data', $this->get_type(), $this->order ); ?>
 				<?php if ( isset($this->settings['display_number']) ) { ?>
 				<tr class="invoice-number">
-					<th><?php _e( 'Receipt Number:', 'woocommerce-pdf-italian-add-on' ); ?></th>
+					<th><?php _e( 'Receipt Number:', 'woocommerce-italian-add-on-plus' ); ?></th>
 					<td><?php $this->receipt_number(); ?></td>
 				</tr>
 				<?php } ?>
@@ -83,7 +88,7 @@
 			<table>
 				<?php if ( isset($this->settings['display_date']) ) { ?>
 				<tr class="invoice-date">
-					<th><?php _e( 'Receipt Date:', 'woocommerce-pdf-italian-add-on' ); ?></th>
+					<th><?php _e( 'Receipt Date:', 'woocommerce-italian-add-on-plus' ); ?></th>
 					<td><?php $this->receipt_date(); ?></td>
 				</tr>
 				<?php } ?>
@@ -170,3 +175,5 @@
 </div>
 <?php endif; ?>
 <?php do_action( 'wpo_wcpdf_after_document', $this->get_type(), $this->order ); ?>
+<?php
+}

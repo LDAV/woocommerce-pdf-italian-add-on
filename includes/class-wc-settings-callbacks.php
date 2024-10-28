@@ -59,10 +59,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 						break;		
 					case 'select_element_callback':
 						$this->select_element_callback( $additional['args'] );
-						break;		
-					case 'multiple_text_element_callback':
-						$this->multiple_text_element_callback( $additional['args'] );
-						break;		
+						break;
 					case 'multiple_checkbox_element_callback':
 						$this->multiple_checkbox_element_callback( $additional['args'] );
 						break;		
@@ -116,6 +113,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			}
 		
 			echo $html;
+			return "";
 		}
 		
 		/**
@@ -140,6 +138,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			if ( isset( $args['description'] ) ) {
 				printf( '<p class="description">%s</p>', $args['description'] );
 			}
+			return "";
 		}
 
 		/**
@@ -189,6 +188,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 			if ( isset( $args['description'] ) ) {
 				printf( '<p class="description">%s</p>', $args['description'] );
 			}
+			return "";
 		}
 
 		/**
@@ -224,10 +224,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 				switch ($custom['type']) {
 					case 'text_element_callback':
 						$this->text_element_callback( $custom['args'] );
-						break;		
-					case 'multiple_text_element_callback':
-						$this->multiple_text_element_callback( $custom['args'] );
-						break;		
+						break;
 					case 'multiple_checkbox_element_callback':
 						$this->multiple_checkbox_element_callback( $custom['args'] );
 						break;		
@@ -278,10 +275,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 						break;		
 					case 'select_element_callback':
 						$this->select_element_callback( $additional['args'] );
-						break;		
-					case 'multiple_text_element_callback':
-						$this->multiple_text_element_callback( $additional['args'] );
-						break;		
+						break;
 					case 'multiple_checkbox_element_callback':
 						$this->multiple_checkbox_element_callback( $additional['args'] );
 						break;		
@@ -292,6 +286,7 @@ class WooCommerce_Italian_add_on_Settings_Callbacks {
 				echo '</div>';
 			}
 
+			return "";
 		}
 		
 		/**

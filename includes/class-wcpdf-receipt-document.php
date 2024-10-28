@@ -92,25 +92,37 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 		$name = _n( 'receipt', 'receipts', $order_count, WCPDF_IT_DOMAIN );
 
 		if ( $order_count == 1 ) {
-			if ( isset( $this->settings['display_number'] ) ) {
+			if ( isset( $this->settings['display_number'] ) && $this->settings['display_number'] == 'invoice_number' ) {
 				$suffix = (string) $this->get_number();
 			} else {
-				if ( empty( $this->order ) ) {
-					$order = wc_get_order ( $order_ids[0] );
-					$suffix = method_exists( $order, 'get_order_number' ) ? $order->get_order_number() : '';
+				if ( empty( $this->order ) && isset( $args['order_ids'][0] ) ) {
+					$order = wc_get_order( $args['order_ids'][0] );
+					$suffix = is_callable( array( $order, 'get_order_number' ) ) ? $order->get_order_number() : '';
 				} else {
-					$suffix = method_exists( $this->order, 'get_order_number' ) ? $this->order->get_order_number() : '';
+					$suffix = is_callable( array( $this->order, 'get_order_number' ) ) ? $this->order->get_order_number() : '';
+				}
+			}
+			// ensure unique filename in case suffix was empty
+			if ( empty( $suffix ) ) {
+				if ( ! empty( $this->order_id ) ) {
+					$suffix = $this->order_id;
+				} elseif ( ! empty( $args['order_ids'] ) && is_array( $args['order_ids'] ) ) {
+					$suffix = reset( $args['order_ids'] );
+				} else {
+					$suffix = uniqid();
 				}
 			}
 		} else {
-			$suffix = date('Y-m-d'); // 2020-11-11
+			$suffix = date_i18n( 'Y-m-d' ); // 2024-12-31
 		}
 
-		$filename = $name . '-' . $suffix . '.pdf';
+		// get filename
+		$output_format = ! empty( $args['output'] ) ? esc_attr( $args['output'] ) : 'pdf';
+		$filename      = $name . '-' . $suffix . wcpdf_get_document_output_format_extension( $output_format );
 
 		// Filter filename
-		$order_ids = isset($args['order_ids']) ? $args['order_ids'] : array( $this->order_id );
-		$filename = apply_filters( 'wpo_wcpdf_filename', $filename, $this->get_type(), $order_ids, $context );
+		$order_ids = isset( $args['order_ids'] ) ? $args['order_ids'] : array( $this->order_id );
+		$filename  = apply_filters( 'wpo_wcpdf_filename', $filename, $this->get_type(), $order_ids, $context, $args );
 
 		// sanitize filename (after filters to prevent human errors)!
 		return sanitize_file_name( $filename );
@@ -349,7 +361,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 	}
 
 	public function formatted_number() {
-		echo $this->get_formatted_number( $this->get_type() );
+		echo $this->get_formatted_number();
 	}
 
 	public function get_formatted_date() {
@@ -361,7 +373,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 	}
 
 	public function formatted_date() {
-		echo $this->get_formatted_date( $this->get_type() );
+		echo $this->get_formatted_date();
 	}
 
 }

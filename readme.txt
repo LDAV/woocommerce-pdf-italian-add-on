@@ -2,9 +2,9 @@
 Contributors: labdav
 Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, PDF Invoices & Packing Slips for WooCommerce, ldav
 Requires at least: 4.4
-Requires PHP: 7.4
-Tested up to: 6.6.1
-Stable tag: 0.7.4
+Requires PHP: 8.0
+Tested up to: 6.6.2
+Stable tag: 0.7.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -47,8 +47,8 @@ Tax Code or VAT number are added to WooCommerce checkout page. The customer coul
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 9.1.4
-* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.8.6
+* WooCommerce v. 9.3.3
+* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.9.0
 
 = Translations in your language =
 
@@ -106,7 +106,11 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.2 - 0.7.4  - 2024-07-27 =
+= 0.7.5  - 2024-10-28 =
+* Verifica compatibilità con WooCommerce 9.3.3
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.9.0
+
+= 0.7.2 - 0.7.4 =
 * Verifica compatibilità con WooCommerce 9.1.4
 * Verifica compatibilità con WooCommerce High-Performance Order Storage (HPOS)
 * Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.6
@@ -263,10 +267,9 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.2 - 0.7.4  - 2024-07-27 =
-* Verifica compatibilità con WooCommerce 9.1.4
-* Verifica compatibilità con WooCommerce High-Performance Order Storage (HPOS)
-* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.8.6
+= 0.7.5  - 2024-10-28 =
+* Verifica compatibilità con WooCommerce 9.3.3
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.9.0
 È consigliato l'upgrade. 
 
 == Support ==

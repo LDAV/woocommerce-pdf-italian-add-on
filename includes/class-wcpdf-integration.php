@@ -26,10 +26,10 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 				'title'		=> __( 'PDF Receipt', WCPDF_IT_DOMAIN )
 			)), $meta_actions);
 			unset($meta_actions['invoice']);
-			$order->delete_meta_data( $post_id, '_wcpdf_invoice_number' );
-			$order->delete_meta_data( $post_id, '_wcpdf_formatted_invoice_number' );
-			$order->delete_meta_data( $post_id, '_wcpdf_invoice_date' );
-			$order->delete_meta_data( $post_id, '_wcpdf_invoice_exists' );
+			$order->delete_meta_data('_wcpdf_invoice_number');
+			$order->delete_meta_data('_wcpdf_formatted_invoice_number');
+			$order->delete_meta_data('_wcpdf_invoice_date');
+			$order->delete_meta_data('_wcpdf_invoice_exists');
 			$order->save();
 		}
 		return $meta_actions;
@@ -161,4 +161,3 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 }
 $wcpdf_it_add_on = new wcpdf_Integration_Italian_add_on();
 endif;
-?>
