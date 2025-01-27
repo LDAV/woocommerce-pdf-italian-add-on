@@ -3,7 +3,7 @@
 * Plugin Name: WooCommerce PDF Invoices Italian Add-on
 * Plugin URI: https://ldav.it/plugin/woocommerce-pdf-invoices-italian-add-on/
 * Description: Aggiunge a WooCommerce tutto il necessario per un e-commerce italiano e la fatturazione elettronica
-* Version: 0.7.5
+* Version: 0.7.6.1
 * Author: laboratorio d'Avanguardia
 * Author URI: https://ldav.it/
 * License: GPLv2 or later
@@ -12,7 +12,7 @@
 * Domain Path: /languages
 * Requires Plugins: woocommerce
 * WC requires at least: 8.0
-* WC tested up to: 9.3.3
+* WC tested up to: 9.4.1
 */
 
 //Thanks to Nicola Mustone https://gist.github.com/SiR-DanieL
@@ -25,7 +25,7 @@ class WooCommerce_Italian_add_on {
 	public static $plugin_url;
 	public static $plugin_path;
 	public static $plugin_basename;
-	public $version = '0.7.5';
+	public $version = '0.7.6.1';
 	protected static $instance = null;
 	
 	public $settings;
@@ -82,45 +82,26 @@ class WooCommerce_Italian_add_on {
 
 	private function init_hooks() {
 		add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
-		if ($this->is_wc_active()) {
-			add_action( 'init', array( $this, 'init_integration' ) );
-			add_filter( 'woocommerce_billing_fields' , array( $this, 'billing_fields'), 10, 1);
-			add_filter( 'woocommerce_admin_billing_fields' , array( $this, 'admin_billing_fields' ));
-			add_action( 'woocommerce_after_edit_address_form_billing', array( $this, 'after_edit_address_form_billing') );
-			add_action( 'woocommerce_after_order_notes', array( $this, 'after_order_notes') );
-			add_action( 'woocommerce_checkout_fields', array( $this, 'checkout_fields'));
-			add_action( 'woocommerce_checkout_process', array( $this, 'piva_checkout_field_process'));
-			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'checkout_update_order_meta'));
-			add_filter( 'woocommerce_order_formatted_billing_address' , array( $this, 'woocommerce_order_formatted_billing_address'), 10, 2 );
-			add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'my_account_my_address_formatted_address'), 10, 3 );
-			add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'formatted_address_replacements'), 10, 2 );
-			add_filter( 'woocommerce_localisation_address_formats', array( $this, 'localisation_address_format') );
-			add_action( 'woocommerce_get_order_address', array($this, 'get_order_address'), 10, 3 );
-			add_filter( 'woocommerce_ajax_get_customer_details', array( $this, 'ajax_get_customer_details'), 10, 3 );
-			add_filter( 'woocommerce_customer_meta_fields', array( $this, 'customer_meta_fields') );
-			add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'add_invoice_type_column' ), 999 );
-			add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'invoice_type_column_data' ), 10, 2 );
-			add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_invoice_type_column' ));
-			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'invoice_type_column_data' ), 10, 2);
-		} else {
-			add_action( 'admin_notices', array ( $this, 'check_wc' ) );
-		}
+		add_action( 'init', array( $this, 'init_integration' ) );
+		add_filter( 'woocommerce_billing_fields' , array( $this, 'billing_fields'), 10, 1);
+		add_filter( 'woocommerce_admin_billing_fields' , array( $this, 'admin_billing_fields' ));
+		add_action( 'woocommerce_after_edit_address_form_billing', array( $this, 'after_edit_address_form_billing') );
+		add_action( 'woocommerce_after_order_notes', array( $this, 'after_order_notes') );
+		add_action( 'woocommerce_checkout_fields', array( $this, 'checkout_fields'));
+		add_action( 'woocommerce_checkout_process', array( $this, 'piva_checkout_field_process'));
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'checkout_update_order_meta'));
+		add_filter( 'woocommerce_order_formatted_billing_address' , array( $this, 'woocommerce_order_formatted_billing_address'), 10, 2 );
+		add_filter( 'woocommerce_my_account_my_address_formatted_address', array( $this, 'my_account_my_address_formatted_address'), 10, 3 );
+		add_filter( 'woocommerce_formatted_address_replacements', array( $this, 'formatted_address_replacements'), 10, 2 );
+		add_filter( 'woocommerce_localisation_address_formats', array( $this, 'localisation_address_format') );
+		add_action( 'woocommerce_get_order_address', array($this, 'get_order_address'), 10, 3 );
+		add_filter( 'woocommerce_ajax_get_customer_details', array( $this, 'ajax_get_customer_details'), 10, 3 );
+		add_filter( 'woocommerce_customer_meta_fields', array( $this, 'customer_meta_fields') );
+		add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'add_invoice_type_column' ), 999 );
+		add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'invoice_type_column_data' ), 10, 2 );
+		add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_invoice_type_column' ));
+		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'invoice_type_column_data' ), 10, 2);
 	}
-	
-	public function is_wc_active() {
-		$plugins = get_site_option( 'active_sitewide_plugins', array());
-		if (in_array('woocommerce/woocommerce.php', get_option( 'active_plugins', array())) || isset($plugins['woocommerce/woocommerce.php'])) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function check_wc( $fields ) {
-		$class = "error";
-		$message = sprintf( __( 'WooCommerce Italian Add-on requires %sWooCommerce%s to be installed and activated!' , WCPDF_IT_DOMAIN ), '<a href="https://wordpress.org/plugins/woocommerce/">', '</a>' );
-		echo"<div class=\"$class\"> <p>$message</p></div>";
-	}	
 
 	public function init_integration() {
 		include_once 'includes/class-wc-settings.php';
@@ -532,9 +513,9 @@ table.wp-list-table .column-invoice_type{width:48px; text-align:center; color:#9
 		if ( $column === 'invoice_type' ) {
 			$invoicetype = wcpdf_it_get_billing_invoice_type($order);
 			switch($invoicetype) {
-				case "invoice": echo "<i class=\"dashicons dashicons-media-document tips\" data-tip=\"" . __( 'invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
-				case "receipt": echo "<i class=\"dashicons dashicons-media-default tips\" data-tip=\"" . __( 'receipt', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
-				case "noinvoice": echo "<i class=\"dashicons dashicons-no tips\" data-tip=\"" . __( 'No Invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
+			case "invoice": echo "<i class=\"dashicons dashicons-media-document tips\" data-tip=\"" . esc_attr__( 'invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
+				case "receipt": echo "<i class=\"dashicons dashicons-media-default tips\" data-tip=\"" . esc_attr__( 'receipt', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
+				case "noinvoice": echo "<i class=\"dashicons dashicons-no tips\" data-tip=\"" . esc_attr__( 'No Invoice', WCPDF_IT_DOMAIN ) . "\"></i>"; break;
 				default: echo "-"; break;
 			}
 		}

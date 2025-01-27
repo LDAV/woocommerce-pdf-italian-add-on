@@ -39,7 +39,8 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 
 	public function get_title() {
 		// override/not using $this->title to allow for language switching!
-		return apply_filters( "wpo_wcpdf_{$this->slug}_title", __( 'Receipt', WCPDF_IT_DOMAIN ) );
+		$title = __( 'Receipt', WCPDF_IT_DOMAIN );
+		return apply_filters( 'wpo_wcpdf_document_title', $title, $this );
 	}
 
 	public function init() {
@@ -116,7 +117,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 			$suffix = date_i18n( 'Y-m-d' ); // 2024-12-31
 		}
 
-		// get filename
+				// get filename
 		$output_format = ! empty( $args['output'] ) ? esc_attr( $args['output'] ) : 'pdf';
 		$filename      = $name . '-' . $suffix . wcpdf_get_document_output_format_extension( $output_format );
 
@@ -126,6 +127,7 @@ class WPO_WCPDF_Receipt_Document extends Order_Document_Methods {
 
 		// sanitize filename (after filters to prevent human errors)!
 		return sanitize_file_name( $filename );
+		
 	}
 
 	public function get_receipt_number() {

@@ -63,14 +63,14 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Update' ) ) {
 			$nonce = wp_create_nonce( "wcpdf_IT_update_db" );
 	?>
 	<div class="updated fade wcpdf_IT_update woocommerce-message">
-		<p><?php esc_js(_e( '<strong>WooCommerce PDF Italian Add-on Data Update Required</strong> - We just need to update your install to the latest version', WCPDF_IT_DOMAIN )); ?></p>
-		<p class="submit"><button type="button" class="wcpdf_IT-update-now button-primary"><?php esc_js(_e( 'Run the updater', 'woocommerce' )); ?></button></p>
+		<p><?php esc_attr_e( '<strong>WooCommerce PDF Italian Add-on Data Update Required</strong> - We just need to update your install to the latest version', WCPDF_IT_DOMAIN ); ?></p>
+		<p class="submit"><button type="button" class="wcpdf_IT-update-now button-primary"><?php esc_attr_e( 'Run the updater', 'woocommerce' ); ?></button></p>
 	</div>
 	<script type="text/javascript">
 		jQuery( '.wcpdf_IT-update-now' ).click( 'click', function() {
-			if(!window.confirm( '<?php echo esc_js( __( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'woocommerce' ) ); ?>' )){return(false)};
-			jQuery.post('<?php echo $s; ?>', {action:"wcpdf_IT_update_db", "_wpnonce" : '<?php echo $nonce?>'}, function(response) {
-				jQuery(".wcpdf_IT_update").html('<p>' + "<?php echo esc_js(_e("OK. The data update was performed correctly", WCPDF_IT_DOMAIN)) ?>" + '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">' + "<?php echo esc_js(_e("Hide this notice", WCPDF_IT_DOMAIN))?>" + '.</span></button>');
+			if(!window.confirm( '<?php esc_attr_e( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'woocommerce' ) ; ?>' )){return(false)};
+			jQuery.post('<?php echo esc_attr($s); ?>', {action:"wcpdf_IT_update_db", "_wpnonce" : '<?php echo esc_attr($nonce) ?>'}, function(response) {
+				jQuery(".wcpdf_IT_update").html('<p>' + "<?php esc_attr_e("OK. The data update was performed correctly", WCPDF_IT_DOMAIN) ?>" + '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">' + "<?php esc_attr_e("Hide this notice", WCPDF_IT_DOMAIN)?>" + '.</span></button>');
 				jQuery(".wcpdf_IT_update .notice-dismiss").click(function(){
 					jQuery(".wcpdf_IT_update").fadeOut();
 				});

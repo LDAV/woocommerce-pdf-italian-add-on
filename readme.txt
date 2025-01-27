@@ -1,10 +1,10 @@
 === WooCommerce PDF Invoices Italian Add-on ===
 Contributors: labdav
-Tags: WooCommerce, Codice Fiscale, Partita IVA, VAT number, VAT, EU VAT, Tax Code, Invoice, Receipt, Fattura elettronica, Fatturazione elettronica, Italian Electronic Invoice, Italian Electronic Invoicing, PDF Invoices & Packing Slips for WooCommerce, ldav
+Tags: Fattura, Ricevuta Fiscale, Partita IVA, Codice Fiscale, VAT
 Requires at least: 4.4
 Requires PHP: 8.0
-Tested up to: 6.6.2
-Stable tag: 0.7.5
+Tested up to: 6.7
+Stable tag: 0.7.6.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -106,9 +106,10 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.5  - 2024-10-28 =
+= 0.7.5 - 0.7.6.1 - 2024-11-13 =
 * Verifica compatibilità con WooCommerce 9.3.3
 * Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.9.0
+* bug fixes
 
 = 0.7.2 - 0.7.4 =
 * Verifica compatibilità con WooCommerce 9.1.4
@@ -267,9 +268,10 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.5  - 2024-10-28 =
+= 0.7.5 - 0.7.6.1 - 2024-11-13 =
 * Verifica compatibilità con WooCommerce 9.3.3
 * Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.9.0
+* bug fixes
 È consigliato l'upgrade. 
 
 == Support ==

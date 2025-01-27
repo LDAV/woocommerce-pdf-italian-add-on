@@ -24,8 +24,8 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings_premium' ) ) {
 				$content = "";
 			}
 ?>
-<h3><?php echo __( 'Premium Versions', WCPDF_IT_DOMAIN ) ?></h3>
-<div class="'wcpdf_IT_result"><?php echo $content?></div>
+<h3><?php esc_attr_e( 'Premium Versions', WCPDF_IT_DOMAIN ) ?></h3>
+<div class="'wcpdf_IT_result"><?php echo wp_kses($content, "post") ?></div>
 <?php
 		
 		}

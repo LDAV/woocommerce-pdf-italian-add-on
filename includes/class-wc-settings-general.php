@@ -84,9 +84,7 @@ function wcpdf_IT_show_pnl_receipt_allowed(){
 	}
 }
 jQuery(function() {
-	//jQuery(".form-table tr.invoice_required .description").append('<br><img src="<?php echo WooCommerce_Italian_add_on::$plugin_url ?>images/option_required.png" width="464" height="311" />');
-	//jQuery(".form-table tr.invoice_width .description").append('<br><img src="<?php echo WooCommerce_Italian_add_on::$plugin_url ?>images/customertype_width.png" width="464" height="259" />');
-	jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(__("If you like <strong>%1s</strong> please leave us a %2s rating. A huge thank you from %3s team in advance!", WCPDF_IT_DOMAIN ), "WooCommerce Italian Add-on", "<a href='https://wordpress.org/support/view/plugin-reviews/woocommerce-pdf-invoices-italian-add-on?rate=5#postform'>★★★★★</a>", "<a href='http://ldav.it'>laboratorio d'Avanguardia</a>"); ?></em></p><div class=\"clear\"></div>");
+	jQuery("#wpfooter").prepend("<p class=\"alignleft\"><em><?php echo sprintf(esc_attr__("If you like <strong>%1s</strong> please leave us a %2s rating. A huge thank you from %3s team in advance!", WCPDF_IT_DOMAIN ), "WooCommerce Italian Add-on", "<a href='https://wordpress.org/support/view/plugin-reviews/woocommerce-pdf-invoices-italian-add-on?rate=5#postform'>★★★★★</a>", "<a href='http://ldav.it'>laboratorio d'Avanguardia</a>"); ?></em></p><div class=\"clear\"></div>");
 	jQuery("input[id^='wcpdf_IT_general_settings[invoice_required]']").click(wcpdf_IT_show_pnl_receipt_allowed);
 	wcpdf_IT_show_pnl_receipt_allowed();
 	if(typeof(jQuery.fn.select2) === "function") {

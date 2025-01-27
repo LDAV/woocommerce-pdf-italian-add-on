@@ -57,7 +57,7 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 			echo '<i class="icon icon32"></i>';
 			foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
 				$active = $current_tab == $tab_key ? 'nav-tab-active' : '';
-				echo '<a class="nav-tab ' . $active . '" href="?page=' . $this->plugin_options_key . '&tab=' . $tab_key . '">' . $tab_caption . '</a>';
+				echo '<a class="nav-tab ' . esc_attr($active) . '" href="?page=' . esc_attr($this->plugin_options_key) . '&tab=' . esc_attr($tab_key) . '">' . esc_attr($tab_caption) . '</a>';
 			}
 			echo '</h2>';
 		}
@@ -65,7 +65,7 @@ if ( ! class_exists( 'WooCommerce_Italian_add_on_Settings' ) ) {
 		public function settings_page() {
 			$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET[ 'tab' ] ) : $this->general_settings_key;
 ?>
-<h2><img src="<?php echo WooCommerce_Italian_add_on::$plugin_url ?>images/logo2.png" width="36" style="vertical-align: middle; margin-right: 12px"> WooCommerce PDF Invoice Italian Add-on <sup><?php echo WCPDF_IT()->version ?></sup></h2>
+<h2><img src="<?php echo esc_attr(WooCommerce_Italian_add_on::$plugin_url) ?>images/logo2.png" width="36" style="vertical-align: middle; margin-right: 12px"> WooCommerce PDF Invoice Italian Add-on <sup><?php echo esc_attr(WCPDF_IT()->version) ?></sup></h2>
 <div class="wrap woocommerce">
 <?php $this->plugin_options_tabs(); ?>
 <form method="post" action="options.php" id="wcpdf-IT-settings">

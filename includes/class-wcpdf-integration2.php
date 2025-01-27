@@ -18,7 +18,6 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		add_action( 'save_post', array( $this,'wcpdf_save_receipt_number_date' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wcpdf_admin_enqueue_scripts' ) );
 		add_filter( 'wpo_wcpdf_document_classes', array( $this, 'wcpdf_register_documents' ), 10, 1 );
-		add_action( 'wpo_wcpdf_after_order_details', array( $this, 'wcpdf_after_order_details' ), 10, 2 );
 
 		add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_receipt_number_column' ), 999 );
 		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'receipt_number_column_data' ), 2 );
@@ -264,7 +263,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	public function wcpdf_template_files( $file_path, $type, $order ) {
 		if($type !== "receipt" || strpos($file_path, "receipt") === false) return $file_path;
 		
-		$file = "receipt2.php";
+		$file = "receipt.php";
 		$path = WPO_WCPDF()->settings->get_template_path( $file );
 		$file_path = "{$path}/{$file}";
 		if(file_exists( $file_path )) return($file_path);
@@ -283,35 +282,8 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		}
 
 		// use default (Simple)
-		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt2.php';
-		if(file_exists( $file_path )) return($file_path);
 		$file_path = WooCommerce_Italian_add_on::$plugin_path . 'templates/pdf/Simple/receipt.php';
 		return $file_path;
-	}
-
-	function wcpdf_after_order_details($type, $order) {
-		if($type === "invoice" || $type === "receipt") {
-			$country = $order->get_billing_country();
-			$taxes = $order->get_total_tax();
-			//controlla solo se l'IVA è 0 e non se vat_exempt_if_UE_business = true perché potrebbero essere cambiate le condizioni di esenzione.
-			if($taxes == 0) {
-				if($country == WCPDF_IT()->default_country) {
-					if(!empty(WCPDF_IT()->options["txtVatExempt"])){
-						echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExempt"><strong>' . WCPDF_IT()->options["txtVatExempt"] . '</strong></div>';
-					}
-				} else {
-					$is_UE = in_array($country, WCPDF_IT()->eu_vat_countries);
-					$azienda = (wcpdf_it_get_billing_customer_type($order) == "business" || wcpdf_it_get_billing_invoice_type($order) == "invoice");
-					if($is_UE) {
-						echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExemptUE"><strong>' . WCPDF_IT()->options["txtVatExemptUE"] . '</strong></div>';
-					} else {
-						if($azienda || !empty(WCPDF_IT()->options["txtVatExempt"])) {
-							echo '<div class"wcpdf_IT_txtVatExempt wcpdf_IT_VatExemptExtraUE"><strong>' . WCPDF_IT()->options["txtVatExemptExtraUE"] . '</strong></div>';
-						}
-					}
-				}
-			}
-		}
 	}
 
 	public function add_receipt_number_column( $columns ) {
