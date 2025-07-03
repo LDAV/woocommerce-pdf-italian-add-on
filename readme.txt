@@ -3,7 +3,7 @@ Contributors: labdav
 Tags: Fattura, Ricevuta Fiscale, Partita IVA, Codice Fiscale, VAT
 Requires at least: 4.4
 Requires PHP: 8.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 0.7.6.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -47,8 +47,8 @@ Tax Code or VAT number are added to WooCommerce checkout page. The customer coul
 
 Tested up to/Testato fino alle versioni:
 
-* WooCommerce v. 9.3.3
-* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 3.9.0
+* WooCommerce v. 9.8.1
+* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 4.4.0
 
 = Translations in your language =
 
@@ -106,9 +106,9 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.5 - 0.7.6.1 - 2024-11-13 =
-* Verifica compatibilità con WooCommerce 9.3.3
-* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.9.0
+= 0.7.5 - 0.7.6.1 - 2025-04-22 =
+* Verifica compatibilità con WooCommerce 9.8.1
+* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 4.4.0
 * bug fixes
 
 = 0.7.2 - 0.7.4 =
