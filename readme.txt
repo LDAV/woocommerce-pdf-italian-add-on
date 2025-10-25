@@ -1,10 +1,10 @@
-=== WooCommerce PDF Invoices Italian Add-on ===
+=== PDF Invoices Italian Add-on for WooCommerce ===
 Contributors: labdav
 Tags: Fattura, Ricevuta Fiscale, Partita IVA, Codice Fiscale, VAT
 Requires at least: 4.4
 Requires PHP: 8.0
-Tested up to: 6.8
-Stable tag: 0.7.6.1
+Tested up to: 6.8.3
+Stable tag: 0.7.7
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -44,11 +44,6 @@ Tax Code or VAT number are added to WooCommerce checkout page. The customer coul
 
 1. Read the istructions for [How to create my own custom template](https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/faq/).
 1. Copy the "[plugins dir]/woocommerce-pdf-italian-add-on/template/Simple/receipt.php" in your (child) theme, and customize it.
-
-Tested up to/Testato fino alle versioni:
-
-* WooCommerce v. 9.8.1
-* PDF Invoices & Packing Slips for WooCommerce [Ewout Fernhout] v. 4.4.0
 
 = Translations in your language =
 
@@ -105,6 +100,9 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 4. Il codice Fiscale o la Partita IVA vengono riportate nei dati dell'indirizzo, e quindi anche nelle email o nel pdf di fattura o ricevuta
 
 == Changelog ==
+
+= 0.7.7 - 2025-10-25 =
+* Verifica compatibilità con WooCommerce 10.3.3
 
 = 0.7.5 - 0.7.6.1 - 2025-04-22 =
 * Verifica compatibilità con WooCommerce 9.8.1
@@ -268,10 +266,8 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.5 - 0.7.6.1 - 2024-11-13 =
-* Verifica compatibilità con WooCommerce 9.3.3
-* Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 3.9.0
-* bug fixes
+= 0.7.7 - 2025-10-25 =
+* Verifica compatibilità con WooCommerce 10.3.3
 È consigliato l'upgrade. 
 
 == Support ==
