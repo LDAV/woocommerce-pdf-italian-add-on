@@ -12,7 +12,7 @@
 * Domain Path: /languages
 * Requires Plugins: woocommerce
 * WC requires at least: 8.0
-* WC tested up to: 10.3.3
+* WC tested up to: 10.4.3
 */
 
 //Thanks to Nicola Mustone https://gist.github.com/SiR-DanieL
