@@ -1,2 +1,12 @@
-
 .DS_Store
+.worktree-copy/
+.svn/
+.vscode
+.wporg-svn/
+.distignore
+.gitignore
+.github/
+*.sh
+_*
+INSTALL.md
+scripts/

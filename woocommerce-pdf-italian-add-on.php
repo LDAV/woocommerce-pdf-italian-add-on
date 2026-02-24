@@ -127,7 +127,7 @@ class WooCommerce_Italian_add_on {
 		$update = new WooCommerce_Italian_add_on_Update();
 		$update->test();
 
-		if ( class_exists( 'WPO_WCPDF' ) ) {
+		if ( class_exists( 'WPO_WCPDF' ) && function_exists("WPO_WCPDF") ) {
 			if(version_compare( WPO_WCPDF()->version, '2.0', '<' ) ) {
 				include_once 'includes/class-wcpdf-integration.php';
 			} elseif(version_compare( WPO_WCPDF()->version, '2.7', '<' ) ) {

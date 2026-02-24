@@ -101,8 +101,8 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.7 - 2025-12-23 =
-* Verifica compatibilità con WooCommerce 10.4.3
+= 0.7.7 - 2025-12-23 - 2026-02-24 =
+* Verifica compatibilità con WooCommerce 10.5.2
 
 = 0.7.5 - 0.7.6.1 - 2025-04-22 =
 * Verifica compatibilità con WooCommerce 9.8.1
@@ -266,8 +266,8 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.7 - 2025-10-25 =
-* Verifica compatibilità con WooCommerce 10.3.3
+= 0.7.7 - 2025-12-23 - 2026-02-24 =
+* Verifica compatibilità con WooCommerce 10.5.2
 È consigliato l'upgrade. 
 
 == Support ==
