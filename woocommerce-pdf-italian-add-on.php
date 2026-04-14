@@ -135,10 +135,6 @@ class WooCommerce_Italian_add_on {
 			} else {
 				include_once 'includes/class-wcpdf-integration3.php';
 			}
-/*
-		} else {
-			add_action( 'admin_notices', array ( $this, 'check_wpo_wcpdf' ) );
-*/
 		}
 	}
 
@@ -148,9 +144,9 @@ class WooCommerce_Italian_add_on {
 		 * Filter get address method for WC_Order
 		 *
 		 * @author Andrea Grillo <info@andreagrillo.it>
-		 * @param array $address
-		 * @param string $type
-		 * @param \WC_Order $order
+		 * @param array address
+		 * @param string type
+		 * @param \WC_Order order
 		 * @return array
 	 */
 		if( 'billing' == $type ){
