@@ -21,7 +21,7 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		add_action( 'add_meta_boxes', array( $this, 'wcpdf_add_meta_boxes' ), 20, 2 );
 		add_action( 'save_post', array( $this,'wcpdf_save_receipt_number_date' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wcpdf_admin_enqueue_scripts' ) );
-		add_filter( 'wpo_wcpdf_document_classes', array( $this, 'wcpdf_register_documents' ), 10, 1 );
+		add_filter( 'wpo_wcpdf_document_classes', array( $this, 'wcpdf_register_documents' ), 20, 1 );
 
 		if($this->receipt_columns_enabled()) {
 			add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'add_receipt_number_column' ), 999 ); // WC 7.1+
@@ -37,7 +37,16 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	}
 
 	public function wcpdf_register_documents( $documents ) {
+		if ( isset( $documents['\WPO\IPS\Documents\Receipt'] ) ) {
+			unset( $documents['\WPO\IPS\Documents\Receipt'] );
+		}
+		
+		if ( isset( $documents['\WPO\WC\PDF_Invoices\Documents\Receipt'] ) ) {
+			unset( $documents['\WPO\WC\PDF_Invoices\Documents\Receipt'] );
+		}
+		
 		$documents['WPO_WCPDF_Receipt_Document'] = include( 'class-wcpdf-receipt-document.php' );
+		
 		return $documents;
 	}
 
