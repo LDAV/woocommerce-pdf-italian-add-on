@@ -75,11 +75,12 @@ function wcpdf_IT_hide_outside_UE(wcpdf_IT_country_selected) {
 		jQuery("#billing_invoice_type_field").hide();
 	}
 }
-jQuery(function($){
-	if(typeof(jQuery.fn.select2) === "function"){$("#billing_invoice_type").select2({minimumResultsForSearch: Infinity});}
-	$("#billing_country").change(wcpdf_IT_check_required);
-	$("#billing_cf").change(wcpdf_IT_check_PEC);
-	$("#billing_invoice_type").change(wcpdf_IT_check_required);
+//jQuery(function($){
+document.addEventListener('DOMContentLoaded', function () {
+	if(typeof(jQuery.fn.select2) === "function"){jQuery("#billing_invoice_type").select2({minimumResultsForSearch: Infinity});}
+	jQuery("#billing_country").change(wcpdf_IT_check_required);
+	jQuery("#billing_cf").change(wcpdf_IT_check_PEC);
+	jQuery("#billing_invoice_type").change(wcpdf_IT_check_required);
 	//wcpdf_IT_billing_customer_type_change();
 	wcpdf_IT_check_required();
 });
