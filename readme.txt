@@ -4,7 +4,7 @@ Tags: Fattura, Ricevuta Fiscale, Partita IVA, Codice Fiscale, VAT
 Requires at least: 4.4
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 0.7.7.3
+Stable tag: 0.7.7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Italian Add-on for PDF invoices & packing slips for WooCommerce.
@@ -101,7 +101,7 @@ Ogni suggerimento o aiuto è bene accetto! Il plugin è su github: https://githu
 
 == Changelog ==
 
-= 0.7.7.2 - 0.7.7.3 - 2026-05-21 =
+= 0.7.7.2 - 0.7.7.4 - 2026-05-22 =
 * Verifica compatibilità con Wordpress 7.0
 * Verifica compatibilità con WooCommerce 10.7.0
 * Verifica compatibilità con PDF Invoices & Packing Slips for WooCommerce 5.12.1
@@ -273,7 +273,7 @@ EN
 
 == Upgrade Notice ==
 
-= 0.7.7.2 - 2026-04-22 =
+= 0.7.7.4 - 2026-05-22 =
 * Verifica compatibilità con WooCommerce 10.7.0
 * Verifica compatibilità Receipt PDF Invoices & Packing Slips for WooCommerce Professional 2.6
 È consigliato l'upgrade. 
