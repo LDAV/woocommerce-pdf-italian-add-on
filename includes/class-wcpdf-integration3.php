@@ -39,13 +39,32 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	}
 
 	public function wcpdf_register_documents( $documents ) {
+		$dirname = dirname( __FILE__ );
+
+		if ( ! function_exists( 'WPO_WCPDF' ) ) {
+			return $documents;
+		}
+
+		$version = WPO_WCPDF()->version ?? '';
+		$version = preg_replace( '/[^0-9.].*$/', '', $version );
+
+		// Remove default receipt document
 		if ( isset( $documents['\WPO\IPS\Documents\Receipt'] ) ) {
 			unset( $documents['\WPO\IPS\Documents\Receipt'] );
 		}
 		if ( isset( $documents['\WPO\WC\PDF_Invoices\Documents\Receipt'] ) ) {
 			unset( $documents['\WPO\WC\PDF_Invoices\Documents\Receipt'] );
 		}
-		$documents['WPO_WCPDF_Receipt_Document'] = include( 'class-wcpdf-receipt-document.php' );
+
+		// New Free 6.0.0+
+		if ( ! empty( $version ) && version_compare( $version, '6.0.0', '>=' ) ) {
+			$documents['\WPO\IPS\Documents\ItReceipt'] = include $dirname . '/Documents/ItReceipt.php';
+
+			// Legacy
+		} else {
+			$documents['WPO_WCPDF_Receipt_Document'] = include $dirname . 'class-wcpdf-receipt-document-legacy.php';
+		}
+
 		return $documents;
 	}
 
