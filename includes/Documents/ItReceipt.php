@@ -18,7 +18,7 @@ class ItReceipt extends OrderDocumentMethods {
 		// set properties
 		$this->type  = 'receipt';
 		$this->title = __( 'Receipt', WCPDF_IT_DOMAIN );
-		$this->icon  = plugin_dir_url( dirname( __FILE__ ) ) . 'images/receipt.svg';
+		$this->icon  = WCPDF_IT()::$plugin_url . 'images/receipt.svg';
 
 		// call parent constructor
 		parent::__construct( $order );
