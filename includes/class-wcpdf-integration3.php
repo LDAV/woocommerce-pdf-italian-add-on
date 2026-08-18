@@ -8,44 +8,73 @@ if ( ! class_exists( 'wcpdf_Integration_Italian_add_on' )) :
 
 class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 
-	public $is_WPO_WCPDF_Pro;
+	public $wpo_ips_base_version = null;
+	public $wpo_ips_is_v6_base   = false;
+	public $wpo_ips_settings     = null;
+	public $wpo_ips_is_pro       = false;
 
 	public function __construct() {
+		if ( function_exists( 'WPO_WCPDF' ) ) {
+			$this->wpo_ips_base_version = preg_replace( '/[^0-9.].*$/', '', ( WPO_WCPDF()->version ?? null ) );
+			$this->wpo_ips_is_v6_base   = version_compare( $this->wpo_ips_base_version, '6.0.0', '>=' );
+			$this->wpo_ips_settings     = $this->wpo_ips_is_v6_base ? WPO_WCPDF()->get_instance( 'settings' ) : WPO_WCPDF()->settings;
+			$this->wpo_ips_is_pro       = class_exists( 'WooCommerce_PDF_IPS_Pro' ) && function_exists( 'WPO_WCPDF_Pro' ) && version_compare( WPO_WCPDF_Pro()->version, '2.14', '>' );
+		}
+
+		if ( ! $this->wpo_ips_is_v6_base ) {
+			add_filter( 'wpo_wcpdf_bulk_actions' , array( $this, 'wcpdf_bulk_actions') );
+			add_action( 'save_post', array( $this,'wcpdf_save_receipt_number_date' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'wcpdf_admin_enqueue_scripts' ) );
+		}
+
 		add_filter( 'wpo_wcpdf_meta_box_actions' , array( $this, 'wcpdf_meta_box_actions'), 20, 2 );
 		add_filter( 'wpo_wcpdf_listing_actions' , array( $this, 'wcpdf_listing_actions'), 20, 2 );
-		add_filter( 'wpo_wcpdf_bulk_actions' , array( $this, 'wcpdf_bulk_actions') );
 
 		add_filter( 'wpo_wcpdf_custom_attachment_condition' , array( $this, 'wcpdf_custom_email_condition'), 8,4);
 		add_filter( 'wpo_wcpdf_myaccount_actions', array( $this, 'wcpdf_my_account'), 10, 2 );
 		add_filter( 'wpo_wcpdf_template_file', array( $this, 'wcpdf_template_files'), 20, 3 );
 
 		add_action( 'add_meta_boxes', array( $this, 'wcpdf_add_meta_boxes' ), 20, 2 );
-		add_action( 'save_post', array( $this,'wcpdf_save_receipt_number_date' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'wcpdf_admin_enqueue_scripts' ) );
 		add_filter( 'wpo_wcpdf_document_classes', array( $this, 'wcpdf_register_documents' ), 20, 1 );
 
-		if($this->receipt_columns_enabled()) {
+		if ( $this->receipt_columns_enabled() ) {
 			add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'add_receipt_number_column' ), 999 ); // WC 7.1+
 			add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'receipt_number_column_data' ), 10, 2 ); // WC 7.1+
 			//add_filter( 'manage_woocommerce_page_wc-orders_sortable_columns', array( $this, 'receipt_number_column_sortable' ) ); // WC 7.1+
 			add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_receipt_number_column' ), 999 );
 			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'receipt_number_column_data' ), 10, 2 );
 			add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'receipt_number_column_sortable' ) );
-			if ( !class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) || !OrderUtil::custom_orders_table_usage_is_enabled() ) {
+
+			if ( !class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) || ! OrderUtil::custom_orders_table_usage_is_enabled() ) {
 				add_filter( 'pre_get_posts', array( $this, 'sort_by_receipt_number' ) );
 			}
 		}
-		$this->is_WPO_WCPDF_Pro = class_exists( 'WooCommerce_PDF_IPS_Pro' ) && function_exists("WPO_WCPDF_Pro") && version_compare( WPO_WCPDF_Pro()->version, '2.14', '>' );
 	}
 
 	public function wcpdf_register_documents( $documents ) {
+		if ( empty( $this->wpo_ips_base_version ) ) {
+			return $documents;
+		}
+
+		// Remove default receipt document
 		if ( isset( $documents['\WPO\IPS\Documents\Receipt'] ) ) {
 			unset( $documents['\WPO\IPS\Documents\Receipt'] );
 		}
 		if ( isset( $documents['\WPO\WC\PDF_Invoices\Documents\Receipt'] ) ) {
 			unset( $documents['\WPO\WC\PDF_Invoices\Documents\Receipt'] );
 		}
-		$documents['WPO_WCPDF_Receipt_Document'] = include( 'class-wcpdf-receipt-document.php' );
+
+		$dirname = dirname( __FILE__ );
+
+		// New base 6.0.0+
+		if ( $this->wpo_ips_is_v6_base ) {
+			$documents['\WPO\IPS\Documents\ItReceipt'] = include $dirname . '/Documents/ItReceipt.php';
+
+		// Legacy
+		} else {
+			$documents['WPO_WCPDF_Receipt_Document'] = include $dirname . '/class-wcpdf-receipt-document-legacy.php';
+		}
+
 		return $documents;
 	}
 
@@ -109,27 +138,35 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 		}
 	}
 
-	public function data_input_box_content ( $post_or_order_object ) {
-		$order = ( $post_or_order_object instanceof WP_Post ) ? wc_get_order( $post_or_order_object->ID ) : $post_or_order_object;
-		$this->disable_storing_document_settings();
-		$receipt = wcpdf_get_document( 'receipt', $order );
-		do_action( 'wpo_wcpdf_meta_box_start', $order, $this );
+	public function data_input_box_content( $post_or_order_object ) {
+		$order = ( $post_or_order_object instanceof WP_Post )
+			? wc_get_order( $post_or_order_object->ID )
+			: $post_or_order_object;
 
-		if ( $receipt && !$this->is_WPO_WCPDF_Pro ) {
-			// data
+		$admin = $this->wpo_ips_is_v6_base
+			? WPO_WCPDF()->get_instance( 'admin' )
+			: $this;
+
+		$admin->disable_storing_document_settings();
+
+		$receipt = wcpdf_get_document( 'receipt', $order );
+
+		do_action( 'wpo_wcpdf_meta_box_start', $order, $admin );
+
+		if ( $receipt && ! $this->wpo_ips_is_pro ) {
 			$data = array(
 				'number' => array(
-					'label'  => __( 'Receipt Number:', WCPDF_IT_DOMAIN ),
+					'label' => __( 'Receipt Number:', WCPDF_IT_DOMAIN ),
 				),
-				'date'   => array(
-					'label'  => __( 'Receipt Date:', WCPDF_IT_DOMAIN ),
-				),
+				 'date' => array(
+					 'label' => __( 'Receipt Date:', WCPDF_IT_DOMAIN ),
+				 ),
 			);
-			// output
-			$this->output_number_date_edit_fields( $receipt, $data );
+
+			$admin->output_number_date_edit_fields( $receipt, $data );
 		}
 
-		do_action( 'wpo_wcpdf_meta_box_end', $order, $this );
+		do_action( 'wpo_wcpdf_meta_box_end', $order, $admin );
 	}
 	
 	public function disable_storing_document_settings() {
@@ -414,17 +451,17 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 	public function wcpdf_template_files( $file_path, $type, $order ) {
 		if($type !== "receipt" || strpos($file_path, "receipt") === false) return $file_path;
 		
-		$file = "receipt.php";
-		$path = WPO_WCPDF()->settings->get_template_path( $file );
-		$file_path = "{$path}/{$file}";
-		if(file_exists( $file_path )) return($file_path);
+		$path      = $this->wpo_ips_settings->get_template_path();
 		$file_path = "{$path}/receipt.php";
-		if(file_exists( $file_path )) return($file_path);
+
+		if ( file_exists( $file_path ) ) {
+			return $file_path;
+		}
 
 		// if WCPDF premium template is selected, use that
 		if ( defined('WPO_WCPDF_TEMPLATES_VERSION') && version_compare( WPO_WCPDF_TEMPLATES_VERSION, '2.4', '>' ) ) {
 			// use setting, fallback to basename
-			$template_name = !empty(WCPDF_IT()->options['template_name']) ? WCPDF_IT()->options['template_name'] : basename( WPO_WCPDF()->settings->get_template_path() );
+			$template_name = !empty(WCPDF_IT()->options['template_name']) ? WCPDF_IT()->options['template_name'] : basename( $this->wpo_ips_settings->get_template_path() );
 
 			if ($template_name != 'Simple') {
 				$file_path = WooCommerce_Italian_add_on::$plugin_path . "templates/pdf/{$template_name}/receipt.php";
