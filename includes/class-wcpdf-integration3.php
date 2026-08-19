@@ -21,6 +21,15 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			$this->wpo_ips_is_pro       = class_exists( 'WooCommerce_PDF_IPS_Pro' ) && function_exists( 'WPO_WCPDF_Pro' ) && version_compare( WPO_WCPDF_Pro()->version, '2.14', '>' );
 		}
 
+		add_filter(
+			'wpo_wcpdf_v6_compatible_document_classes',
+			function ( $classes ) {
+				$classes[] = 'WPO_WCPDF_Receipt_Document';       // Pre-v6 receipt.
+				$classes[] = 'WPO\\IPS\\Documents\\ItReceipt';   // V6 receipt.
+				return array_unique( $classes );
+			}
+		);
+
 		if ( ! $this->wpo_ips_is_v6_base ) {
 			add_filter( 'wpo_wcpdf_bulk_actions' , array( $this, 'wcpdf_bulk_actions') );
 			add_action( 'save_post', array( $this,'wcpdf_save_receipt_number_date' ) );
@@ -50,7 +59,6 @@ class wcpdf_Integration_Italian_add_on extends WooCommerce_Italian_add_on {
 			}
 		}
 	}
-
 	public function wcpdf_register_documents( $documents ) {
 		if ( empty( $this->wpo_ips_base_version ) ) {
 			return $documents;
